@@ -4,6 +4,7 @@ from custom_types import *
 from move import Move
 import numpy as np
 
+
 def random_angle() -> float:
     return random.random() * 2 * math.pi
 

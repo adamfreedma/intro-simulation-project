@@ -1,8 +1,9 @@
 from walker import Walker
-import math_functions
 from custom_types import *
+import math
+import random
 
-class RandomAngleWalker(Walker):
+class StraightWalker(Walker):
     
     def __init__(self, is_3d: bool) -> None:
         super().__init__()
@@ -15,8 +16,12 @@ class RandomAngleWalker(Walker):
     def _generate_move_angle(self) -> Tuple[float, float]:
         result = None
         if self.is_3d:
-            result = (math_functions.random_angle(), math_functions.random_angle())
+            random_int = random.randint(0, 5)
+            if random_int >= 4:
+                result = (0, (random_int - 4.5) * math.pi)
+            else:
+                result = (random_int * math.pi / 2, 0)                
         else:
-            result = (math_functions.random_angle(), 0)
+            result = (random.randint(0, 3) * math.pi / 2, 0)
             
         return result

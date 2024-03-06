@@ -6,6 +6,8 @@ import math_functions
 class Walker(ABC):
     
     _location = (0, 0, 0)
+    is_3d: bool
+    
         
     @abstractmethod
     def _generate_move_radius(self) -> float:
@@ -13,18 +15,18 @@ class Walker(ABC):
     
     
     @abstractmethod
-    def _generate_move_angle(self, is_3d=False) -> Tuple[float, float]:
+    def _generate_move_angle(self) -> Tuple[float, float]:
         raise NotImplementedError
 
     
-    def get_move(self, is_3d=False) -> Move:
-        angle = self._generate_move_angle(is_3d)
+    def get_move(self) -> Move:
+        angle = self._generate_move_angle()
         return Move(angle[0], self._generate_move_radius(), angle[1])
 
     def get_location(self):
         return self._location
     
-    def move(self, is_3d=False):
+    def move(self):
         self._location = math_functions.add_move(self._location, self.get_move())
         
     def reset(self):
