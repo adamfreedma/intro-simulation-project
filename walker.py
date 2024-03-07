@@ -26,8 +26,11 @@ class Walker(ABC):
     def get_location(self):
         return self._location
     
-    def move(self):
-        self._location = math_functions.add_move(self._location, self.get_move())
+    def move(self, move: Move):
+        self._location = math_functions.add_move(self._location, move)
         
+    def move_to(self, location: vector3):
+        self._location = location
+                
     def reset(self):
         self._location = (0, 0, 0)
