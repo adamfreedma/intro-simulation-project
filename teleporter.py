@@ -10,4 +10,3 @@ class Teleporter(Obstacle):
         
     def get_target(self) -> vector3:
         return self.__target
-    
