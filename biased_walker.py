@@ -28,27 +28,30 @@ class BiasedWalker(Walker):
 
     def _generate_move_angle(self) -> Tuple[float, float]:
         result = None
-        
-        # generating a normaly distributed change in angle from the bias direction
+
+        # generating a normally distributed change in angle from the bias direction
         change_direction = math_functions.random_angle()
-        cahgne_magnitude = np.random.normal(scale=self.bias_scale) # change in radians
-        
+        changee_magnitude = np.random.normal(scale=self.bias_scale)  # change in radians
+
         # finding the bias direction from the bias dictionary
         if self.bias in self.__BIAS_DICT:
             yaw, pitch = self.__BIAS_DICT[self.bias]
-        # finding the bias direction as the oposite of the current location
+        # finding the bias direction as the opposite of the current location
         elif self.bias == "O":
             yaw = math.atan2(self._location[1], self._location[0])
-            pitch = math.atan2(self._location[2], np.linalg.norm(self._location[:2])) + math.pi
-        
+            pitch = (
+                math.atan2(self._location[2], np.linalg.norm(self._location[:2]))
+                + math.pi
+            )
+
         if self.is_3d:
-            # adding the yaw and pitch chagne partialy to both axis 
-            new_yaw = yaw + math.cos(change_direction) * cahgne_magnitude
-            new_pitch = pitch + math.sin(change_direction) * cahgne_magnitude
+            # adding the yaw and pitch change partially to both axis
+            new_yaw = yaw + math.cos(change_direction) * changee_magnitude
+            new_pitch = pitch + math.sin(change_direction) * changee_magnitude
 
             result = (new_yaw, new_pitch)
         else:
             # adding the yaw change
-            result = (yaw + cahgne_magnitude + math.pi, 0)
+            result = (yaw + changee_magnitude + math.pi, 0)
 
         return result

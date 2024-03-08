@@ -42,18 +42,19 @@ class Grid(object):
                 obstacle_list.append(Obstacle(obstacle["location"], obstacle["radius"]))
 
         return obstacle_list
-    
 
-    def find_closest(self, obstacles: List[Obstacle], starting_location: vector3) -> Obstacle:
+    def find_closest(
+        self, obstacles: List[Obstacle], starting_location: vector3
+    ) -> Obstacle:
         min_dist = math.inf
         closest = None
-        
+
         for obstacle in obstacles:
             dist = math_functions.dist(obstacle.get_location(), starting_location)
             if dist < min_dist:
                 min_dist = dist
                 closest = obstacle
-        
+
         return closest
 
     def move(self, walker: Walker):
@@ -72,14 +73,13 @@ class Grid(object):
             for teleporter in self._teleporters
             if teleporter.detect_colision(starting_location, final_location)
         ]
-        
-        closest_hit = self.find_closest(set(hit_teleporters + hit_obstacles), starting_location)
-                
+
+        closest_hit = self.find_closest(
+            set(hit_teleporters + hit_obstacles), starting_location
+        )
+
         if closest_hit:
             if isinstance(closest_hit, Teleporter):
                 walker.move_to(closest_hit.get_target())
             elif isinstance(closest_hit, Obstacle):
                 walker.move_to(starting_location)
-            
-        
-        

@@ -31,9 +31,9 @@ class Obstacle(object):
 
             solution_1_touched = solution_1 >= 0 and solution_1 <= 1
             solution_2_touched = solution_2 >= 0 and solution_2 <= 1
-            completly_inside = solution_1 < 0 and solution_2 > 1
+            completely_inside = solution_1 < 0 and solution_2 > 1
 
-            return solution_1_touched or solution_2_touched or completly_inside
+            return solution_1_touched or solution_2_touched or completely_inside
 
     def get_location(self):
         return self.__location
