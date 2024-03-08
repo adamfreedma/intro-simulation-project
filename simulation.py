@@ -2,7 +2,7 @@ from grid import Grid
 from walker import Walker
 import numpy as np
 import json
-
+import graph
 
 class Simulation:
 
@@ -77,3 +77,6 @@ class Simulation:
             self.__average_time_to_leave += time_to_leave / float(self.__max_steps)
 
         self._save_log_data()
+        
+    def graph(self):
+        graph.distance_graph(self.__output_path)
