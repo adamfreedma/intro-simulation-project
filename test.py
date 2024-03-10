@@ -1,16 +1,14 @@
 from biased_walker import BiasedWalker
+from random_angle_walker import RandomAngleWalker
+from straight_walker import StraightWalker
+from grid import Grid
+from simulation import Simulation
 import numpy as np
+import graph
 
+walker = StraightWalker(True)
+grid = Grid("config\\obstacles.json", "config\\teleporters.json")
 
-walker = BiasedWalker(False, "R")
-
-summ = 0
-
-for i in range(100):
-    for j in range(100):
-        walker.move()
-
-    summ += np.linalg.norm(walker.get_location())
-    walker.reset()
-
-print(summ / 100)
+sim = Simulation(grid, "test.json")
+sim.simulate(walker)
+sim.graph()
