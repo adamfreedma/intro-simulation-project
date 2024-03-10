@@ -3,6 +3,9 @@ from walker import Walker
 import numpy as np
 import json
 import graph
+from screen import Screen
+import time
+
 
 class Simulation:
 
@@ -10,9 +13,15 @@ class Simulation:
     __EPSILON = 0.0001
 
     def __init__(
-        self, grid: Grid, output_path: str, simulation_count=500, max_steps=500
+        self,
+        grid: Grid,
+        screen: Screen,
+        output_path: str,
+        simulation_count=500,
+        max_steps=500,
     ) -> None:
         self.__grid = grid
+        self.__screen = screen
         self.__output_path = output_path
         self.__simulation_count = simulation_count
         self.__max_steps = max_steps
@@ -34,14 +43,16 @@ class Simulation:
             "time_to_leave": self.__average_time_to_leave,
             "y_cross_count_list": self.__y_cross_count_list,
         }
-        
-        with open(self.__output_path, 'w') as f:
+
+        with open(self.__output_path, "w") as f:
             json.dump(data, f)
 
     def simulate(self, walker: Walker):
         self._init_log_data()
+        self.__screen.add_walker(walker)
 
-        for simultaion in range(self.__simulation_count):
+        for simulation in range(self.__simulation_count):
+            self.__screen.reset_trail()
             walker.reset()
 
             cross_count = 0
@@ -50,6 +61,7 @@ class Simulation:
 
             for step in range(self.__max_steps):
                 self.__grid.move(walker)
+                time.sleep(0.00001)
                 location = walker.get_location()
                 distance = np.linalg.norm(location)
                 # tracking  y axis crosses
@@ -66,17 +78,18 @@ class Simulation:
                 if time_to_leave == -1 and distance > self.__LEAVE_DISTANCE:
                     time_to_leave = step + 1
 
-                if distance != 1 and step == 0:
-                    print("ahhhhh")
-
                 self.__distance_list[step] += distance / float(self.__max_steps)
                 self.__x_distance_list[step] += location[0] / float(self.__max_steps)
                 self.__y_distance_list[step] += location[1] / float(self.__max_steps)
                 self.__z_distance_list[step] += location[2] / float(self.__max_steps)
 
+                self.__screen.add_to_trail(walker.get_location())
+
             self.__average_time_to_leave += time_to_leave / float(self.__max_steps)
 
+        self.__screen.remove_walker(walker)
+
         self._save_log_data()
-        
+
     def graph(self):
         graph.distance_graph(self.__output_path)
