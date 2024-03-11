@@ -5,7 +5,7 @@ from OpenGL.GLU import *
 import math
 from custom_types import *
 from custom_types import *
-from typing import List
+from typing import List, Dict
 from walker import Walker
 import random
 
@@ -23,8 +23,8 @@ class Screen:
         self.__pitch = 0
 
         self.__walkers: List[Walker] = []
-        self.__trail = []
-        self.__color = (0, 0, 0)
+        self.__trails: Dict[Walker, List[vector3]] = {}
+        self.__colors: Dict[Walker, vector3] = {}
 
     def initialize(self):
         pygame.init()
@@ -51,16 +51,20 @@ class Screen:
 
     def add_walker(self, walker: Walker):
         self.__walkers.append(walker)
+        self.__trails[walker] = []
+        self.__colors[walker] = (random.random(), random.random(), random.random())
 
     def remove_walker(self, walker: Walker):
         self.__walkers.remove(walker)
+        del self.__trails[walker]
 
-    def reset_trail(self):
-        self.__trail = []
-        self.__color = (random.random(), random.random(), random.random())
+    def reset_trail(self, walker: Walker):
+        self.__trails[walker] = []
+        self.__colors[walker] = (random.random(), random.random(), random.random())
 
-    def add_to_trail(self, position: vector3):
-        self.__trail.append(position)
+    def add_to_trail(self, walker: Walker, position: vector3):
+        if walker in self.__trails:
+            self.__trails[walker].append(position)
 
     def draw_line(self, starting_point: vector3, final_point: vector3, color: vector3):
         glColor3fv(color)
@@ -81,10 +85,15 @@ class Screen:
         for walker in self.__walkers:
             self.render_sphere(walker.get_location(), 1, self.__WALKER_COLOR)
 
-        for step in range(len(self.__trail) - 1):
-            # making sure the other thread isn't changing the trail
-            if self.__trail:
-                self.draw_line(self.__trail[step], self.__trail[step + 1], self.__color)
+            if walker in self.__trails:
+                for step in range(len(self.__trails[walker]) - 1):
+                    # making sure the other thread isn't changing the trail
+                    if self.__trails[walker]:
+                        self.draw_line(
+                            self.__trails[walker][step],
+                            self.__trails[walker][step + 1],
+                            self.__colors[walker],
+                        )
 
         self.draw_line((-self.INF, 0, 0), (self.INF, 0, 0), (1, 0, 0))
         self.draw_line((0, -self.INF, 0), (0, self.INF, 0), (0, 1, 0))

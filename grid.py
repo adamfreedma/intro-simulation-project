@@ -7,41 +7,65 @@ from move import Move
 import math_functions
 import math
 from custom_types import *
+import os
 
 
 class Grid(object):
 
-    def __init__(self, obstacles_path: str, teleporters_path: str) -> None:
-        self._obstacles = self._read_obstacles(obstacles_path)
-        self._teleporters = self._read_teleporters(teleporters_path)
+    def __init__(self, obstacles_path="", teleporters_path="") -> None:
+        self._obstacles = []
+        self._teleporters = []
+        self._config_obstacles(obstacles_path)
+        self._config_teleporters(teleporters_path)
 
-    def _read_teleporters(self, path: str) -> List[Teleporter]:
+    def _config_teleporters(self, path: str) -> bool:
         teleporter_list = []
+        success = False
 
-        with open(path, "rb") as f:
-            data = json.load(f)
+        if os.path.exists(path):
+            success = True
+            with open(path, "rb") as f:
+                data = json.load(f)
 
-            for teleporter in data:
-                teleporter_list.append(
-                    Teleporter(
-                        teleporter["location"],
-                        teleporter["radius"],
-                        teleporter["target"],
-                    )
-                )
+                for teleporter in data:
+                    if type(teleporter) == dict and set(
+                        ["location", "radius", "target"]
+                    ) == set(teleporter.keys()):
+                        teleporter_list.append(
+                            Teleporter(
+                                teleporter["location"],
+                                teleporter["radius"],
+                                teleporter["target"],
+                            )
+                        )
+                    else:
+                        success = False
+        if success:
+            self._teleporters = teleporter_list
+        return success
 
-        return teleporter_list
-
-    def _read_obstacles(self, path: str) -> List[Obstacle]:
+    def _config_obstacles(self, path: str) -> bool:
         obstacle_list = []
+        success = False
 
-        with open(path, "rb") as f:
-            data = json.load(f)
+        if os.path.exists(path):
+            success = True
+            with open(path, "rb") as f:
+                data = json.load(f)
 
-            for obstacle in data:
-                obstacle_list.append(Obstacle(obstacle["location"], obstacle["radius"]))
+                for obstacle in data:
+                    if type(obstacle) == dict and set(["location", "radius"]) == set(
+                        obstacle.keys()
+                    ):
+                        obstacle_list.append(
+                            Obstacle(obstacle["location"], obstacle["radius"])
+                        )
+                    else:
+                        success = False
 
-        return obstacle_list
+        if success:
+            self._obstacles = obstacle_list
+        return success
 
     def find_closest(
         self, obstacles: List[Obstacle], starting_location: vector3

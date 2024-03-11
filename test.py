@@ -12,9 +12,12 @@ walker = RandomAngleWalker(True)
 grid = Grid("config\\obstacles.json", "config\\teleporters.json")
 screen = Screen(800, 600)
 
-ui_thread = threading.Thread(target=screen.run, daemon=True)
-ui_thread.start()
+screen_thread = threading.Thread(target=screen.run, daemon=True)
+screen_thread.start()
+
 
 sim = Simulation(grid, screen, "test.json")
-sim.simulate(walker)
+sim_thread = threading.Thread(target=sim.simulate, args=[walker], daemon=True)
+sim_thread.start()
+
 sim.graph()

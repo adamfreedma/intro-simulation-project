@@ -34,6 +34,12 @@ class Simulation:
         self.__average_time_to_leave = 0
         self.__y_cross_count_list = [0] * self.__max_steps
 
+    def config_teleporters(self, path: str):
+        return self.__grid._config_teleporters(path)
+
+    def config_obstacles(self, path: str):
+        return self.__grid._config_obstacles(path)
+
     def _save_log_data(self):
         data = {
             "distance": self.__distance_list,
@@ -52,7 +58,7 @@ class Simulation:
         self.__screen.add_walker(walker)
 
         for simulation in range(self.__simulation_count):
-            self.__screen.reset_trail()
+            self.__screen.reset_trail(walker)
             walker.reset()
 
             cross_count = 0
@@ -83,13 +89,16 @@ class Simulation:
                 self.__y_distance_list[step] += location[1] / float(self.__max_steps)
                 self.__z_distance_list[step] += location[2] / float(self.__max_steps)
 
-                self.__screen.add_to_trail(walker.get_location())
+                self.__screen.add_to_trail(walker, walker.get_location())
 
             self.__average_time_to_leave += time_to_leave / float(self.__max_steps)
 
         self.__screen.remove_walker(walker)
 
         self._save_log_data()
+
+    def run_visual(self):
+        self.__screen.run()
 
     def graph(self):
         graph.distance_graph(self.__output_path)
