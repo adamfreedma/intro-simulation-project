@@ -7,7 +7,10 @@ from custom_types import *
 from custom_types import *
 from typing import List, Dict
 from walker import Walker
+from obstacle import Obstacle
+from teleporter import Teleporter
 import random
+import threading
 
 
 class Screen:
@@ -20,10 +23,12 @@ class Screen:
         self.__display = (width, height)
         self.__screen_center = (width // 2, height // 2)
 
-        self.__pitch = 0
+        self.__obstacles: List[Obstacle] = []
+        self.__teleporters: List[Teleporter] = []
 
         self.__walkers: List[Walker] = []
         self.__trails: Dict[Walker, List[vector3]] = {}
+        self.__trails_lock = threading.Lock()
         self.__colors: Dict[Walker, vector3] = {}
 
     def initialize(self):
@@ -56,15 +61,25 @@ class Screen:
 
     def remove_walker(self, walker: Walker):
         self.__walkers.remove(walker)
+        self.__trails_lock.acquire()
         del self.__trails[walker]
+        self.__trails_lock.release()
 
     def reset_trail(self, walker: Walker):
+        self.__trails_lock.acquire()
         self.__trails[walker] = []
+        self.__trails_lock.release()
         self.__colors[walker] = (random.random(), random.random(), random.random())
 
     def add_to_trail(self, walker: Walker, position: vector3):
         if walker in self.__trails:
             self.__trails[walker].append(position)
+
+    def set_teleporters(self, teleporters: List[Teleporter]):
+        self.__teleporters = teleporters
+
+    def set_obstacles(self, obstacles: List[Obstacle]):
+        self.__obstacles = obstacles
 
     def draw_line(self, starting_point: vector3, final_point: vector3, color: vector3):
         glColor3fv(color)
@@ -83,18 +98,31 @@ class Screen:
 
     def render_all(self):
         for walker in self.__walkers:
-            self.render_sphere(walker.get_location(), 1, self.__WALKER_COLOR)
+            self.render_sphere(walker.get_location(), 0.5, self.__WALKER_COLOR)
 
+            self.__trails_lock.acquire()
             if walker in self.__trails:
                 for step in range(len(self.__trails[walker]) - 1):
-                    # making sure the other thread isn't changing the trail
-                    if self.__trails[walker]:
-                        self.draw_line(
-                            self.__trails[walker][step],
-                            self.__trails[walker][step + 1],
-                            self.__colors[walker],
-                        )
+                    self.draw_line(
+                        self.__trails[walker][step],
+                        self.__trails[walker][step + 1],
+                        self.__colors[walker],
+                    )
+            self.__trails_lock.release()
 
+        # render teleporters
+        for teleporter in self.__teleporters:
+            self.render_sphere(
+                teleporter.get_location(), teleporter.get_radius(), (0.1, 0.1, 0.5)
+            )
+
+        # render obstacles
+        for obstacle in self.__obstacles:
+            self.render_sphere(
+                obstacle.get_location(), obstacle.get_radius(), (0.1, 0.1, 0.1)
+            )
+
+        # drawing the axis
         self.draw_line((-self.INF, 0, 0), (self.INF, 0, 0), (1, 0, 0))
         self.draw_line((0, -self.INF, 0), (0, self.INF, 0), (0, 1, 0))
         self.draw_line((0, 0, -self.INF), (0, 0, self.INF), (0, 0, 1))
@@ -125,7 +153,7 @@ class Screen:
 
         pygame.display.flip()
 
-    def run(self):
+    def run(self, stop_event: threading.Event):
         self.initialize()
 
         # init mouse movement and center mouse on screen
@@ -178,4 +206,5 @@ class Screen:
 
                 pygame.time.wait(10)
 
-    pygame.quit()
+        stop_event.set()
+        pygame.quit()

@@ -16,6 +16,7 @@ class MainFrame(ctk.CTkFrame):
         self.height = master.height
         self.width = master.width
 
+        self.stop_event = threading.Event()
         self.simulation = simulation
         self.walkers: List[Walker] = [
             StraightWalker(True),
@@ -32,14 +33,18 @@ class MainFrame(ctk.CTkFrame):
         self.start_frame.pack(anchor="s", pady=self.padding)
 
     def start_simulation(self, visual: bool):
+        self.stop_event.clear()
+
         if visual:
-            visual_thread = threading.Thread(target=self.simulation.run_visual)
+            visual_thread = threading.Thread(
+                target=self.simulation.run_visual, args=[self.stop_event]
+            )
             visual_thread.start()
 
         for walker in self.walkers:
             print(walker)
             walker_thread = threading.Thread(
-                target=self.simulation.simulate, args=[walker]
+                target=self.simulation.simulate, args=[walker, self.stop_event]
             )
             walker_thread.start()
 

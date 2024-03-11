@@ -8,6 +8,7 @@ import math_functions
 import math
 from custom_types import *
 import os
+import copy
 
 
 class Grid(object):
@@ -107,3 +108,9 @@ class Grid(object):
                 walker.move_to(closest_hit.get_target())
             elif isinstance(closest_hit, Obstacle):
                 walker.move_to(starting_location)
+
+    def get_teleporters(self) -> List[Teleporter]:
+        return copy.deepcopy(self._teleporters)
+
+    def get_obstacles(self) -> List[Obstacle]:
+        return copy.deepcopy(self._obstacles)

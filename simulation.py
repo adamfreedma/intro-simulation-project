@@ -5,6 +5,7 @@ import json
 import graph
 from screen import Screen
 import time
+from threading import Event
 
 
 class Simulation:
@@ -35,10 +36,14 @@ class Simulation:
         self.__y_cross_count_list = [0] * self.__max_steps
 
     def config_teleporters(self, path: str):
-        return self.__grid._config_teleporters(path)
+        success = self.__grid._config_teleporters(path)
+        self.__screen.set_teleporters(self.__grid.get_teleporters())
+        return success
 
     def config_obstacles(self, path: str):
-        return self.__grid._config_obstacles(path)
+        success = self.__grid._config_obstacles(path)
+        self.__screen.set_obstacles(self.__grid.get_obstacles())
+        return success
 
     def _save_log_data(self):
         data = {
@@ -53,7 +58,7 @@ class Simulation:
         with open(self.__output_path, "w") as f:
             json.dump(data, f)
 
-    def simulate(self, walker: Walker):
+    def simulate(self, walker: Walker, event: Event):
         self._init_log_data()
         self.__screen.add_walker(walker)
 
@@ -66,8 +71,12 @@ class Simulation:
             time_to_leave = -1
 
             for step in range(self.__max_steps):
+                if event.is_set():
+                    break
+
                 self.__grid.move(walker)
                 time.sleep(0.00001)
+
                 location = walker.get_location()
                 distance = np.linalg.norm(location)
                 # tracking  y axis crosses
@@ -92,13 +101,15 @@ class Simulation:
                 self.__screen.add_to_trail(walker, walker.get_location())
 
             self.__average_time_to_leave += time_to_leave / float(self.__max_steps)
+            if event.is_set():
+                break
 
         self.__screen.remove_walker(walker)
 
         self._save_log_data()
 
-    def run_visual(self):
-        self.__screen.run()
+    def run_visual(self, event: Event):
+        self.__screen.run(event)
 
     def graph(self):
         graph.distance_graph(self.__output_path)

@@ -37,3 +37,6 @@ class Obstacle(object):
 
     def get_location(self):
         return self.__location
+
+    def get_radius(self) -> float:
+        return self.__radius
