@@ -30,6 +30,7 @@ class Screen:
         self.__trails: Dict[Walker, List[vector3]] = {}
         self.__trails_lock = threading.Lock()
         self.__colors: Dict[Walker, vector3] = {}
+        self.__run = True
 
     def initialize(self):
         pygame.init()
@@ -163,15 +164,15 @@ class Screen:
 
         up_down_angle = 0.0
         paused = False
-        run = True
-        while run:
+        self.__run = True
+        while self.__run:
             for event in pygame.event.get():
                 # checking for quits/ pauses
                 if event.type == pygame.QUIT:
-                    run = False
+                    self.__run = False
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE or event.key == pygame.K_RETURN:
-                        run = False
+                        self.__run = False
                     if event.key == pygame.K_PAUSE or event.key == pygame.K_p:
                         paused = not paused
                         pygame.mouse.set_pos(self.__screen_center)
@@ -208,3 +209,7 @@ class Screen:
 
         stop_event.set()
         pygame.quit()
+
+    
+    def stop(self):
+        self.__run = False

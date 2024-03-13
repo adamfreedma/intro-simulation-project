@@ -11,49 +11,29 @@ class ConfigChooseFrame(ctk.CTkFrame):
         self.height = master.height
         self.width = master.width
         self.widget_width = self.width // 8
+        self.padding = master.padding
 
-        self.teleporters_file_picker = ctk.CTkButton(
+        self.file_picker = ctk.CTkButton(
             self,
             self.widget_width,
-            text="Choose Teleporter config",
-            command=self.teleporters_file_dialog,
-        )
-
-        self.obstacles_file_picker = ctk.CTkButton(
-            self,
-            self.widget_width,
-            text="Choose Obstacle config",
-            command=self.obstacles_file_dialog,
+            text="Enter config file",
+            command=self.file_dialog,
         )
 
         # layout
-        self.teleporters_file_picker.pack(expand=True)
-        self.obstacles_file_picker.pack(expand=True)
+        self.file_picker.pack(expand=True, padx=self.padding, pady=self.padding)
 
-    def teleporters_file_dialog(self):
-        success = self.master.parse_teleporters_config(
+    def file_dialog(self):
+        success = self.master.parse_config(
             ctk.filedialog.askopenfilename(
                 initialdir=os.getcwd(),
-                title="Enter the teleporters file config",
+                title="Enter the config file",
                 filetypes=[("JSON", "*.json")],
             )
         )
 
         if success:
-            self.teleporters_file_picker.configure(fg_color=colors.GREEN)
+            self.file_picker.configure(fg_color=colors.GREEN)
         else:
-            self.teleporters_file_picker.configure(fg_color=colors.RED)
+            self.file_picker.configure(fg_color=colors.RED)
 
-    def obstacles_file_dialog(self):
-        success = self.master.parse_obstacles_config(
-            ctk.filedialog.askopenfilename(
-                initialdir=os.getcwd(),
-                title="Enter the obstacles file config",
-                filetypes=[("JSON", "*.json")],
-            )
-        )
-
-        if success:
-            self.obstacles_file_picker.configure(fg_color=colors.GREEN)
-        else:
-            self.obstacles_file_picker.configure(fg_color=colors.RED)

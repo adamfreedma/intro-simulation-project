@@ -25,13 +25,11 @@ class Grid(object):
 
         if os.path.exists(path):
             success = True
-            with open(path, "rb") as f:
-                data = json.load(f)
+            try:
+                with open(path, "rb") as f:
+                    data = json.load(f)
 
-                for teleporter in data:
-                    if type(teleporter) == dict and set(
-                        ["location", "radius", "target"]
-                    ) == set(teleporter.keys()):
+                    for teleporter in data["teleporters"]:
                         teleporter_list.append(
                             Teleporter(
                                 teleporter["location"],
@@ -39,8 +37,8 @@ class Grid(object):
                                 teleporter["target"],
                             )
                         )
-                    else:
-                        success = False
+            except KeyError:
+                success = False
         if success:
             self._teleporters = teleporter_list
         return success
@@ -51,18 +49,16 @@ class Grid(object):
 
         if os.path.exists(path):
             success = True
-            with open(path, "rb") as f:
-                data = json.load(f)
+            try:
+                with open(path, "rb") as f:
+                    data = json.load(f)
 
-                for obstacle in data:
-                    if type(obstacle) == dict and set(["location", "radius"]) == set(
-                        obstacle.keys()
-                    ):
+                    for obstacle in data["obstacles"]:
                         obstacle_list.append(
                             Obstacle(obstacle["location"], obstacle["radius"])
                         )
-                    else:
-                        success = False
+            except KeyError:
+                success = False
 
         if success:
             self._obstacles = obstacle_list

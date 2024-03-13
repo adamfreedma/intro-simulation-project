@@ -19,11 +19,13 @@ class MainApp(CTk.CTk):
         self.title("Random walk")
 
         self._frame = None
+        self.confirm_menu_open = False
+        self.padding = 10
 
         self._config_window()
         self.screen = Screen(800, 600)
         self.grid = Grid()
-        self.simulation = Simulation(self.grid, self.screen, "temp.png")
+        self.simulation = Simulation(self.grid, self.screen)
 
         self.main_frame = MainFrame(self, self.simulation)
 
@@ -55,29 +57,23 @@ class MainApp(CTk.CTk):
         if not self.confirm_menu_open:
             self.confirm_menu_open = True
 
-            self.top = CTk.cTkToplevel(self)
+            self.top = CTk.CTkToplevel(self)
             self.top.attributes("-topmost", "true")
             self.top.overrideredirect(1)
 
-            question_label = CTk.cTkLabel(
-                self.top, text="Are you sure you want to quit?", font=self.font
+            question_label = CTk.CTkLabel(
+                self.top, text="Are you sure you want to quit?",
             )
 
-            yes_button = CTk.cTkButton(
+            yes_button = CTk.CTkButton(
                 self.top,
                 text="Yes",
-                font=self.font,
                 command=self.close,
-                fg_color=self.BUTTON_COLOR,
-                hover_color=self.BUTTON_HOVER_COLOR,
             )
-            no_button = CTk.cTkButton(
+            no_button = CTk.CTkButton(
                 self.top,
                 text="No",
-                font=self.font,
                 command=self.close_confirm_menu,
-                fg_color=self.RED_BUTTON_COLOR,
-                hover_color=self.RED_BUTTON_HOVER_COLOR,
             )
 
             question_label.grid(

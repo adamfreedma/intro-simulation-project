@@ -7,7 +7,7 @@ def read_json(path: str):
     with open(path, 'r') as f:
         return json.load(f)
 
-def distance_graph(data_path: str):
+def distance_graph(data_path: str, output_path: str):
     
     data = read_json(data_path)["distance"]
 
@@ -18,5 +18,5 @@ def distance_graph(data_path: str):
         title='About as simple as it gets, folks')
     ax.grid()
 
-    fig.savefig("test.png")
+    fig.savefig(output_path)
     plt.show()

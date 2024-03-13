@@ -1,12 +1,13 @@
 import customtkinter as ctk
+from customtkinter import DoubleVar
 from start_frame import StartFrame
 from config_choose_frame import ConfigChooseFrame
+from walker_config_frame import WalkerConfigFrame
 from simulation import Simulation
-from walker import Walker
-from typing import List
 import threading
 from straight_walker import StraightWalker
-
+import os
+from typing import List
 
 class MainFrame(ctk.CTkFrame):
 
@@ -15,25 +16,31 @@ class MainFrame(ctk.CTkFrame):
 
         self.height = master.height
         self.width = master.width
+        self.padding = master.padding
 
         self.stop_event = threading.Event()
         self.simulation = simulation
-        self.walkers: List[Walker] = [
-            StraightWalker(True),
-            StraightWalker(True),
-            StraightWalker(True),
-        ]
 
         self.start_frame = StartFrame(self)
         self.config_choose_frame = ConfigChooseFrame(self)
-        self.padding = 30
+        self.walker_config_frame = WalkerConfigFrame(self)
 
         # layout
-        self.config_choose_frame.pack(anchor="s", pady=self.padding)
-        self.start_frame.pack(anchor="s", pady=self.padding)
+        self.walker_config_frame.pack(anchor="s", fill="both", padx=self.padding, pady=self.padding)
+        self.config_choose_frame.pack(anchor="s", fill="both", padx=self.padding, pady=self.padding)
+        self.start_frame.pack(anchor="s", fill="both", padx=self.padding, pady=self.padding)
 
-    def start_simulation(self, visual: bool):
+    def start_simulation(self, visual: bool, progress_var: DoubleVar,
+                         simulation_count: int=None, max_steps: int=None, graph_output_folder: str=None):
         self.stop_event.clear()
+
+        if graph_output_folder and not os.path.exists(graph_output_folder):
+            os.mkdir(graph_output_folder)
+
+        if simulation_count:
+            self.simulation.set_simulation_count(simulation_count)
+        if max_steps:
+            self.simulation.set_max_steps(max_steps)
 
         if visual:
             visual_thread = threading.Thread(
@@ -41,15 +48,28 @@ class MainFrame(ctk.CTkFrame):
             )
             visual_thread.start()
 
-        for walker in self.walkers:
-            print(walker)
+        walker_thread_list: List[threading.Thread] = []
+
+        for walker in self.walker_config_frame.get_walkers():
+            output_path = None
+            if graph_output_folder:
+                output_path = f"{graph_output_folder}\\{walker.get_name()}.png"
+            
             walker_thread = threading.Thread(
-                target=self.simulation.simulate, args=[walker, self.stop_event]
+                target=self.simulation.simulate,
+                args=[walker, self.stop_event, progress_var, visual, output_path]
             )
             walker_thread.start()
+            
+            walker_thread_list.append(walker_thread)
+            
+        self.wait_to_stop(walker_thread_list)
+            
+    def wait_to_stop(self, walker_thread_list: List[threading.Thread]):
+        if all([not walker_thread.is_alive() for walker_thread in walker_thread_list]):
+            self.simulation.stop()
+        else:
+            self.after(50, self.wait_to_stop, walker_thread_list)
 
-    def parse_teleporters_config(self, path: str) -> bool:
-        return self.simulation.config_teleporters(path)
-
-    def parse_obstacles_config(self, path: str) -> bool:
-        return self.simulation.config_obstacles(path)
+    def parse_config(self, path: str) -> bool:
+        return self.simulation.config(path)
