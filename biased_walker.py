@@ -16,10 +16,10 @@ class BiasedWalker(Walker):
         "D": (0, -0.5 * math.pi),
     }
 
-    def __init__(self, is_3d: bool, bias: str, bias_scale=1) -> None:
-        super().__init__()
+    def __init__(self, name: str, is_3d: bool, bias: str, bias_scale=1) -> None:
+        super().__init__(name)
 
-        self.is_3d = is_3d
+        self.__is_3d = is_3d
         self.bias = bias
         self.bias_scale = bias_scale
 
@@ -44,7 +44,7 @@ class BiasedWalker(Walker):
                 + math.pi
             )
 
-        if self.is_3d:
+        if self.__is_3d:
             # adding the yaw and pitch change partially to both axis
             new_yaw = yaw + math.cos(change_direction) * changee_magnitude
             new_pitch = pitch + math.sin(change_direction) * changee_magnitude
