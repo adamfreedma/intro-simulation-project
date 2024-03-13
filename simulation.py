@@ -53,9 +53,9 @@ class Simulation:
                        y_cross_count_list: List[float]):
         data = {
             "distance": distance_list,
-            "x_distance": x_distance_list,
-            "y_distance": y_distance_list,
-            "z_distance": z_distance_list,
+            "xdistance": x_distance_list,
+            "ydistance": y_distance_list,
+            "zdistance": z_distance_list,
             "time_to_leave": average_time_to_leave,
             "y_cross_count_list": y_cross_count_list,
         }
@@ -127,7 +127,7 @@ class Simulation:
                             average_time_to_leave, y_cross_count_list)
         
         if graph_output_path:
-            self.generate_graphs(log_path, graph_output_path)
+            self.generate_graphs(log_path, graph_output_path, walker.is_3d())
 
     def run_visual(self, event: Event):
         self.__screen.run(event)
@@ -135,5 +135,10 @@ class Simulation:
     def stop(self):
         self.__screen.stop()
 
-    def generate_graphs(self, log_path: str, output_path: str):
+    def generate_graphs(self, log_path: str, output_path: str, is_3d: bool):
         graph.distance_graph(log_path, output_path)
+        graph.distance_graph(log_path, output_path, "x")
+        graph.distance_graph(log_path, output_path, "y")
+        graph.cross_amount_graph(log_path, output_path)
+        if is_3d:
+            graph.distance_graph(log_path, output_path, "z")

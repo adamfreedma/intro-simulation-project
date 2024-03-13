@@ -53,7 +53,7 @@ class MainFrame(ctk.CTkFrame):
         for walker in self.walker_config_frame.get_walkers():
             output_path = None
             if graph_output_folder:
-                output_path = f"{graph_output_folder}\\{walker.get_name()}.png"
+                output_path = f"{graph_output_folder}\\{walker.get_name()}"
             
             walker_thread = threading.Thread(
                 target=self.simulation.simulate,
@@ -68,6 +68,7 @@ class MainFrame(ctk.CTkFrame):
     def wait_to_stop(self, walker_thread_list: List[threading.Thread]):
         if all([not walker_thread.is_alive() for walker_thread in walker_thread_list]):
             self.simulation.stop()
+            self.start_frame.stop()
         else:
             self.after(50, self.wait_to_stop, walker_thread_list)
 

@@ -9,10 +9,10 @@ class Walker(ABC):
     def __init__(self, name: str) -> None:
         super().__init__()
         
-        self.__name = name
+        self._name = name
 
-        self.__location = (0, 0, 0)
-        self.__is_3d: bool
+        self._location = (0, 0, 0)
+        self._is_3d: bool
 
     @abstractmethod
     def _generate_move_radius(self) -> float:
@@ -27,16 +27,19 @@ class Walker(ABC):
         return Move(angle[0], self._generate_move_radius(), angle[1])
 
     def get_name(self) -> str:
-        return self.__name
+        return self._name
+    
+    def is_3d(self) -> bool:
+        return self._is_3d
 
     def get_location(self):
-        return self.__location
+        return self._location
 
     def move(self, move: Move):
-        self.__location = math_functions.add_move(self.__location, move)
+        self._location = math_functions.add_move(self._location, move)
 
     def move_to(self, location: vector3):
-        self.__location = location
+        self._location = location
 
     def reset(self):
-        self.__location = (0, 0, 0)
+        self._location = (0, 0, 0)
