@@ -3,7 +3,7 @@ import math_functions
 from custom_types import *
 import math
 import numpy as np
-
+import random
 
 class BiasedWalker(Walker):
 
@@ -16,12 +16,16 @@ class BiasedWalker(Walker):
         "D": (0, -0.5 * math.pi),
     }
 
-    def __init__(self, name: str, is_3d: bool, bias: str, bias_scale=1) -> None:
+    def __init__(self, name: str, is_3d: bool, bias: str=None, bias_scale=1) -> None:
         super().__init__(name)
 
         self._is_3d = is_3d
-        self.bias = bias
         self.bias_scale = bias_scale
+        if bias in self.__BIAS_DICT:
+            self.bias = bias
+        else:
+            self.bias = random.choice(list(self.__BIAS_DICT.keys()))
+
 
     def _generate_move_radius(self) -> float:
         return 1
