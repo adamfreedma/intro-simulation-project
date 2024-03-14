@@ -105,15 +105,15 @@ class Simulation:
                     if sign == 1:
                         cross_count += 1
                     sign = -1
-                y_cross_count_list[step] += cross_count / float(self.__max_steps)
+                y_cross_count_list[step] += cross_count / float(self.__simulation_count)
                 # tracking time to leave
                 if time_to_leave == -1 and distance > self.__LEAVE_DISTANCE:
                     time_to_leave = step + 1
 
-                distance_list[step] += distance / float(self.__max_steps)
-                x_distance_list[step] += location[0] / float(self.__max_steps)
-                y_distance_list[step] += location[1] / float(self.__max_steps)
-                z_distance_list[step] += location[2] / float(self.__max_steps)
+                distance_list[step] += distance / float(self.__simulation_count)
+                x_distance_list[step] += abs(location[0]) / float(self.__simulation_count)
+                y_distance_list[step] += abs(location[1]) / float(self.__simulation_count)
+                z_distance_list[step] += abs(location[2]) / float(self.__simulation_count)
 
                 self.__screen.add_to_trail(walker, walker.get_location())
                 
