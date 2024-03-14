@@ -7,6 +7,7 @@ from simulation import Simulation
 import threading
 from straight_walker import StraightWalker
 import os
+import shutil
 from typing import List
 
 class MainFrame(ctk.CTkFrame):
@@ -39,8 +40,10 @@ class MainFrame(ctk.CTkFrame):
 
         graph_output_folder = self.__FOLDER_PREFIX + graph_output_folder
 
-        if graph_output_folder and not os.path.isdir(graph_output_folder):
-            os.mkdir(graph_output_folder)
+        if os.path.isdir(graph_output_folder):
+            shutil.rmtree(graph_output_folder)
+
+        os.mkdir(graph_output_folder)
 
         if simulation_count:
             self.simulation.set_simulation_count(simulation_count)
