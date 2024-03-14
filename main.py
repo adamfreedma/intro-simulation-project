@@ -1,9 +1,10 @@
 import customtkinter as CTk
 from main_frame import MainFrame
+from graph_viewer_frame import GraphViewerFrame
 from simulation import Simulation
 from grid import Grid
 from screen import Screen
-
+import customtkinter as ctk
 
 class MainApp(CTk.CTk):
 
@@ -18,7 +19,6 @@ class MainApp(CTk.CTk):
 
         self.title("Random walk")
 
-        self._frame = None
         self.confirm_menu_open = False
         self.padding = 10
 
@@ -27,28 +27,26 @@ class MainApp(CTk.CTk):
         self.grid = Grid()
         self.simulation = Simulation(self.grid, self.screen)
 
-        self.main_frame = MainFrame(self, self.simulation)
+        self.tab_menu = ctk.CTkTabview(self)
+        self.tab_list = []
+        self.tab_list.append(self.tab_menu.add("Simulation"))
+        self.tab_list.append(self.tab_menu.add("Graph viewer"))
+        
+        self.main_frame = MainFrame(self.tab_list[0], self, self.simulation)
+        self.main_frame.pack()
+        
+        self.graph_viewer_frame = GraphViewerFrame(self.tab_list[1], self)
+        self.graph_viewer_frame.pack()
 
         self.bind("<Escape>", self.confirm_menu)
 
-        self.switch_frame(self.main_frame)
+        self.tab_menu.pack()
 
     def _config_window(self) -> None:
         """configures propterties of the window"""
 
         self.width = 800
         self.height = 600
-
-    def clear(self):
-        if self._frame:
-            self._frame.pack_forget()
-
-    def switch_frame(self, frame):
-        """Destroys current frame and replaces it with a new one."""
-        self.clear()
-
-        self._frame = frame
-        self._frame.pack(expand=True, fill="both")
 
     def close(self, _=None):
         self.destroy()
@@ -88,5 +86,7 @@ class MainApp(CTk.CTk):
 
 
 if __name__ == "__main__":
+    ctk.set_appearance_mode("dark")
+    ctk.set_default_color_theme("dark-blue")
     app = MainApp()
     app.mainloop()

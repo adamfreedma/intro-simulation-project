@@ -27,6 +27,7 @@ class Simulation:
         self.__screen = screen
         self.__simulation_count = simulation_count
         self.__max_steps = max_steps
+        self.__wait = 0.001
 
     def config(self, path: str):
         return self.config_obstacles(path) and self.config_teleporters(path)
@@ -74,6 +75,9 @@ class Simulation:
         self.__screen.add_walker(walker)
 
         for simulation in range(self.__simulation_count):
+            if simulation >= self.__simulation_count:
+                break
+            
             self.__screen.reset_trail(walker)
             walker.reset()
             progress_var.set(float(simulation) / self.__simulation_count)
@@ -83,10 +87,10 @@ class Simulation:
             time_to_leave = -1
 
             for step in range(self.__max_steps):
-                if event.is_set():
+                if event.is_set() or step >= self.__max_steps:
                     break
                 if visual:
-                    time.sleep(0.00001)
+                    time.sleep(self.__wait)
 
                 self.__grid.move(walker)
 
@@ -131,6 +135,9 @@ class Simulation:
 
     def run_visual(self, event: Event):
         self.__screen.run(event)
+        
+    def update_speed(self, value: float):
+        self.__wait = (1.001 - value) / 10
         
     def stop(self):
         self.__screen.stop()

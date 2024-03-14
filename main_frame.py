@@ -11,8 +11,8 @@ from typing import List
 
 class MainFrame(ctk.CTkFrame):
 
-    def __init__(self, master, simulation: Simulation):
-        ctk.CTkFrame.__init__(self, master, corner_radius=15)
+    def __init__(self, tab_master, master, simulation: Simulation):
+        ctk.CTkFrame.__init__(self, tab_master, corner_radius=15)
 
         self.height = master.height
         self.width = master.width
@@ -34,7 +34,7 @@ class MainFrame(ctk.CTkFrame):
                          simulation_count: int=None, max_steps: int=None, graph_output_folder: str=None):
         self.stop_event.clear()
 
-        if graph_output_folder and not os.path.exists(graph_output_folder):
+        if graph_output_folder and not os.path.isdir(graph_output_folder):
             os.mkdir(graph_output_folder)
 
         if simulation_count:
@@ -71,6 +71,15 @@ class MainFrame(ctk.CTkFrame):
             self.start_frame.stop()
         else:
             self.after(50, self.wait_to_stop, walker_thread_list)
+
+    def update_speed(self, value: float):
+        self.simulation.update_speed(value)
+        
+    def update_simulation_count(self, value: int):
+        self.simulation.set_simulation_count(value)
+        
+    def update_max_steps(self, value: int):
+        self.simulation.set_max_steps(value)
 
     def parse_config(self, path: str) -> bool:
         return self.simulation.config(path)

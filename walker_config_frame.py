@@ -17,7 +17,7 @@ class WalkerConfigFrame(ctk.CTkFrame):
 
         self.walker_frame_list: List[WalkerFrame] = []
         
-        self.add_walker_button = ctk.CTkButton(self, self.widget_width, text="Add walker", command=self.create_walker, fg_color=colors.GREEN)
+        self.add_walker_button = ctk.CTkButton(self, self.widget_width, text="Add walker", command=self.create_walker)
         
         # layout
         self.add_walker_button.pack(padx=self.padding, pady=self.padding)

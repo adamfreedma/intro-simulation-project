@@ -42,24 +42,24 @@ class Spinbox(customtkinter.CTkFrame):
         self.entry_var.trace_add("write", lambda *args: self.cap_write_values(self.entry_var))
 
     def add_button_callback(self):
-        if self.command is not None:
-            self.command()
         try:
             value = min(int(self.entry.get()) + 1, self.max_value)
             self.entry.delete(0, "end")
             self.entry.insert(0, value)
         except ValueError:
             return
+        if self.command is not None and self.get():
+            self.command(int(self.get()))
 
     def subtract_button_callback(self):
-        if self.command is not None:
-            self.command()
         try:
             value = max(int(self.entry.get()) - 1, self.min_value)
             self.entry.delete(0, "end")
             self.entry.insert(0, value)
         except ValueError:
             return
+        if self.command is not None and self.get():
+            self.command(int(self.get()))
 
     def cap_write_values(self, text_var: customtkinter.StringVar):
         if text_var.get().isnumeric():
@@ -67,6 +67,8 @@ class Spinbox(customtkinter.CTkFrame):
                 text_var.set(str(self.max_value))
             if int(text_var.get()) < self.min_value:
                 text_var.set(str(self.min_value))
+        if self.command is not None and self.get():
+            self.command(int(self.get()))
 
     def get(self) -> int:
         try:
