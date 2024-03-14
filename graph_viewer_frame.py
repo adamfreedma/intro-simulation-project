@@ -4,6 +4,8 @@ import os
 
 class GraphViewerFrame(ctk.CTkFrame):
 
+    __FOLDER_PREFIX = "GRAPHS"
+
     def __init__(self, tab_master, master):
         ctk.CTkFrame.__init__(self, tab_master, corner_radius=15)
 
@@ -20,7 +22,7 @@ class GraphViewerFrame(ctk.CTkFrame):
         self.image = ctk.CTkLabel(self, image=None, text="")
         
         self.buttons_frame = ctk.CTkFrame(self)
-        self.folder_entry = ctk.CTkEntry(self.buttons_frame, self.widget_width, textvariable=self.__folder_var)
+        self.folder_entry = ctk.CTkComboBox(self.buttons_frame, self.widget_width, variable=self.__folder_var)
         self.next_button = ctk.CTkButton(self.buttons_frame, self.widget_width, text="->", command=self.next_image)
         self.prev_button = ctk.CTkButton(self.buttons_frame, self.widget_width, text="<-", command=self.prev_image)
         
@@ -33,6 +35,7 @@ class GraphViewerFrame(ctk.CTkFrame):
         self.image.pack(padx=self.padding, pady=self.padding)
 
         # folder entry listener
+        self.update_folders_list()
         self.__folder_var.trace_add("write", lambda *args: self.update_paths())
 
         
@@ -43,11 +46,17 @@ class GraphViewerFrame(ctk.CTkFrame):
     def prev_image(self):
         self.__path_index -= 1
         self.update_image()
-        
+    
+    def update_folders_list(self):
+        self.folder_entry.configure(values=[folder[0].split(
+            self.__FOLDER_PREFIX)[-1] for folder in os.walk(os.getcwd())
+                                            if folder[0].count(self.__FOLDER_PREFIX)]
+)
+    
     def update_paths(self):
-        print(self.__folder_var.get())
-        if os.path.isdir(self.__folder_var.get()):
-            self.__paths = [f"{self.__folder_var.get()}/{path}" for path in os.listdir(self.__folder_var.get()) if path.endswith(".png")]
+        folder_path = self.__FOLDER_PREFIX + self.__folder_var.get()
+        if os.path.isdir(folder_path):
+            self.__paths = [f"{folder_path}/{path}" for path in os.listdir(folder_path) if path.endswith(".png")]
             self.__path_index = 0
             self.update_image()
         

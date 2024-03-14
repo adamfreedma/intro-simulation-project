@@ -10,13 +10,16 @@ import os
 from typing import List
 
 class MainFrame(ctk.CTkFrame):
-
+    
+    __FOLDER_PREFIX = "GRAPHS"
+    
     def __init__(self, tab_master, master, simulation: Simulation):
         ctk.CTkFrame.__init__(self, tab_master, corner_radius=15)
 
         self.height = master.height
         self.width = master.width
         self.padding = master.padding
+        self.main_master = master
 
         self.stop_event = threading.Event()
         self.simulation = simulation
@@ -33,6 +36,8 @@ class MainFrame(ctk.CTkFrame):
     def start_simulation(self, visual: bool, progress_var: DoubleVar,
                          simulation_count: int=None, max_steps: int=None, graph_output_folder: str=None):
         self.stop_event.clear()
+
+        graph_output_folder = self.__FOLDER_PREFIX + graph_output_folder
 
         if graph_output_folder and not os.path.isdir(graph_output_folder):
             os.mkdir(graph_output_folder)

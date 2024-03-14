@@ -26,6 +26,7 @@ class MainApp(CTk.CTk):
         self.screen = Screen(800, 600)
         self.grid = Grid()
         self.simulation = Simulation(self.grid, self.screen)
+        
 
         self.tab_menu = ctk.CTkTabview(self)
         self.tab_list = []
@@ -33,11 +34,12 @@ class MainApp(CTk.CTk):
         self.tab_list.append(self.tab_menu.add("Graph viewer"))
         
         self.main_frame = MainFrame(self.tab_list[0], self, self.simulation)
-        self.main_frame.pack()
-        
         self.graph_viewer_frame = GraphViewerFrame(self.tab_list[1], self)
+        
+        self.main_frame.pack()
         self.graph_viewer_frame.pack()
 
+        self.tab_menu.configure(command=self.graph_viewer_frame.update_folders_list)
         self.bind("<Escape>", self.confirm_menu)
 
         self.tab_menu.pack()
