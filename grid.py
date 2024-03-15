@@ -1,6 +1,7 @@
 import json
 from teleporter import Teleporter
 from obstacle import Obstacle
+from speed_zone import SpeedZone
 from typing import List
 from walker import Walker
 from move import Move
@@ -8,18 +9,18 @@ import math_functions
 import math
 from custom_types import *
 import os
+import numpy as np
 import copy
-
 
 class Grid(object):
 
-    def __init__(self, obstacles_path="", teleporters_path="") -> None:
+    def __init__(self) -> None:
         self._obstacles = []
-        self._teleporters = []
-        self._config_obstacles(obstacles_path)
-        self._config_teleporters(teleporters_path)
 
-    def _config_teleporters(self, path: str) -> bool:
+    def clear_obstacles(self):
+        self._obstacles = []
+
+    def _add_teleporters(self, path: str) -> bool:
         teleporter_list = []
         success = False
 
@@ -40,10 +41,10 @@ class Grid(object):
             except KeyError:
                 success = False
         if success:
-            self._teleporters = teleporter_list
+            self._obstacles.extend(teleporter_list)
         return success
 
-    def _config_obstacles(self, path: str) -> bool:
+    def _add_obstacles(self, path: str) -> bool:
         obstacle_list = []
         success = False
 
@@ -61,7 +62,28 @@ class Grid(object):
                 success = False
 
         if success:
-            self._obstacles = obstacle_list
+            self._obstacles.extend(obstacle_list)
+        return success
+
+    def _add_speed_zones(self, path: str) -> bool:
+        speed_zone_list = []
+        success = False
+
+        if os.path.exists(path):
+            success = True
+            try:
+                with open(path, "rb") as f:
+                    data = json.load(f)
+
+                    for speed_zone in data["speed zones"]:
+                        speed_zone_list.append(
+                            SpeedZone(speed_zone["location"], speed_zone["radius"], speed_zone["speed factor"])
+                        )
+            except KeyError:
+                success = False
+
+        if success:
+            self._obstacles.extend(speed_zone_list)
         return success
 
     def find_closest(
@@ -71,42 +93,41 @@ class Grid(object):
         closest = None
 
         for obstacle in obstacles:
-            dist = math_functions.dist(obstacle.get_location(), starting_location)
+            dist = math_functions.dist(obstacle.get_location(), starting_location) - obstacle.get_radius()
             if dist < min_dist:
                 min_dist = dist
                 closest = obstacle
 
         return closest
 
-    def move(self, walker: Walker):
+    def move(self, walker: Walker, move: Move, obstacles: List[Obstacle]=None):
         starting_location = walker.get_location()
-        walker.move(walker.get_move())
+        walker.move(move)
         final_location = walker.get_location()
+        
+        if obstacles is None:
+            obstacles = copy.deepcopy(self._obstacles)
+        
         # getting all hit obstacles
         hit_obstacles = [
             obstacle
-            for obstacle in self._obstacles
+            for obstacle in obstacles
             if obstacle.detect_colision(starting_location, final_location)
         ]
-        # getting all hit teleporters
-        hit_teleporters = [
-            teleporter
-            for teleporter in self._teleporters
-            if teleporter.detect_colision(starting_location, final_location)
-        ]
 
-        closest_hit = self.find_closest(
-            set(hit_teleporters + hit_obstacles), starting_location
-        )
+        closest_hit = self.find_closest(hit_obstacles, starting_location)
 
         if closest_hit:
-            if isinstance(closest_hit, Teleporter):
+            obstacles.remove(closest_hit)
+            if type(closest_hit) == SpeedZone:
+                walker.move_to(starting_location)
+                scaled_move = move
+                scaled_move.scale_radius(closest_hit.get_speed_factor())
+                self.move(walker, scaled_move, obstacles)
+            if type(closest_hit) == Teleporter:
                 walker.move_to(closest_hit.get_target())
-            elif isinstance(closest_hit, Obstacle):
+            elif type(closest_hit) == Obstacle:
                 walker.move_to(starting_location)
 
-    def get_teleporters(self) -> List[Teleporter]:
-        return copy.deepcopy(self._teleporters)
-
     def get_obstacles(self) -> List[Obstacle]:
-        return copy.deepcopy(self._obstacles)
+        return self._obstacles

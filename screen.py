@@ -9,6 +9,7 @@ from typing import List, Dict
 from walker import Walker
 from obstacle import Obstacle
 from teleporter import Teleporter
+from speed_zone import SpeedZone
 import random
 import threading
 
@@ -24,7 +25,6 @@ class Screen:
         self.__screen_center = (width // 2, height // 2)
 
         self.__obstacles: List[Obstacle] = []
-        self.__teleporters: List[Teleporter] = []
 
         self.__walkers: List[Walker] = []
         self.__trails: Dict[Walker, List[vector3]] = {}
@@ -76,9 +76,6 @@ class Screen:
         if walker in self.__trails:
             self.__trails[walker].append(position)
 
-    def set_teleporters(self, teleporters: List[Teleporter]):
-        self.__teleporters = teleporters
-
     def set_obstacles(self, obstacles: List[Obstacle]):
         self.__obstacles = obstacles
 
@@ -93,7 +90,7 @@ class Screen:
     def render_sphere(self, location: vector3, radius: float, color: vector3):
 
         glTranslatef(*location)
-        glColor3fv(color)
+        glColor3f(*color)
         gluSphere(gluNewQuadric(), radius, 32, 16)
         glTranslatef(-location[0], -location[1], -location[2])
 
@@ -111,17 +108,21 @@ class Screen:
                     )
             self.__trails_lock.release()
 
-        # render teleporters
-        for teleporter in self.__teleporters:
-            self.render_sphere(
-                teleporter.get_location(), teleporter.get_radius(), (0.1, 0.1, 0.5)
-            )
 
         # render obstacles
         for obstacle in self.__obstacles:
-            self.render_sphere(
-                obstacle.get_location(), obstacle.get_radius(), (0.1, 0.1, 0.1)
-            )
+            if type(obstacle) == Obstacle:
+                self.render_sphere(
+                    obstacle.get_location(), obstacle.get_radius(), (0.1, 0.1, 0.1)
+                )
+            elif type(obstacle) == Teleporter:
+                self.render_sphere(
+                    obstacle.get_location(), obstacle.get_radius(), (0.1, 0.1, 0.5)
+                )
+            elif type(obstacle) == SpeedZone:
+                self.render_sphere(
+                    obstacle.get_location(), obstacle.get_radius(), obstacle.get_color()
+                )
 
         # drawing the axis
         self.draw_line((-self.INF, 0, 0), (self.INF, 0, 0), (1, 0, 0))

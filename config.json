@@ -40,5 +40,23 @@
         0,
         0
      ]
+    }],
+    "speed zones": [{
+       "location":[
+          0,
+          -5,
+          0
+       ],
+       "radius":1,
+       "speed factor": 0.1
+    },
+    {
+       "location":[
+          0,
+          -3,
+          0
+       ],
+       "radius":1,
+       "speed factor": 5
     }]
 }

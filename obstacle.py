@@ -13,10 +13,14 @@ class Obstacle(object):
         self, starting_location: vector3, final_location: vector3
     ) -> bool:
         movement = np.subtract(final_location, starting_location)
-        teleporter_to_start = np.subtract(starting_location, self.__location)
+        obstacle_to_start = np.subtract(starting_location, self.__location)
+        # completely inside
+        if np.linalg.norm(obstacle_to_start) < self.__radius:
+            return True
+        
         coef_a = np.dot(movement, movement)
-        coef_b = 2 * np.dot(teleporter_to_start, movement)
-        coef_c = np.dot(teleporter_to_start, teleporter_to_start) - self.__radius**2
+        coef_b = 2 * np.dot(obstacle_to_start, movement)
+        coef_c = np.dot(obstacle_to_start, obstacle_to_start) - self.__radius**2
 
         discriminant = coef_b**2 - 4 * coef_a * coef_c
         # no intersection

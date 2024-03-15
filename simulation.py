@@ -30,23 +30,18 @@ class Simulation:
         self.__wait = 0.001
 
     def config(self, path: str):
-        return self.config_obstacles(path) and self.config_teleporters(path)
+        self.__grid.clear_obstacles()
+        success = self.__grid._add_teleporters(path) and self.__grid._add_obstacles(path) and self.__grid._add_speed_zones(path)
+        self.__screen.set_obstacles(self.__grid.get_obstacles())
     
-    def config_teleporters(self, path: str):
-        success = self.__grid._config_teleporters(path)
-        self.__screen.set_teleporters(self.__grid.get_teleporters())
         return success
-
+    
     def set_simulation_count(self, simulation_count: int):
         self.__simulation_count = simulation_count
         
     def set_max_steps(self, max_steps: int):
         self.__max_steps = max_steps
-
-    def config_obstacles(self, path: str):
-        success = self.__grid._config_obstacles(path)
-        self.__screen.set_obstacles(self.__grid.get_obstacles())
-        return success
+    
 
     def _save_log_data(self, path: str, distance_list: List[float],
                        x_distance_list: List[float], y_distance_list: List[float],
@@ -92,7 +87,7 @@ class Simulation:
                 if visual:
                     time.sleep(self.__wait)
 
-                self.__grid.move(walker)
+                self.__grid.move(walker, walker.get_move())
 
                 location = walker.get_location()
                 distance = np.linalg.norm(location)
