@@ -18,9 +18,10 @@ def normalize(vec: vector3):
 
 def angle_and_radius_from_vector(vec: vector3) -> vector3:
     radius = np.linalg.norm(vec)
+    if radius == 0:
+        return (0, 0, 0)
     pitch = math.asin(vec[2] / radius)
-    floor_radius = radius * math.cos(pitch)
-    yaw = math.acos(vec[0] / floor_radius)
+    yaw = math.atan2(vec[1], vec[0])
     
     return (yaw, radius, pitch)
 
