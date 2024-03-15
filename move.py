@@ -1,5 +1,6 @@
 from custom_types import *
-
+import numpy as np
+from math_functions import vector_from_angle_and_radius
 
 class Move(object):
 
@@ -14,5 +15,10 @@ class Move(object):
     def scale_radius(self, factor: float):
         self.__radius *= factor
 
+    def __add__(self, other: 'Move'):
+        self_vector3 = self.vector_from_angle_and_radius(self.angle_and_radius())
+        other_vector3 = self.vector_from_angle_and_radius(other.angle_and_radius())
+        return Move(np.add(self_vector3, other_vector3))
+    
     def __str__(self):
         return f"yaw: {self.__yaw}, radius: {self.__radius}, pitch: {self.pitch}"

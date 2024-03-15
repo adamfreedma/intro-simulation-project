@@ -59,7 +59,7 @@ class Simulation:
         with open(path, "w") as f:
             json.dump(data, f)
 
-    def simulate(self, walker: Walker, event: Event, progress_var: DoubleVar, visual=False, graph_output_path:str=None):
+    def simulate(self, walker: Walker, event: Event, progress_var: DoubleVar, walker_list: List[Walker], visual=False, graph_output_path:str=None):
         distance_list = [0] * self.__max_steps
         x_distance_list = [0] * self.__max_steps
         y_distance_list = [0] * self.__max_steps
@@ -87,7 +87,7 @@ class Simulation:
                 if visual:
                     time.sleep(self.__wait)
 
-                self.__grid.move(walker, walker.get_move())
+                self.__grid.move(walker, walker.get_move(), walker_list)
 
                 location = walker.get_location()
                 distance = np.linalg.norm(location)
