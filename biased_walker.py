@@ -16,8 +16,8 @@ class BiasedWalker(Walker):
         "D": (0, -0.5 * math.pi),
     }
 
-    def __init__(self, name: str, is_3d: bool, bias: str=None, bias_scale=1) -> None:
-        super().__init__(name)
+    def __init__(self, name: str, is_3d: bool, mass: float=1, bias: str=None, bias_scale=1) -> None:
+        super().__init__(name, mass)
 
         self._is_3d = is_3d
         self.bias_scale = bias_scale

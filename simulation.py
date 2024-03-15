@@ -7,7 +7,7 @@ from screen import Screen
 import time
 from threading import Event
 from customtkinter import DoubleVar
-from typing import List
+from typing import List, Dict
 
 
 class Simulation:
@@ -59,7 +59,26 @@ class Simulation:
         with open(path, "w") as f:
             json.dump(data, f)
 
-    def simulate(self, walker: Walker, event: Event, progress_var: DoubleVar, walker_list: List[Walker], visual=False, graph_output_path:str=None):
+    def wait_for_all(self, simulation: int, run_event_dict: Dict[Walker, Event], walker: Walker):
+            # syncing the threads, on even runs setting the events, on odd runs unsetting the events
+            if simulation % 2 == 0:
+                set_dict = {walker : run_event_dict[walker].is_set() for walker in run_event_dict.keys()}
+                run_event_dict[walker].set()
+                while not all(set_dict.values()):
+                    for walker, event in run_event_dict.items():
+                        if event.is_set():
+                            set_dict[walker] = True
+                    time.sleep(0.01)
+            else:
+                set_dict = {walker : run_event_dict[walker].is_set() for walker in run_event_dict.keys()}
+                run_event_dict[walker].clear()
+                while any(set_dict.values()):
+                    for walker, event in run_event_dict.items():
+                        if not event.is_set():
+                            set_dict[walker] = False
+                    time.sleep(0.01)
+
+    def simulate(self, walker: Walker, stop_event: Event, run_event_dict: Dict[Walker, Event], progress_var: DoubleVar, walker_list: List[Walker], visual=False, graph_output_path:str=None):
         distance_list = [0] * self.__max_steps
         x_distance_list = [0] * self.__max_steps
         y_distance_list = [0] * self.__max_steps
@@ -82,7 +101,7 @@ class Simulation:
             time_to_leave = -1
 
             for step in range(self.__max_steps):
-                if event.is_set() or step >= self.__max_steps:
+                if stop_event.is_set() or step >= self.__max_steps:
                     break
                 if visual:
                     time.sleep(self.__wait)
@@ -115,8 +134,10 @@ class Simulation:
 
             average_time_to_leave += time_to_leave / float(self.__max_steps)
             
-            if event.is_set():
+            if stop_event.is_set():
                 break
+            
+            self.wait_for_all(simulation, run_event_dict, walker)
 
         self.__screen.remove_walker(walker)
 

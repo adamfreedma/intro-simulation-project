@@ -14,7 +14,7 @@ import copy
 
 class Grid(object):
     
-    __GRAVITY_CONSTANT = 0.5
+    __GRAVITY_CONSTANT = 1
 
     def __init__(self) -> None:
         self._obstacles = []
@@ -104,16 +104,17 @@ class Grid(object):
     
     def get_gravity_effect(self, walker: Walker, walker_list: List[Walker]) -> Move:
         addition_sum: vector3 = np.array((0, 0, 0), np.float64)
+        total_mass = sum([other_walker.get_mass() for other_walker in walker_list])
         
         for other_walker in walker_list:
             if other_walker != walker:
                 distance = math_functions.dist(walker.get_location(), other_walker.get_location())
                 walker_to_other_walker = np.subtract(other_walker.get_location(), walker.get_location())
                 direction = math_functions.normalize(walker_to_other_walker)
-                addition = (direction * other_walker.get_mass()) / max(distance, 1)
+                addition = (direction * other_walker.get_mass() * self.__GRAVITY_CONSTANT) / (max(distance, 1) * total_mass)
                 
                 addition_sum += addition
-                
+
         return Move(*math_functions.angle_and_radius_from_vector(addition_sum))
         
 
@@ -145,7 +146,6 @@ class Grid(object):
                 walker.move_to(closest_hit.get_target())
             elif type(closest_hit) == Obstacle:
                 walker.move_to(starting_location)
-                
         walker.move(self.get_gravity_effect(walker, walker_list))
 
     def get_obstacles(self) -> List[Obstacle]:

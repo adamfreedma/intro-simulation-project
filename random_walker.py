@@ -6,8 +6,8 @@ from custom_types import *
 
 class RandomWalker(Walker):
 
-    def __init__(self, name: str, is_3d: bool) -> None:
-        super().__init__(name)
+    def __init__(self, name: str, is_3d: bool, mass: float=1) -> None:
+        super().__init__(name, mass)
 
         self._is_3d = is_3d
 
