@@ -1,6 +1,6 @@
 import customtkinter as ctk
+from spinbox import Spinbox
 import colors
-import os
 from walker import Walker
 from straight_walker import StraightWalker
 from random_angle_walker import RandomAngleWalker
@@ -38,20 +38,28 @@ class WalkerFrame(ctk.CTkFrame):
             button_color=colors.WHITE,
         )
         
+        self.mass_spinbox = Spinbox(
+            self,
+            width=self.widget_width,
+            starting_value=1,
+            text="Mass",
+        )
+        
         # layout
         self.walker_choose_dropdown.pack(expand=True, side="left", padx=self.padding, pady=self.padding)
         self.dimension_toggle.pack(side="left", padx=self.padding, pady=self.padding)
+        self.mass_spinbox.pack(side="left", padx=self.padding, pady=self.padding)
         self.delete_button.pack(expand=True, side="right", padx=self.padding, pady=self.padding)
         
     def get_walker(self, name: str) -> Walker:
         if self.walker_type.get() == "Straight":
-            return StraightWalker(name, self.dimension_toggle.get())
+            return StraightWalker(name, self.dimension_toggle.get(), self.mass_spinbox.get())
         if self.walker_type.get() == "Random Angle":
-            return RandomAngleWalker(name, self.dimension_toggle.get())
+            return RandomAngleWalker(name, self.dimension_toggle.get(), self.mass_spinbox.get())
         if self.walker_type.get() == "Random":
-            return RandomWalker(name, self.dimension_toggle.get())
+            return RandomWalker(name, self.dimension_toggle.get(), self.mass_spinbox.get())
         if self.walker_type.get() == "Biased":
-            return BiasedWalker(name, self.dimension_toggle.get())
+            return BiasedWalker(name, self.dimension_toggle.get(), self.mass_spinbox.get())
     
     def delete(self):
         self.master.delete_walker(self)
