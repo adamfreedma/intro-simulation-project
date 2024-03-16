@@ -57,15 +57,17 @@ class MainFrame(ctk.CTkFrame):
             visual_thread.start()
 
         walker_thread_list: List[threading.Thread] = []
+        walker_list = self.walker_config_frame.get_walkers()
+        run_event_dict = {walker : threading.Event() for walker in walker_list}
 
-        for walker in self.walker_config_frame.get_walkers():
+        for walker in walker_list:
             output_path = None
             if graph_output_folder:
                 output_path = f"{graph_output_folder}\\{walker.get_name()}"
             
             walker_thread = threading.Thread(
                 target=self.simulation.simulate,
-                args=[walker, self.stop_event, progress_var, visual, output_path]
+                args=[walker, self.stop_event, run_event_dict, progress_var, walker_list, visual, output_path]
             )
             walker_thread.start()
             

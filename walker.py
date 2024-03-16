@@ -6,10 +6,11 @@ import math_functions
 
 class Walker(ABC):
 
-    def __init__(self, name: str) -> None:
+    def __init__(self, name: str, mass: float=1) -> None:
         super().__init__()
         
-        self._name = name
+        self.__name = name
+        self.__mass = mass
 
         self._location = (0, 0, 0)
         self._is_3d: bool
@@ -27,7 +28,10 @@ class Walker(ABC):
         return Move(angle[0], self._generate_move_radius(), angle[1])
 
     def get_name(self) -> str:
-        return self._name
+        return self.__name
+    
+    def get_mass(self) -> float:
+        return self.__mass
     
     def is_3d(self) -> bool:
         return self._is_3d
