@@ -7,13 +7,13 @@ import random
 
 class BiasedWalker(Walker):
 
-    __BIAS_DICT = {
-        "L": (-0.5 * math.pi, 0),
-        "R": (0.5 * math.pi, 0),
-        "F": (0, 0),
-        "B": (math.pi, 0),
-        "U": (0, 0.5 * math.pi),
-        "D": (0, -0.5 * math.pi),
+    BIAS_DICT = {
+        "Left": (-0.5 * math.pi, 0),
+        "Right": (0.5 * math.pi, 0),
+        "Front": (0, 0),
+        "Back": (math.pi, 0),
+        "Up": (0, 0.5 * math.pi),
+        "Down": (0, -0.5 * math.pi),
     }
 
     def __init__(self, name: str, is_3d: bool, mass: float=1, bias: str=None, bias_scale=1) -> None:
@@ -21,10 +21,10 @@ class BiasedWalker(Walker):
 
         self._is_3d = is_3d
         self.bias_scale = bias_scale
-        if bias in self.__BIAS_DICT:
+        if bias in self.BIAS_DICT:
             self.bias = bias
         else:
-            self.bias = random.choice(list(self.__BIAS_DICT.keys()))
+            self.bias = random.choice(list(self.BIAS_DICT.keys()))
 
 
     def _generate_move_radius(self) -> float:
@@ -38,10 +38,10 @@ class BiasedWalker(Walker):
         changee_magnitude = np.random.normal(scale=self.bias_scale)  # change in radians
 
         # finding the bias direction from the bias dictionary
-        if self.bias in self.__BIAS_DICT:
-            yaw, pitch = self.__BIAS_DICT[self.bias]
+        if self.bias in self.BIAS_DICT:
+            yaw, pitch = self.BIAS_DICT[self.bias]
         # finding the bias direction as the opposite of the current location
-        elif self.bias == "O":
+        elif self.bias == "Origin":
             yaw = math.atan2(self._location[1], self._location[0])
             pitch = (
                 math.atan2(self._location[2], np.linalg.norm(self._location[:2]))
