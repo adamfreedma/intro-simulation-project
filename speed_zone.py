@@ -16,7 +16,7 @@ class SpeedZone(Obstacle):
         super().__init__(location, radius)
         self.__speed_factor = speed_factor
 
-    def get_speed_factor(self) -> vector3:
+    def get_speed_factor(self) -> float:
         return self.__speed_factor
     
     def get_color(self) -> vector3:

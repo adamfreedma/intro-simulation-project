@@ -15,7 +15,7 @@ class StraightWalker(Walker):
         return 1
 
     def _generate_move_angle(self) -> Tuple[float, float]:
-        result = None
+        result = (0.0, 0.0)
         if self._is_3d:
             random_int = random.randint(0, 5)
             if random_int >= 4:

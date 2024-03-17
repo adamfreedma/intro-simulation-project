@@ -78,13 +78,13 @@ class Simulation:
                             set_dict[walker] = False
                     time.sleep(0.01)
 
-    def simulate(self, walker: Walker, stop_event: Event, run_event_dict: Dict[Walker, Event], progress_var: DoubleVar, walker_list: List[Walker], visual=False, graph_output_path:str=None):
-        distance_list = [0] * self.__max_steps
-        x_distance_list = [0] * self.__max_steps
-        y_distance_list = [0] * self.__max_steps
-        z_distance_list = [0] * self.__max_steps
-        average_time_to_leave = 0
-        y_cross_count_list = [0] * self.__max_steps
+    def simulate(self, walker: Walker, stop_event: Event, run_event_dict: Dict[Walker, Event], progress_var: DoubleVar, walker_list: List[Walker], visual=False, graph_output_path:str=""):
+        distance_list = [0.0] * self.__max_steps
+        x_distance_list = [0.0] * self.__max_steps
+        y_distance_list = [0.0] * self.__max_steps
+        z_distance_list = [0.0] * self.__max_steps
+        average_time_to_leave = 0.0
+        y_cross_count_list = [0.0] * self.__max_steps
         
         self.__screen.add_walker(walker)
 

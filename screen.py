@@ -1,8 +1,7 @@
 import pygame
 from pygame.locals import *
-from OpenGL.GL import *
-from OpenGL.GLU import *
-import math
+import OpenGL.GL as GL
+import OpenGL.GLU as GLU
 from custom_types import *
 from custom_types import *
 from typing import List, Dict
@@ -37,23 +36,23 @@ class Screen:
 
         pygame.display.set_mode(self.__display, DOUBLEBUF | OPENGL)
 
-        glEnable(GL_DEPTH_TEST)
-        glEnable(GL_LIGHTING)
-        glShadeModel(GL_SMOOTH)
-        glEnable(GL_COLOR_MATERIAL)
-        glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE)
+        GL.glEnable(GL.GL_DEPTH_TEST)
+        GL.glEnable(GL.GL_LIGHTING)
+        GL.glShadeModel(GL.GL_SMOOTH)
+        GL.glEnable(GL.GL_COLOR_MATERIAL)
+        GL.glColorMaterial(GL.GL_FRONT_AND_BACK, GL.GL_AMBIENT_AND_DIFFUSE)
 
-        glEnable(GL_LIGHT0)
-        glLightfv(GL_LIGHT0, GL_AMBIENT, [0.5, 0.5, 0.5, 1])
-        glLightfv(GL_LIGHT0, GL_DIFFUSE, [1.0, 1.0, 1.0, 1])
+        GL.glEnable(GL.GL_LIGHT0)
+        GL.glLightfv(GL.GL_LIGHT0, GL.GL_AMBIENT, [0.5, 0.5, 0.5, 1])
+        GL.glLightfv(GL.GL_LIGHT0, GL.GL_DIFFUSE, [1.0, 1.0, 1.0, 1])
 
-        glMatrixMode(GL_PROJECTION)
-        gluPerspective(45, (self.__display[0] / self.__display[1]), 0.1, 50000.0)
+        GL.glMatrixMode(GL.GL_PROJECTION)
+        GLU.gluPerspective(45, (self.__display[0] / self.__display[1]), 0.1, 50000.0)
 
-        glMatrixMode(GL_MODELVIEW)
-        gluLookAt(*self.__STARTING_LOCATION, 0, 0, 0, 0, 0, 1)
-        self.__view_matrix = glGetFloatv(GL_MODELVIEW_MATRIX)
-        glLoadIdentity()
+        GL.glMatrixMode(GL.GL_MODELVIEW)
+        GLU.gluLookAt(*self.__STARTING_LOCATION, 0, 0, 0, 0, 0, 1)
+        self.__view_matrix = GL.glGetFloatv(GL.GL_MODELVIEW_MATRIX)
+        GL.glLoadIdentity()
 
     def add_walker(self, walker: Walker):
         self.__walkers.append(walker)
@@ -80,19 +79,19 @@ class Screen:
         self.__obstacles = obstacles
 
     def draw_line(self, starting_point: vector3, final_point: vector3, color: vector3):
-        glColor3fv(color)
-        glLineWidth(5)
-        glBegin(GL_LINES)
-        glVertex3fv(starting_point)
-        glVertex3fv(final_point)
-        glEnd()
+        GL.glColor3fv(color)
+        GL.glLineWidth(5)
+        GL.glBegin(GL.GL_LINES)
+        GL.glVertex3fv(starting_point)
+        GL.glVertex3fv(final_point)
+        GL.glEnd()
 
     def render_sphere(self, location: vector3, radius: float, color: vector3):
 
-        glTranslatef(*location)
-        glColor3f(*color)
-        gluSphere(gluNewQuadric(), radius, 32, 16)
-        glTranslatef(-location[0], -location[1], -location[2])
+        GL.glTranslatef(*location)
+        GL.glColor3f(*color)
+        GLU.gluSphere(GLU.gluNewQuadric(), radius, 32, 16)
+        GL.glTranslatef(-location[0], -location[1], -location[2])
 
     def render_all(self):
         for walker in self.__walkers:
@@ -131,27 +130,27 @@ class Screen:
 
     def move(self, movement: vector3):
         # init model view matrix
-        glLoadIdentity()
+        GL.glLoadIdentity()
         # init the view matrix
-        glPushMatrix()
-        glLoadIdentity()
-        glTranslatef(*movement)
+        GL.glPushMatrix()
+        GL.glLoadIdentity()
+        GL.glTranslatef(*movement)
         # apply the left and right rotation
         # multiply the current matrix by the get the new view matrix and store the final vie matrix
-        glMultMatrixf(self.__view_matrix)
-        self.__view_matrix = glGetFloatv(GL_MODELVIEW_MATRIX)
+        GL.glMultMatrixf(self.__view_matrix)
+        self.__view_matrix = GL.glGetFloatv(GL.GL_MODELVIEW_MATRIX)
         # apply view matrix
-        glPopMatrix()
-        glMultMatrixf(self.__view_matrix)
+        GL.glPopMatrix()
+        GL.glMultMatrixf(self.__view_matrix)
 
-        glLightfv(GL_LIGHT0, GL_POSITION, [1, -1, 1, 0])
+        GL.glLightfv(GL.GL_LIGHT0, GL.GL_POSITION, [1, -1, 1, 0])
 
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-        glClearColor(1, 1, 1, 1)
+        GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT)
+        GL.glClearColor(1, 1, 1, 1)
 
-        glPushMatrix()
+        GL.glPushMatrix()
         self.render_all()
-        glPopMatrix()
+        GL.glPopMatrix()
 
         pygame.display.flip()
 
@@ -183,27 +182,27 @@ class Screen:
                 keypress = pygame.key.get_pressed()
 
                 # init model view matrix
-                glLoadIdentity()
+                GL.glLoadIdentity()
                 # init the view matrix
-                glPushMatrix()
-                glLoadIdentity()
+                GL.glPushMatrix()
+                GL.glLoadIdentity()
 
-                movement = (0, 0, 0)
+                movement = (0.0, 0.0, 0.0)
                 # apply the movement
                 if keypress[pygame.K_s]:
-                    movement = (0, 0, -0.5)
+                    movement = (0.0, 0.0, -0.5)
                 if keypress[pygame.K_w]:
-                    movement = (0, 0, 0.5)
+                    movement = (0.0, 0.0, 0.5)
                 if keypress[pygame.K_d]:
-                    movement = (-0.5, 0, 0)
+                    movement = (-0.5, 0.0, 0.0)
                 if keypress[pygame.K_a]:
-                    movement = (0.5, 0, 0)
+                    movement = (0.5, 0.0, 0.0)
                 if keypress[pygame.K_SPACE]:
-                    movement = (0, -0.5, 0)
+                    movement = (0.0, -0.5, 0.0)
                 if keypress[pygame.K_LSHIFT]:
-                    movement = (0, 0.5, 0)
+                    movement = (0.0, 0.5, 0.0)
 
-                glPopMatrix()
+                GL.glPopMatrix()
                 self.move(movement)
 
                 pygame.time.wait(10)

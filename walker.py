@@ -12,7 +12,7 @@ class Walker(ABC):
         self.__name = name
         self.__mass = mass
 
-        self._location = (0, 0, 0)
+        self._location = (0.0, 0.0, 0.0)
         self._is_3d: bool
 
     @abstractmethod

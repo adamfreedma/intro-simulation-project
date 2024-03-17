@@ -16,9 +16,9 @@ class Move(object):
         self.__radius *= factor
 
     def __add__(self, other: 'Move'):
-        self_vector3 = self.vector_from_angle_and_radius(self.angle_and_radius())
-        other_vector3 = self.vector_from_angle_and_radius(other.angle_and_radius())
-        return Move(np.add(self_vector3, other_vector3))
+        self_vector3 = vector_from_angle_and_radius(*self.angle_and_radius())
+        other_vector3 = vector_from_angle_and_radius(*other.angle_and_radius())
+        return Move(*np.add(self_vector3, other_vector3))
     
     def __str__(self):
         return f"yaw: {self.__yaw}, radius: {self.__radius}, pitch: {self.pitch}"

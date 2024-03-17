@@ -2,7 +2,7 @@ import random
 import math
 from custom_types import *
 import numpy as np
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union, Any, cast
 
 if TYPE_CHECKING:
     from move import Move
@@ -36,7 +36,7 @@ def vector_from_angle_and_radius(yaw: float, radius: float, pitch: float) -> vec
 
 def add_move(location: vector3, move: 'Move') -> vector3:
     move_vector = vector_from_angle_and_radius(*move.angle_and_radius())
-    return np.add(location, move_vector)
+    return cast(vector3, np.add(location, move_vector))
 
 
 def dist(vec1: vector3, vec2: vector3) -> float:

@@ -11,13 +11,14 @@ from custom_types import *
 import os
 import numpy as np
 import copy
+from typing import Optional, cast
 
 class Grid(object):
     
     __GRAVITY_CONSTANT = 1
 
     def __init__(self) -> None:
-        self._obstacles = []
+        self._obstacles: List[Obstacle] = []
 
     def clear_obstacles(self):
         self._obstacles = []
@@ -90,7 +91,7 @@ class Grid(object):
 
     def find_closest(
         self, obstacles: List[Obstacle], starting_location: vector3
-    ) -> Obstacle:
+    ) -> Optional[Obstacle]:
         min_dist = math.inf
         closest = None
 
@@ -103,7 +104,7 @@ class Grid(object):
         return closest
     
     def get_gravity_effect(self, walker: Walker, walker_list: List[Walker]) -> Move:
-        addition_sum: vector3 = np.array((0, 0, 0), np.float64)
+        addition_sum = np.array((0, 0, 0), np.float64)
         total_mass = sum([other_walker.get_mass() for other_walker in walker_list])
         
         for other_walker in walker_list:
@@ -115,10 +116,10 @@ class Grid(object):
                 
                 addition_sum += addition
 
-        return Move(*math_functions.angle_and_radius_from_vector(addition_sum))
+        return Move(*math_functions.angle_and_radius_from_vector(cast(vector3, addition_sum)))
         
 
-    def move(self, walker: Walker, move: Move, walker_list: List[Walker], obstacles: List[Obstacle]=None):
+    def move(self, walker: Walker, move: Move, walker_list: List[Walker], obstacles: Optional[List[Obstacle]]=None):
         starting_location = walker.get_location()
         walker.move(move)
         final_location = walker.get_location()
@@ -141,7 +142,7 @@ class Grid(object):
                 walker.move_to(starting_location)
                 scaled_move = move
                 scaled_move.scale_radius(closest_hit.get_speed_factor())
-                self.move(walker, scaled_move, obstacles)
+                self.move(walker, scaled_move, walker_list, obstacles)
             if type(closest_hit) == Teleporter:
                 walker.move_to(closest_hit.get_target())
             elif type(closest_hit) == Obstacle:

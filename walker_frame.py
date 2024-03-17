@@ -79,8 +79,6 @@ class WalkerFrame(ctk.CTkFrame):
         self.delete_button.pack(expand=True, side="right", padx=self.padding, pady=self.padding)
         
     def get_walker(self, name: str) -> Walker:
-        if self.walker_type.get() == "Straight":
-            return StraightWalker(name, self.dimension_toggle.get(), self.mass_spinbox.get())
         if self.walker_type.get() == "Random Angle":
             return RandomAngleWalker(name, self.dimension_toggle.get(), self.mass_spinbox.get())
         if self.walker_type.get() == "Random":
@@ -89,6 +87,8 @@ class WalkerFrame(ctk.CTkFrame):
             return BiasedWalker(name, self.dimension_toggle.get(), self.mass_spinbox.get(), self.bias_entry.get())
         if self.walker_type.get() == "Accelerating":
             return AcceleratingWalker(name, self.dimension_toggle.get(), self.mass_spinbox.get(), self.acceleration_entry.get())
+        # defaults to Straight
+        return StraightWalker(name, self.dimension_toggle.get(), self.mass_spinbox.get())
     
     def pack_walker_specific_widgets(self, current_value: str):
         if current_value == "Biased":

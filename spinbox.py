@@ -1,15 +1,15 @@
 import customtkinter
-from typing import Callable
+from typing import Callable, Optional
 
 class Spinbox(customtkinter.CTkFrame):
     def __init__(self, *args,
-                 width: int = 100,
-                 height: int = 32,
-                 starting_value: int = 0,
-                 max_value: int = 999,
-                 min_value: int = 0,
-                 text: str = None,
-                 command: Callable = None,
+                 width: int=100,
+                 height: int=32,
+                 starting_value: int=0,
+                 max_value: int=999,
+                 min_value: int=0,
+                 text: str="",
+                 command: Optional[Callable]=None,
                  **kwargs):
         super().__init__(*args, width=width, height=height, **kwargs)
 
@@ -74,7 +74,7 @@ class Spinbox(customtkinter.CTkFrame):
         try:
             return int(self.entry.get())
         except ValueError:
-            return None
+            return 0
 
     def set(self, value: int):
         self.entry.delete(0, "end")

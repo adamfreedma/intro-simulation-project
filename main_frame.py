@@ -9,6 +9,7 @@ from straight_walker import StraightWalker
 import os
 import shutil
 from typing import List
+from typing import Optional
 
 class MainFrame(ctk.CTkFrame):
     
@@ -35,15 +36,16 @@ class MainFrame(ctk.CTkFrame):
         self.start_frame.pack(anchor="s", fill="both", padx=self.padding, pady=self.padding)
 
     def start_simulation(self, visual: bool, progress_var: DoubleVar,
-                         simulation_count: int=None, max_steps: int=None, graph_output_folder: str=None):
+                         simulation_count: Optional[int]=None, max_steps: Optional[int]=None, graph_output_folder: str=""):
         self.stop_event.clear()
 
-        graph_output_folder = self.__FOLDER_PREFIX + graph_output_folder
+        if graph_output_folder:
+            graph_output_folder = self.__FOLDER_PREFIX + graph_output_folder
 
-        if os.path.isdir(graph_output_folder):
-            shutil.rmtree(graph_output_folder)
+            if os.path.isdir(graph_output_folder):
+                shutil.rmtree(graph_output_folder)
 
-        os.mkdir(graph_output_folder)
+            os.mkdir(graph_output_folder)
 
         if simulation_count:
             self.simulation.set_simulation_count(simulation_count)
