@@ -1,7 +1,7 @@
 from custom_types import *
 from custom_types import vector3
 from obstacle import Obstacle
-
+from typing import Tuple
 
 class SpeedZone(Obstacle):
 
@@ -11,7 +11,7 @@ class SpeedZone(Obstacle):
         self,
         location: Tuple[float, float, float],
         radius: float,
-        speed_factor,
+        speed_factor: float,
     ) -> None:
         super().__init__(location, radius)
         self.__speed_factor = speed_factor

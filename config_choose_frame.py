@@ -3,9 +3,9 @@ import colors
 import os
 
 
-class ConfigChooseFrame(ctk.CTkFrame):
+class ConfigChooseFrame(ctk.CTkFrame): # type: ignore[misc]
 
-    def __init__(self, master):
+    def __init__(self, master: ctk.CTkFrame) -> None:
         ctk.CTkFrame.__init__(self, master, corner_radius=15)
 
         self.height = master.height
@@ -23,7 +23,7 @@ class ConfigChooseFrame(ctk.CTkFrame):
         # layout
         self.file_picker.pack(expand=True, padx=self.padding, pady=self.padding)
 
-    def file_dialog(self):
+    def file_dialog(self) -> None:
         success = self.master.parse_config(
             ctk.filedialog.askopenfilename(
                 initialdir=os.getcwd(),

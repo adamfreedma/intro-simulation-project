@@ -4,9 +4,9 @@ from walker_frame import WalkerFrame
 from typing import List
 from walker import Walker
 
-class WalkerConfigFrame(ctk.CTkFrame):
+class WalkerConfigFrame(ctk.CTkFrame): # type: ignore[misc]
 
-    def __init__(self, master):
+    def __init__(self, master: ctk.CTkFrame) -> None:
         ctk.CTkFrame.__init__(self, master, corner_radius=15)
 
         self.height = master.height
@@ -14,7 +14,7 @@ class WalkerConfigFrame(ctk.CTkFrame):
         self.widget_width = self.width // 8
         self.padding = master.padding
 
-        self.walker_frame_list = []
+        self.walker_frame_list: List[WalkerFrame] = []
         
         self.add_walker_button = ctk.CTkButton(self, self.widget_width, text="Add walker", command=self.create_walker)
         
@@ -22,12 +22,12 @@ class WalkerConfigFrame(ctk.CTkFrame):
         self.add_walker_button.pack(padx=self.padding, pady=self.padding)
         
     
-    def create_walker(self):
+    def create_walker(self) -> None:
         walker_frame = WalkerFrame(self)
         self.walker_frame_list.append(walker_frame)
         walker_frame.pack(padx=self.padding, pady=self.padding)
         
-    def delete_walker(self, walker_frame: WalkerFrame):
+    def delete_walker(self, walker_frame: WalkerFrame) -> None:
         self.walker_frame_list.remove(walker_frame)
         
     def get_walkers(self) -> List[Walker]:

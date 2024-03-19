@@ -2,7 +2,7 @@ from walker import Walker
 import math_functions
 import random
 from custom_types import *
-
+from typing import Tuple
 
 class RandomWalker(Walker):
 

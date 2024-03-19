@@ -11,11 +11,11 @@ import shutil
 from typing import List
 from typing import Optional
 
-class MainFrame(ctk.CTkFrame):
+class MainFrame(ctk.CTkFrame): # type: ignore[misc]
     
     __FOLDER_PREFIX = "GRAPHS"
     
-    def __init__(self, tab_master, master, simulation: Simulation):
+    def __init__(self, tab_master: ctk.CTkFrame, master: ctk.CTkFrame, simulation: Simulation) -> None:
         ctk.CTkFrame.__init__(self, tab_master, corner_radius=15)
 
         self.height = master.height
@@ -36,7 +36,10 @@ class MainFrame(ctk.CTkFrame):
         self.start_frame.pack(anchor="s", fill="both", padx=self.padding, pady=self.padding)
 
     def start_simulation(self, visual: bool, progress_var: DoubleVar,
-                         simulation_count: Optional[int]=None, max_steps: Optional[int]=None, graph_output_folder: str=""):
+                         simulation_count: Optional[int]=None,
+                         max_steps: Optional[int]=None,
+                         graph_output_folder: str="") -> None:
+        
         self.stop_event.clear()
 
         if graph_output_folder:
@@ -77,20 +80,20 @@ class MainFrame(ctk.CTkFrame):
             
         self.wait_to_stop(walker_thread_list)
             
-    def wait_to_stop(self, walker_thread_list: List[threading.Thread]):
+    def wait_to_stop(self, walker_thread_list: List[threading.Thread]) -> None:
         if all([not walker_thread.is_alive() for walker_thread in walker_thread_list]):
             self.simulation.stop()
             self.start_frame.stop()
         else:
             self.after(50, self.wait_to_stop, walker_thread_list)
 
-    def update_speed(self, value: float):
+    def update_speed(self, value: float) -> None:
         self.simulation.update_speed(value)
         
-    def update_simulation_count(self, value: int):
+    def update_simulation_count(self, value: int) -> None:
         self.simulation.set_simulation_count(value)
         
-    def update_max_steps(self, value: int):
+    def update_max_steps(self, value: int) -> None:
         self.simulation.set_max_steps(value)
 
     def parse_config(self, path: str) -> bool:

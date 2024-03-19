@@ -1,7 +1,7 @@
 from custom_types import *
 from custom_types import vector3
 from obstacle import Obstacle
-
+from typing import Tuple
 
 class Teleporter(Obstacle):
 

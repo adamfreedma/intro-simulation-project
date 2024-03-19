@@ -7,12 +7,13 @@ from random_angle_walker import RandomAngleWalker
 from random_walker import RandomWalker
 from biased_walker import BiasedWalker
 from accelerating_walker import AcceleratingWalker
+from typing import List
 
-class WalkerFrame(ctk.CTkFrame):
+class WalkerFrame(ctk.CTkFrame): # type: ignore[misc]
 
     __WALKER_TYPES = ["Straight", "Random Angle", "Random", "Biased", "Accelerating"]
 
-    def __init__(self, master):
+    def __init__(self, master: ctk.CTkFrame) -> None:
         ctk.CTkFrame.__init__(self, master, corner_radius=15)
 
         self.height = master.height
@@ -21,7 +22,7 @@ class WalkerFrame(ctk.CTkFrame):
         self.padding = master.padding
 
 
-        self.walker_list = []
+        self.walker_list: List[Walker] = []
         
         self.walker_type = ctk.StringVar(self.master, value="Straight")
         self.dimension_var = ctk.BooleanVar(value=False)
@@ -90,7 +91,7 @@ class WalkerFrame(ctk.CTkFrame):
         # defaults to Straight
         return StraightWalker(name, self.dimension_toggle.get(), self.mass_spinbox.get())
     
-    def pack_walker_specific_widgets(self, current_value: str):
+    def pack_walker_specific_widgets(self, current_value: str) -> None:
         if current_value == "Biased":
             self.bias_entry_frame.pack(side="left", padx=self.padding, pady=self.padding)
             self.acceleration_entry_frame.pack_forget()
@@ -101,7 +102,7 @@ class WalkerFrame(ctk.CTkFrame):
             self.bias_entry_frame.pack_forget()
             self.acceleration_entry_frame.pack_forget()
     
-    def delete(self):
+    def delete(self) -> None:
         self.master.delete_walker(self)
         self.pack_forget()
         self.destroy()

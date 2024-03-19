@@ -3,9 +3,9 @@ import colors
 from spinbox import Spinbox
 
 
-class StartFrame(ctk.CTkFrame):
+class StartFrame(ctk.CTkFrame): # type: ignore[misc]
 
-    def __init__(self, master):
+    def __init__(self, master: ctk.CTkFrame) -> None:
         ctk.CTkFrame.__init__(self, master, corner_radius=15)
 
         self.height = master.height
@@ -91,7 +91,7 @@ class StartFrame(ctk.CTkFrame):
         
         self.start_button.pack(expand=True, padx=self.padding, pady=self.padding)
 
-    def start(self):
+    def start(self) -> None:
         self.progress_bar.pack(expand=True, padx=self.padding, pady=self.padding)
         self.master.start_simulation(self.visual_var.get(),
                                      self.progress_var,
@@ -100,14 +100,14 @@ class StartFrame(ctk.CTkFrame):
                                      graph_output_folder=self.graph_output_folder_widget.get(),
                                     )
 
-    def update_speed(self, value: float):
+    def update_speed(self, value: float) -> None:
         self.master.update_speed(value)
 
-    def update_simulation_count(self, value: int):
+    def update_simulation_count(self, value: int) -> None:
         self.master.update_simulation_count(value)
         
-    def update_max_steps(self, value: int):
+    def update_max_steps(self, value: int) -> None:
         self.master.update_max_steps(value)
 
-    def stop(self):
+    def stop(self) -> None:
         self.progress_bar.pack_forget()

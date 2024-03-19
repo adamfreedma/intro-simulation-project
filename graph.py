@@ -2,14 +2,15 @@ import matplotlib.pyplot as plt
 import matplotlib
 import numpy as np
 import json
+from typing import Dict, Any
 
 matplotlib.use('Agg')
 
-def read_json(path: str):
+def read_json(path: str) -> Dict[str, Any]:
     with open(path, 'r') as f:
-        return json.load(f)
+        return dict(json.load(f))
 
-def distance_graph(data_path: str, output_path: str, axis: str=""):
+def distance_graph(data_path: str, output_path: str, axis: str="") -> None:
     
     data = read_json(data_path)[f"{axis}distance"]
 
@@ -23,7 +24,7 @@ def distance_graph(data_path: str, output_path: str, axis: str=""):
     fig.savefig(f"{output_path}-{axis}distance.png")
     plt.close(fig)
     
-def cross_amount_graph(data_path: str, output_path: str):
+def cross_amount_graph(data_path: str, output_path: str) -> None:
     
     data = read_json(data_path)["y_cross_count_list"]
 

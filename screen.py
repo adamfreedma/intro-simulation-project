@@ -19,7 +19,7 @@ class Screen:
     INF = 50000
     __WALKER_COLOR = (0.2, 0.6, 0.2)
 
-    def __init__(self, width: float, height: float):
+    def __init__(self, width: float, height: float) -> None:
         self.__display = (width, height)
         self.__screen_center = (width // 2, height // 2)
 
@@ -31,7 +31,7 @@ class Screen:
         self.__colors: Dict[Walker, vector3] = {}
         self.__run = True
 
-    def initialize(self):
+    def initialize(self) -> None:
         pygame.init()
 
         pygame.display.set_mode(self.__display, DOUBLEBUF | OPENGL)
@@ -54,31 +54,31 @@ class Screen:
         self.__view_matrix = GL.glGetFloatv(GL.GL_MODELVIEW_MATRIX)
         GL.glLoadIdentity()
 
-    def add_walker(self, walker: Walker):
+    def add_walker(self, walker: Walker) -> None:
         self.__walkers.append(walker)
         self.__trails[walker] = []
         self.__colors[walker] = (random.random(), random.random(), random.random())
 
-    def remove_walker(self, walker: Walker):
+    def remove_walker(self, walker: Walker) -> None:
         self.__walkers.remove(walker)
         self.__trails_lock.acquire()
         del self.__trails[walker]
         self.__trails_lock.release()
 
-    def reset_trail(self, walker: Walker):
+    def reset_trail(self, walker: Walker) -> None:
         self.__trails_lock.acquire()
         self.__trails[walker] = []
         self.__trails_lock.release()
         self.__colors[walker] = (random.random(), random.random(), random.random())
 
-    def add_to_trail(self, walker: Walker, position: vector3):
+    def add_to_trail(self, walker: Walker, position: vector3) -> None:
         if walker in self.__trails:
             self.__trails[walker].append(position)
 
-    def set_obstacles(self, obstacles: List[Obstacle]):
+    def set_obstacles(self, obstacles: List[Obstacle]) -> None:
         self.__obstacles = obstacles
 
-    def draw_line(self, starting_point: vector3, final_point: vector3, color: vector3):
+    def draw_line(self, starting_point: vector3, final_point: vector3, color: vector3) -> None:
         GL.glColor3fv(color)
         GL.glLineWidth(5)
         GL.glBegin(GL.GL_LINES)
@@ -86,14 +86,14 @@ class Screen:
         GL.glVertex3fv(final_point)
         GL.glEnd()
 
-    def render_sphere(self, location: vector3, radius: float, color: vector3):
+    def render_sphere(self, location: vector3, radius: float, color: vector3) -> None:
 
         GL.glTranslatef(*location)
         GL.glColor3f(*color)
         GLU.gluSphere(GLU.gluNewQuadric(), radius, 32, 16)
         GL.glTranslatef(-location[0], -location[1], -location[2])
 
-    def render_all(self):
+    def render_all(self) -> None:
         for walker in self.__walkers:
             self.render_sphere(walker.get_location(), 0.5, self.__WALKER_COLOR)
 
@@ -128,7 +128,7 @@ class Screen:
         self.draw_line((0, -self.INF, 0), (0, self.INF, 0), (0, 1, 0))
         self.draw_line((0, 0, -self.INF), (0, 0, self.INF), (0, 0, 1))
 
-    def move(self, movement: vector3):
+    def move(self, movement: vector3) -> None:
         # init model view matrix
         GL.glLoadIdentity()
         # init the view matrix
@@ -154,7 +154,7 @@ class Screen:
 
         pygame.display.flip()
 
-    def run(self, stop_event: threading.Event):
+    def run(self, stop_event: threading.Event) -> None:
         self.initialize()
 
         # init mouse movement and center mouse on screen
@@ -211,5 +211,5 @@ class Screen:
         pygame.quit()
 
     
-    def stop(self):
+    def stop(self) -> None:
         self.__run = False

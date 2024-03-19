@@ -7,7 +7,7 @@ from screen import Screen
 import time
 from threading import Event
 from customtkinter import DoubleVar
-from typing import List, Dict
+from typing import List, Dict, cast
 
 
 class Simulation:
@@ -20,8 +20,8 @@ class Simulation:
         self,
         grid: Grid,
         screen: Screen,
-        simulation_count=50,
-        max_steps=5000,
+        simulation_count: int=50,
+        max_steps: int=5000,
     ) -> None:
         self.__grid = grid
         self.__screen = screen
@@ -29,24 +29,24 @@ class Simulation:
         self.__max_steps = max_steps
         self.__wait = 0.001
 
-    def config(self, path: str):
+    def config(self, path: str) -> bool:
         self.__grid.clear_obstacles()
         success = self.__grid._add_teleporters(path) and self.__grid._add_obstacles(path) and self.__grid._add_speed_zones(path)
         self.__screen.set_obstacles(self.__grid.get_obstacles())
     
         return success
     
-    def set_simulation_count(self, simulation_count: int):
+    def set_simulation_count(self, simulation_count: int) -> None:
         self.__simulation_count = simulation_count
         
-    def set_max_steps(self, max_steps: int):
+    def set_max_steps(self, max_steps: int) -> None:
         self.__max_steps = max_steps
     
 
     def _save_log_data(self, path: str, distance_list: List[float],
                        x_distance_list: List[float], y_distance_list: List[float],
                        z_distance_list: List[float], average_time_to_leave: float,
-                       y_cross_count_list: List[float]):
+                       y_cross_count_list: List[float]) -> None:
         data = {
             "distance": distance_list,
             "xdistance": x_distance_list,
@@ -59,7 +59,7 @@ class Simulation:
         with open(path, "w") as f:
             json.dump(data, f)
 
-    def wait_for_all(self, simulation: int, run_event_dict: Dict[Walker, Event], walker: Walker):
+    def wait_for_all(self, simulation: int, run_event_dict: Dict[Walker, Event], walker: Walker) -> None:
             # syncing the threads, on even runs setting the events, on odd runs unsetting the events
             if simulation % 2 == 0:
                 set_dict = {walker : run_event_dict[walker].is_set() for walker in run_event_dict.keys()}
@@ -78,7 +78,10 @@ class Simulation:
                             set_dict[walker] = False
                     time.sleep(0.01)
 
-    def simulate(self, walker: Walker, stop_event: Event, run_event_dict: Dict[Walker, Event], progress_var: DoubleVar, walker_list: List[Walker], visual=False, graph_output_path:str=""):
+    def simulate(self , walker: Walker, stop_event: Event,
+                 run_event_dict: Dict[Walker, Event], progress_var: DoubleVar,
+                 walker_list: List[Walker], visual:bool=False,
+                 graph_output_path:str="") -> None:
         distance_list = [0.0] * self.__max_steps
         x_distance_list = [0.0] * self.__max_steps
         y_distance_list = [0.0] * self.__max_steps
@@ -109,7 +112,7 @@ class Simulation:
                 self.__grid.move(walker, walker.get_move(), walker_list)
 
                 location = walker.get_location()
-                distance = np.linalg.norm(location)
+                distance = float(np.linalg.norm(location)) # type: ignore[no-untyped-call]
                 # tracking  y axis crosses
                 if location[1] - self.__EPSILON > 0:
                     if sign == -1:
@@ -149,16 +152,16 @@ class Simulation:
         if graph_output_path:
             self.generate_graphs(log_path, graph_output_path, walker.is_3d())
 
-    def run_visual(self, event: Event):
+    def run_visual(self, event: Event) -> None:
         self.__screen.run(event)
         
-    def update_speed(self, value: float):
+    def update_speed(self, value: float) -> None:
         self.__wait = (1.001 - value) / 10
         
-    def stop(self):
+    def stop(self) -> None:
         self.__screen.stop()
 
-    def generate_graphs(self, log_path: str, output_path: str, is_3d: bool):
+    def generate_graphs(self, log_path: str, output_path: str, is_3d: bool) -> None:
         graph.distance_graph(log_path, output_path)
         graph.distance_graph(log_path, output_path, "x")
         graph.distance_graph(log_path, output_path, "y")

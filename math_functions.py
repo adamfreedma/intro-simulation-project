@@ -2,7 +2,7 @@ import random
 import math
 from custom_types import *
 import numpy as np
-from typing import TYPE_CHECKING, Union, Any, cast
+from typing import TYPE_CHECKING, cast
 
 if TYPE_CHECKING:
     from move import Move
@@ -10,14 +10,14 @@ if TYPE_CHECKING:
 def random_angle() -> float:
     return random.random() * 2 * math.pi
 
-def normalize(vec: vector3):
-    if len(vec) == 0 or np.linalg.norm(vec) == 0:
+def normalize(vec: vector3) -> vector3:
+    if len(vec) == 0 or np.linalg.norm(vec) == 0: # type: ignore[no-untyped-call]
         return vec
     
-    return np.array(vec) / np.linalg.norm(vec)
+    return cast(vector3, np.array(vec) / np.linalg.norm(vec)) # type: ignore[no-untyped-call]
 
 def angle_and_radius_from_vector(vec: vector3) -> vector3:
-    radius = np.linalg.norm(vec)
+    radius = np.linalg.norm(vec) # type: ignore[no-untyped-call]
     if radius == 0:
         return (0, 0, 0)
     pitch = math.asin(vec[2] / radius)
@@ -40,4 +40,4 @@ def add_move(location: vector3, move: 'Move') -> vector3:
 
 
 def dist(vec1: vector3, vec2: vector3) -> float:
-    return np.linalg.norm(np.subtract(vec2, vec1))
+    return float(np.linalg.norm(np.subtract(vec2, vec1))) # type: ignore[no-untyped-call]

@@ -2,12 +2,13 @@ from walker import Walker
 import math_functions
 from custom_types import *
 import math
+from typing import Tuple, Callable, Dict
 
 class AcceleratingWalker(Walker):
 
     __ACCELERATION_SCALE = 0.1
-    ACCELERATION_TYPES = {"Linear": lambda x: AcceleratingWalker.__ACCELERATION_SCALE * x,
-                            "Quadratic": lambda x: (AcceleratingWalker.__ACCELERATION_SCALE * x)**2,
+    ACCELERATION_TYPES: Dict[str, Callable[[float], float]] = {"Linear": lambda x: AcceleratingWalker.__ACCELERATION_SCALE * x,
+                            "Quadratic": lambda x: math.pow(AcceleratingWalker.__ACCELERATION_SCALE * x, 2),
                             "Logarithmic": lambda x: math.log(AcceleratingWalker.__ACCELERATION_SCALE * x),
                             "Square Root": lambda x: math.sqrt(AcceleratingWalker.__ACCELERATION_SCALE * x)
                             }
@@ -25,7 +26,7 @@ class AcceleratingWalker(Walker):
             self.__acceleration_type = "Linear"
 
     def _generate_move_radius(self) -> float:
-        self.__step += 1
+        self.__step = self.__step + 1
         return self.ACCELERATION_TYPES[self.__acceleration_type](self.__step)
 
     def _generate_move_angle(self) -> Tuple[float, float]:
@@ -37,6 +38,6 @@ class AcceleratingWalker(Walker):
 
         return result
     
-    def reset(self):
+    def reset(self) -> None:
         self.__step = 0
-        return super().reset()
+        super().reset()

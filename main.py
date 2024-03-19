@@ -5,8 +5,9 @@ from simulation import Simulation
 from grid import Grid
 from screen import Screen
 import customtkinter as ctk
+from typing import Any
 
-class MainApp(CTk.CTk):
+class MainApp(CTk.CTk): # type: ignore[misc]
 
     BUTTON_COLOR = "#009B44"
     BUTTON_HOVER_COLOR = "#007B34"
@@ -50,10 +51,10 @@ class MainApp(CTk.CTk):
         self.width = 800
         self.height = 600
 
-    def close(self, _=None):
+    def close(self, _:Any=None) -> None:
         self.destroy()
 
-    def confirm_menu(self, _=None):
+    def confirm_menu(self, _:Any=None) -> None:
         if not self.confirm_menu_open:
             self.confirm_menu_open = True
 
@@ -82,7 +83,7 @@ class MainApp(CTk.CTk):
             yes_button.grid(row=1, column=0, padx=self.padding, pady=self.padding)
             no_button.grid(row=1, column=1, padx=self.padding, pady=self.padding)
 
-    def close_confirm_menu(self):
+    def close_confirm_menu(self) -> None:
         self.confirm_menu_open = False
         self.top.destroy()
 

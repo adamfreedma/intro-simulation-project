@@ -20,7 +20,7 @@ class Grid(object):
     def __init__(self) -> None:
         self._obstacles: List[Obstacle] = []
 
-    def clear_obstacles(self):
+    def clear_obstacles(self) -> None:
         self._obstacles = []
 
     def _add_teleporters(self, path: str) -> bool:
@@ -111,15 +111,18 @@ class Grid(object):
             if other_walker != walker:
                 distance = math_functions.dist(walker.get_location(), other_walker.get_location())
                 walker_to_other_walker = np.subtract(other_walker.get_location(), walker.get_location())
-                direction = math_functions.normalize(walker_to_other_walker)
-                addition = (direction * other_walker.get_mass() * self.__GRAVITY_CONSTANT) / (max(distance, 1) * total_mass)
+                direction = math_functions.normalize(cast(vector3, walker_to_other_walker))
+                addition = cast(vector3, ((np.array(direction) *
+                                           other_walker.get_mass() *
+                                           self.__GRAVITY_CONSTANT) /
+                                          (max(distance, 1) * total_mass)))
                 
                 addition_sum += addition
 
         return Move(*math_functions.angle_and_radius_from_vector(cast(vector3, addition_sum)))
         
 
-    def move(self, walker: Walker, move: Move, walker_list: List[Walker], obstacles: Optional[List[Obstacle]]=None):
+    def move(self, walker: Walker, move: Move, walker_list: List[Walker], obstacles: Optional[List[Obstacle]]=None) -> None:
         starting_location = walker.get_location()
         walker.move(move)
         final_location = walker.get_location()

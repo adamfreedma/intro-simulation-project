@@ -1,7 +1,7 @@
 from walker import Walker
 import math_functions
 from custom_types import *
-
+from typing import Tuple
 
 class RandomAngleWalker(Walker):
 
