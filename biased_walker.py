@@ -9,8 +9,8 @@ from typing import Tuple
 class BiasedWalker(Walker):
 
     BIAS_DICT = {
-        "Left": (-0.5 * math.pi, 0),
-        "Right": (0.5 * math.pi, 0),
+        "Left": (0.5 * math.pi, 0),
+        "Right": (-0.5 * math.pi, 0),
         "Front": (0, 0),
         "Back": (math.pi, 0),
         "Up": (0, 0.5 * math.pi),
@@ -22,7 +22,7 @@ class BiasedWalker(Walker):
 
         self._is_3d = is_3d
         self.bias_scale = bias_scale
-        if bias in self.BIAS_DICT:
+        if bias in self.BIAS_DICT or bias == "Origin":
             self.bias = bias
         else:
             self.bias = random.choice(list(self.BIAS_DICT.keys()))
