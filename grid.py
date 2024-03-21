@@ -107,17 +107,18 @@ class Grid(object):
         addition_sum = np.array((0, 0, 0), np.float64)
         total_mass = sum([other_walker.get_mass() for other_walker in walker_list])
         
-        for other_walker in walker_list:
-            if other_walker != walker:
-                distance = math_functions.dist(walker.get_location(), other_walker.get_location())
-                walker_to_other_walker = np.subtract(other_walker.get_location(), walker.get_location())
-                direction = math_functions.normalize(cast(vector3, walker_to_other_walker))
-                addition = cast(vector3, ((np.array(direction) *
-                                           other_walker.get_mass() *
-                                           self.__GRAVITY_CONSTANT) /
-                                          (max(distance, 1) * total_mass)))
-                
-                addition_sum += addition
+        if walker.get_mass() > 0:
+            for other_walker in walker_list:
+                if other_walker != walker:
+                    distance = math_functions.dist(walker.get_location(), other_walker.get_location())
+                    walker_to_other_walker = np.subtract(other_walker.get_location(), walker.get_location())
+                    direction = math_functions.normalize(cast(vector3, walker_to_other_walker))
+                    addition = cast(vector3, ((np.array(direction) *
+                                            other_walker.get_mass() *
+                                            self.__GRAVITY_CONSTANT) /
+                                            (max(distance, 1) * total_mass)))
+                    
+                    addition_sum += addition
 
         return Move(*math_functions.angle_and_radius_from_vector(cast(vector3, addition_sum)))
         
