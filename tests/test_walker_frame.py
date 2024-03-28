@@ -7,7 +7,7 @@ from simulation import Simulation
 from straight_walker import StraightWalker
 from walker_frame import WalkerFrame, Walker
 from walker_config_frame import WalkerConfigFrame
-import customtkinter as ctk
+import customtkinter as ctk # type: ignore[import]
 
 @pytest.fixture
 def walker_frame():

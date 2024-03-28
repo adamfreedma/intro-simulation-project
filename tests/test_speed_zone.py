@@ -1,4 +1,3 @@
-import scipy as sp
 from speed_zone import SpeedZone
 from obstacle import Obstacle
 

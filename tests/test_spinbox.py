@@ -1,6 +1,6 @@
 from spinbox import Spinbox
 import pytest
-import customtkinter as ctk
+import customtkinter as ctk # type: ignore[import]
 
 def empty_function(_: int) -> None:
     pass

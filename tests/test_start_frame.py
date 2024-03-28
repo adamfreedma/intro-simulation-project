@@ -1,7 +1,7 @@
 import pytest
 from start_frame import StartFrame
 from main_frame import MainFrame
-import customtkinter as ctk
+import customtkinter as ctk # type: ignore[import]
 from simulation import Simulation
 from grid import Grid
 from main import MainApp
