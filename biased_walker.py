@@ -18,6 +18,19 @@ class BiasedWalker(Walker):
     }
 
     def __init__(self, name: str, is_3d: bool, mass: float=1.0, bias: str="", bias_scale: int=1) -> None:
+        """
+        Initialize a BiasedWalker object.
+
+        Args:
+            name (str): The name of the walker.
+            is_3d (bool): A flag indicating whether the walker is in 3D or not.
+            mass (float, optional): The mass of the walker. Defaults to 1.0.
+            bias (str, optional): The bias of the walker. Defaults to an empty string.
+            bias_scale (int, optional): The scale of the bias. Defaults to 1.
+
+        Returns:
+            None
+        """
         super().__init__(name, mass)
 
         self._is_3d = is_3d
@@ -29,9 +42,21 @@ class BiasedWalker(Walker):
 
 
     def _generate_move_radius(self) -> float:
+        """
+        Generates the radius for a move.
+
+        Returns:
+            float: The generated move radius.
+        """
         return 1.0
 
     def _generate_move_angle(self) -> Tuple[float, float]:
+        """
+        Generates a move angle based on the bias direction and bias scale.
+
+        Returns:
+            tuple: A tuple containing the new yaw and pitch angles.
+        """
         result = None
 
         # generating a normally distributed change in angle from the bias direction
