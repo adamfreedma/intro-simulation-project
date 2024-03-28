@@ -1,3 +1,4 @@
+import os
 from grid import Grid
 from walker import Walker
 import numpy as np
@@ -61,6 +62,9 @@ class Simulation:
             "y_cross_count_list": y_cross_count_list,
         }
 
+        if not os.path.isdir(self.__LOGS_FOLDER):
+            os.mkdir(self.__LOGS_FOLDER)
+                
         with open(path, "w") as f:
             json.dump(data, f)
 
