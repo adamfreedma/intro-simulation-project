@@ -11,7 +11,7 @@ class RandomAngleWalker(Walker):
         self._is_3d = is_3d
 
     def _generate_move_radius(self) -> float:
-        return 1
+        return 1.0
 
     def _generate_move_angle(self) -> Tuple[float, float]:
         result = None

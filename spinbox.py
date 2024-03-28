@@ -1,4 +1,4 @@
-import customtkinter
+import customtkinter # type: ignore[import]
 from typing import Callable, Optional, Any
 
 class Spinbox(customtkinter.CTkFrame): # type: ignore[misc]
@@ -41,32 +41,42 @@ class Spinbox(customtkinter.CTkFrame): # type: ignore[misc]
         # write listener
         self.entry_var.trace_add("write", lambda *args: self.cap_write_values(self.entry_var))
 
-    def add_button_callback(self) -> None:
+    def add_button_callback(self) -> bool:
         try:
             value = min(int(self.entry.get()) + 1, self.max_value)
             self.entry.delete(0, "end")
             self.entry.insert(0, value)
         except ValueError:
-            return
+            return False
+        
         if self.command is not None and self.get():
             self.command(int(self.get()))
+        
+        return True
 
-    def subtract_button_callback(self) -> None:
+    def subtract_button_callback(self) -> bool:
         try:
             value = max(int(self.entry.get()) - 1, self.min_value)
             self.entry.delete(0, "end")
             self.entry.insert(0, value)
         except ValueError:
-            return
+            return False
+        
         if self.command is not None and self.get():
             self.command(int(self.get()))
+
+        return True
 
     def cap_write_values(self, text_var: customtkinter.StringVar) -> None:
         if text_var.get().isnumeric():
             if int(text_var.get()) > self.max_value:
                 text_var.set(str(self.max_value))
+                self.entry.delete(0, "end")
+                self.entry.insert(0, str(self.max_value))
             if int(text_var.get()) < self.min_value:
                 text_var.set(str(self.min_value))
+                self.entry.delete(0, "end")
+                self.entry.insert(0, str(self.min_value))
         if self.command is not None and self.get():
             self.command(int(self.get()))
 

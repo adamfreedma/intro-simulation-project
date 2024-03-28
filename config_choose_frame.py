@@ -1,6 +1,7 @@
-import customtkinter as ctk
+import customtkinter as ctk # type: ignore[import]
 import colors
 import os
+from typing import Optional
 
 
 class ConfigChooseFrame(ctk.CTkFrame): # type: ignore[misc]
@@ -23,14 +24,16 @@ class ConfigChooseFrame(ctk.CTkFrame): # type: ignore[misc]
         # layout
         self.file_picker.pack(expand=True, padx=self.padding, pady=self.padding)
 
-    def file_dialog(self) -> None:
-        success = self.master.parse_config(
-            ctk.filedialog.askopenfilename(
-                initialdir=os.getcwd(),
-                title="Enter the config file",
-                filetypes=[("JSON", "*.json")],
+    def file_dialog(self, open: Optional[bool]=True) -> None:
+        success = False
+        if open:
+            success = self.master.parse_config(
+                ctk.filedialog.askopenfilename(
+                    initialdir=os.getcwd(),
+                    title="Enter the config file",
+                    filetypes=[("JSON", "*.json")],
+                )
             )
-        )
 
         if success:
             self.file_picker.configure(fg_color=colors.GREEN)

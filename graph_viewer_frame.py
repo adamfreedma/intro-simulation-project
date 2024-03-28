@@ -1,7 +1,7 @@
-import customtkinter as ctk
-from PIL import Image, ImageTk
+import customtkinter as ctk # type: ignore[import]
+from PIL import Image
 import os
-from typing import List
+from typing import List, Optional
 
 class GraphViewerFrame(ctk.CTkFrame): # type: ignore[misc]
 
@@ -39,6 +39,12 @@ class GraphViewerFrame(ctk.CTkFrame): # type: ignore[misc]
         self.update_folders_list()
         self.__folder_var.trace_add("write", lambda *args: self.update_paths())
 
+    @staticmethod
+    def get_folder_prefix() -> str:
+        return GraphViewerFrame.__FOLDER_PREFIX
+
+    def get_path_index(self) -> int:
+        return self.__path_index
         
     def next_image(self) -> None:
         self.__path_index += 1
@@ -51,14 +57,15 @@ class GraphViewerFrame(ctk.CTkFrame): # type: ignore[misc]
     def update_folders_list(self) -> None:
         self.folder_entry.configure(values=[folder[0].split(
             self.__FOLDER_PREFIX)[-1] for folder in os.walk(os.getcwd())
-                                            if folder[0].count(self.__FOLDER_PREFIX)]
-)
+                                            if folder[0].count(self.__FOLDER_PREFIX)])
     
-    def update_paths(self) -> None:
+    def update_paths(self, test: Optional[bool]=False) -> None:
         folder_path = self.__FOLDER_PREFIX + self.__folder_var.get()
         if os.path.isdir(folder_path):
             self.__paths = [f"{folder_path}/{path}" for path in os.listdir(folder_path) if path.endswith(".png")]
             self.__path_index = 0
+            if test:
+                self.__paths = []
             self.update_image()
         
     def update_image(self) -> None:

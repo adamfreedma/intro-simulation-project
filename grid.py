@@ -11,7 +11,7 @@ from custom_types import *
 import os
 import numpy as np
 import copy
-from typing import Optional, cast
+from typing import Optional
 
 class Grid(object):
     
@@ -23,7 +23,7 @@ class Grid(object):
     def clear_obstacles(self) -> None:
         self._obstacles = []
 
-    def _add_teleporters(self, path: str) -> bool:
+    def add_teleporters(self, path: str) -> bool:
         teleporter_list = []
         success = False
 
@@ -47,7 +47,7 @@ class Grid(object):
             self._obstacles.extend(teleporter_list)
         return success
 
-    def _add_obstacles(self, path: str) -> bool:
+    def add_obstacles(self, path: str) -> bool:
         obstacle_list = []
         success = False
 
@@ -68,7 +68,7 @@ class Grid(object):
             self._obstacles.extend(obstacle_list)
         return success
 
-    def _add_speed_zones(self, path: str) -> bool:
+    def add_speed_zones(self, path: str) -> bool:
         speed_zone_list = []
         success = False
 
@@ -112,16 +112,16 @@ class Grid(object):
                 if other_walker != walker:
                     distance = math_functions.dist(walker.get_location(), other_walker.get_location())
                     walker_to_other_walker = np.subtract(other_walker.get_location(), walker.get_location())
-                    direction = math_functions.normalize(cast(vector3, walker_to_other_walker))
-                    addition = cast(vector3, ((np.array(direction) *
+                    direction = math_functions.normalize(cast_to_vector3(walker_to_other_walker))
+                    addition = cast_to_vector3((np.array(direction) *
                                             other_walker.get_mass() *
                                             self.__GRAVITY_CONSTANT) /
-                                            (max(distance, 1) * total_mass)))
+                                            (max(distance, 1) * total_mass))
                     
                     addition_sum += addition
 
-        return Move(*math_functions.angle_and_radius_from_vector(cast(vector3, addition_sum)))
         
+        return Move(*math_functions.angle_and_radius_from_vector(cast_to_vector3(addition_sum)))
 
     def move(self, walker: Walker, move: Move, walker_list: List[Walker], obstacles: Optional[List[Obstacle]]=None) -> None:
         starting_location = walker.get_location()
@@ -155,3 +155,6 @@ class Grid(object):
 
     def get_obstacles(self) -> List[Obstacle]:
         return self._obstacles
+
+    def set_obstacles(self, obstacles: List[Obstacle]) -> None:
+        self._obstacles = obstacles

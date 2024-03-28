@@ -1,7 +1,7 @@
 import pygame
 from pygame.locals import *
-import OpenGL.GL as GL
-import OpenGL.GLU as GLU
+import OpenGL.GL as GL # type: ignore[import]
+import OpenGL.GLU as GLU # type: ignore[import]
 from custom_types import *
 from custom_types import *
 from typing import List, Dict
@@ -54,6 +54,9 @@ class Screen:
         self.__view_matrix = GL.glGetFloatv(GL.GL_MODELVIEW_MATRIX)
         GL.glLoadIdentity()
 
+    def get_walkers(self) -> List[Walker]:
+        return self.__walkers
+
     def add_walker(self, walker: Walker) -> None:
         self.__walkers.append(walker)
         self.__trails[walker] = []
@@ -74,9 +77,15 @@ class Screen:
     def add_to_trail(self, walker: Walker, position: vector3) -> None:
         if walker in self.__trails:
             self.__trails[walker].append(position)
+            
+    def get_trails(self) -> Dict[Walker, List[vector3]]:
+        return self.__trails
 
     def set_obstacles(self, obstacles: List[Obstacle]) -> None:
         self.__obstacles = obstacles
+        
+    def get_obstacles(self) -> List[Obstacle]:
+        return self.__obstacles
 
     def draw_line(self, starting_point: vector3, final_point: vector3, color: vector3) -> None:
         GL.glColor3fv(color)
@@ -159,10 +168,8 @@ class Screen:
 
         # init mouse movement and center mouse on screen
         displayCenter = [self.__display[i] // 2 for i in range(2)]
-        mouse_change = [0, 0]
         pygame.mouse.set_pos(displayCenter)
 
-        up_down_angle = 0.0
         paused = False
         self.__run = True
         while self.__run:
@@ -208,8 +215,13 @@ class Screen:
                 pygame.time.wait(10)
 
         stop_event.set()
+        self.close()
+        
+    def close(self) -> None:
         pygame.quit()
-
     
     def stop(self) -> None:
         self.__run = False
+        
+    def get_stop(self) -> bool:
+        return self.__run == False

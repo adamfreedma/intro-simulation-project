@@ -1,4 +1,4 @@
-import customtkinter as ctk
+import customtkinter as ctk # type: ignore[import]
 import colors
 from walker_frame import WalkerFrame
 from typing import List
@@ -28,7 +28,8 @@ class WalkerConfigFrame(ctk.CTkFrame): # type: ignore[misc]
         walker_frame.pack(padx=self.padding, pady=self.padding)
         
     def delete_walker(self, walker_frame: WalkerFrame) -> None:
-        self.walker_frame_list.remove(walker_frame)
+        if walker_frame in self.walker_frame_list:
+            self.walker_frame_list.remove(walker_frame)
         
     def get_walkers(self) -> List[Walker]:
         return [frame.get_walker(str(num)) for num, frame in enumerate(self.walker_frame_list)]

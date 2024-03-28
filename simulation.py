@@ -6,8 +6,8 @@ import graph
 from screen import Screen
 import time
 from threading import Event
-from customtkinter import DoubleVar
-from typing import List, Dict, cast
+from customtkinter import DoubleVar # type: ignore[import]
+from typing import List, Dict
 
 
 class Simulation:
@@ -20,8 +20,8 @@ class Simulation:
         self,
         grid: Grid,
         screen: Screen,
-        simulation_count: int=50,
-        max_steps: int=5000,
+        simulation_count: int=10,
+        max_steps: int=10,
     ) -> None:
         self.__grid = grid
         self.__screen = screen
@@ -31,17 +31,22 @@ class Simulation:
 
     def config(self, path: str) -> bool:
         self.__grid.clear_obstacles()
-        success = self.__grid._add_teleporters(path) and self.__grid._add_obstacles(path) and self.__grid._add_speed_zones(path)
+        success = self.__grid.add_teleporters(path) and self.__grid.add_obstacles(path) and self.__grid.add_speed_zones(path)
         self.__screen.set_obstacles(self.__grid.get_obstacles())
     
         return success
     
     def set_simulation_count(self, simulation_count: int) -> None:
         self.__simulation_count = simulation_count
-        
+    
+    def get_simulation_count(self) -> int:
+        return self.__simulation_count
+    
     def set_max_steps(self, max_steps: int) -> None:
         self.__max_steps = max_steps
     
+    def get_max_steps(self) -> int:
+        return self.__max_steps
 
     def _save_log_data(self, path: str, distance_list: List[float],
                        x_distance_list: List[float], y_distance_list: List[float],
@@ -78,7 +83,7 @@ class Simulation:
                             set_dict[walker] = False
                     time.sleep(0.01)
 
-    def simulate(self , walker: Walker, stop_event: Event,
+    def simulate(self, walker: Walker, stop_event: Event,
                  run_event_dict: Dict[Walker, Event], progress_var: DoubleVar,
                  walker_list: List[Walker], visual:bool=False,
                  graph_output_path:str="") -> None:
@@ -158,8 +163,17 @@ class Simulation:
     def update_speed(self, value: float) -> None:
         self.__wait = (1.001 - value) / 10
         
+    def get_wait(self) -> float:
+        return self.__wait
+        
     def stop(self) -> None:
         self.__screen.stop()
+
+    def close(self) -> None:
+        self.__screen.close()
+
+    def get_stop(self) -> bool:
+        return self.__screen.get_stop()
 
     def generate_graphs(self, log_path: str, output_path: str, is_3d: bool) -> None:
         graph.distance_graph(log_path, output_path)

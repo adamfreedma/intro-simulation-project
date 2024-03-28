@@ -1,4 +1,4 @@
-import customtkinter as ctk
+import customtkinter as ctk # type: ignore[import]
 import colors
 from spinbox import Spinbox
 
@@ -102,12 +102,21 @@ class StartFrame(ctk.CTkFrame): # type: ignore[misc]
 
     def update_speed(self, value: float) -> None:
         self.master.update_speed(value)
+        
+    def get_speed(self) -> float:
+        return self.speed_slider.get()
 
     def update_simulation_count(self, value: int) -> None:
         self.master.update_simulation_count(value)
         
+    def get_simulation_count(self) -> int:
+        return self.master.get_simulation_count()
+        
     def update_max_steps(self, value: int) -> None:
         self.master.update_max_steps(value)
+        
+    def get_max_steps(self) -> int:
+        return self.master.get_max_steps()
 
     def stop(self) -> None:
         self.progress_bar.pack_forget()

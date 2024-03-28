@@ -19,6 +19,6 @@ class RandomWalker(Walker):
         if self._is_3d:
             result = (math_functions.random_angle(), math_functions.random_angle())
         else:
-            result = (math_functions.random_angle(), 0)
+            result = (math_functions.random_angle(), 0.0)
 
         return result

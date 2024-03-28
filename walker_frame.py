@@ -1,4 +1,4 @@
-import customtkinter as ctk
+import customtkinter as ctk # type: ignore[import]
 from spinbox import Spinbox
 import colors
 from walker import Walker

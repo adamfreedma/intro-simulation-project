@@ -34,10 +34,13 @@ class AcceleratingWalker(Walker):
         if self._is_3d:
             result = (math_functions.random_angle(), math_functions.random_angle())
         else:
-            result = (math_functions.random_angle(), 0)
+            result = (math_functions.random_angle(), 0.0)
 
         return result
     
     def reset(self) -> None:
         self.__step = 0
         super().reset()
+
+    def get_acceleration_type(self) -> str:
+        return self.__acceleration_type

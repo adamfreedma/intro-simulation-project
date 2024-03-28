@@ -1,4 +1,4 @@
-import customtkinter as ctk
+import customtkinter as ctk # type: ignore[import]
 from customtkinter import DoubleVar
 from start_frame import StartFrame
 from config_choose_frame import ConfigChooseFrame
@@ -34,6 +34,9 @@ class MainFrame(ctk.CTkFrame): # type: ignore[misc]
         self.walker_config_frame.pack(anchor="s", fill="both", padx=self.padding, pady=self.padding)
         self.config_choose_frame.pack(anchor="s", fill="both", padx=self.padding, pady=self.padding)
         self.start_frame.pack(anchor="s", fill="both", padx=self.padding, pady=self.padding)
+
+    def get_folder_prefix(self) -> str:
+        return self.__FOLDER_PREFIX
 
     def start_simulation(self, visual: bool, progress_var: DoubleVar,
                          simulation_count: Optional[int]=None,
@@ -93,8 +96,14 @@ class MainFrame(ctk.CTkFrame): # type: ignore[misc]
     def update_simulation_count(self, value: int) -> None:
         self.simulation.set_simulation_count(value)
         
+    def get_simulation_count(self) -> int:
+        return self.simulation.get_simulation_count()
+        
     def update_max_steps(self, value: int) -> None:
         self.simulation.set_max_steps(value)
+        
+    def get_max_steps(self) -> int:
+        return self.simulation.get_max_steps()
 
     def parse_config(self, path: str) -> bool:
         return self.simulation.config(path)

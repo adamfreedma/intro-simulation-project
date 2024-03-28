@@ -1,3 +1,4 @@
+import re
 from walker import Walker
 from custom_types import *
 import math
@@ -12,7 +13,7 @@ class StraightWalker(Walker):
         self._is_3d = is_3d
 
     def _generate_move_radius(self) -> float:
-        return 1
+        return 1.0
 
     def _generate_move_angle(self) -> Tuple[float, float]:
         result = (0.0, 0.0)
@@ -21,8 +22,8 @@ class StraightWalker(Walker):
             if random_int >= 4:
                 result = (0, (random_int - 4.5) * math.pi)
             else:
-                result = (random_int * math.pi / 2, 0)
+                result = (random_int * math.pi / 2, 0.0)
         else:
-            result = (random.randint(0, 3) * math.pi / 2, 0)
+            result = (random.randint(0, 3) * math.pi / 2, 0.0)
 
-        return result
+        return (result[0] % (2 * math.pi), result[1] % (2 * math.pi))

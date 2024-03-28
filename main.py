@@ -1,11 +1,11 @@
-import customtkinter as CTk
+import customtkinter as CTk # type: ignore[import]
 from main_frame import MainFrame
 from graph_viewer_frame import GraphViewerFrame
 from simulation import Simulation
 from grid import Grid
 from screen import Screen
 import customtkinter as ctk
-from typing import Any
+from typing import Any, Optional
 
 class MainApp(CTk.CTk): # type: ignore[misc]
 
@@ -22,6 +22,7 @@ class MainApp(CTk.CTk): # type: ignore[misc]
 
         self.confirm_menu_open = False
         self.padding = 10
+        self.closed = False
 
         self._config_window()
         self.screen = Screen(800, 600)
@@ -53,8 +54,9 @@ class MainApp(CTk.CTk): # type: ignore[misc]
 
     def close(self, _:Any=None) -> None:
         self.destroy()
+        self.closed = True
 
-    def confirm_menu(self, _:Any=None) -> None:
+    def confirm_menu(self, _:Optional[Any]=None) -> None:
         if not self.confirm_menu_open:
             self.confirm_menu_open = True
 

@@ -29,7 +29,7 @@ class BiasedWalker(Walker):
 
 
     def _generate_move_radius(self) -> float:
-        return 1
+        return 1.0
 
     def _generate_move_angle(self) -> Tuple[float, float]:
         result = None
@@ -58,4 +58,4 @@ class BiasedWalker(Walker):
             # adding the yaw change
             result = (yaw + changee_magnitude + math.pi, 0)
 
-        return result
+        return (result[0] % (2 * math.pi), result[1] % (2 * math.pi))
