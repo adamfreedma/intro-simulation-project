@@ -71,7 +71,7 @@ class MainFrame(ctk.CTkFrame): # type: ignore[misc]
         for walker in walker_list:
             output_path = None
             if graph_output_folder:
-                output_path = f"{graph_output_folder}\\{walker.get_name()}"
+                output_path = f"{graph_output_folder}/{walker.get_name()}"
             
             walker_thread = threading.Thread(
                 target=self.simulation.simulate,
