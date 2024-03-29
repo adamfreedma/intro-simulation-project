@@ -6,6 +6,7 @@ import numpy as np
 import random
 from typing import Tuple
 
+
 class BiasedWalker(Walker):
 
     BIAS_DICT = {
@@ -17,7 +18,14 @@ class BiasedWalker(Walker):
         "Down": (0, -0.5 * math.pi),
     }
 
-    def __init__(self, name: str, is_3d: bool, mass: float=1.0, bias: str="", bias_scale: int=1) -> None:
+    def __init__(
+        self,
+        name: str,
+        is_3d: bool,
+        mass: float = 1.0,
+        bias: str = "",
+        bias_scale: int = 1,
+    ) -> None:
         """
         Initialize a BiasedWalker object.
 
@@ -39,7 +47,6 @@ class BiasedWalker(Walker):
             self.bias = bias
         else:
             self.bias = random.choice(list(self.BIAS_DICT.keys()))
-
 
     def _generate_move_radius(self) -> float:
         """
@@ -69,7 +76,8 @@ class BiasedWalker(Walker):
         # finding the bias direction as the opposite of the current location
         elif self.bias == "Origin":
             yaw = math.atan2(self._location[1], self._location[0])
-            pitch = (math.atan2(self._location[2], np.linalg.norm(self._location[:2])) # type: ignore[no-untyped-call]
+            pitch = (
+                math.atan2(self._location[2], np.linalg.norm(self._location[:2]))  # type: ignore[no-untyped-call]
                 + math.pi
             )
 

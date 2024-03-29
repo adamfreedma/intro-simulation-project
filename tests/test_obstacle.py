@@ -12,11 +12,11 @@ def test_obstacle_initialization() -> None:
 
 def test_obstacle_collision_detection() -> None:
     obstacle = Obstacle((0, 0, 0), 5.0)
-    
+
     # Test when there is no collision
     assert not obstacle.detect_colision((10, 10, 10), (20, 20, 20))
     assert not obstacle.detect_colision((10, 10, 10), (10, 20, 10))
-    
+
     # Test when there is a collision
     assert obstacle.detect_colision((0, 0, 0), (3, 3, 3))
 

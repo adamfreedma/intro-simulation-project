@@ -32,12 +32,12 @@ class Obstacle(object):
         movement = np.subtract(final_location, starting_location)
         obstacle_to_start = np.subtract(starting_location, self.__location)
         # completely inside
-        if np.linalg.norm(obstacle_to_start) < self.__radius: # type: ignore[no-untyped-call]
+        if np.linalg.norm(obstacle_to_start) < self.__radius:  # type: ignore[no-untyped-call]
             return True
         # finding the coefficients for the quadratic equation
-        coef_a = np.dot(movement, movement) # type: ignore[no-untyped-call]
-        coef_b = 2 * np.dot(obstacle_to_start, movement) # type: ignore[no-untyped-call]
-        coef_c = np.dot(obstacle_to_start, obstacle_to_start) - self.__radius**2 # type: ignore[no-untyped-call]
+        coef_a = np.dot(movement, movement)  # type: ignore[no-untyped-call]
+        coef_b = 2 * np.dot(obstacle_to_start, movement)  # type: ignore[no-untyped-call]
+        coef_c = np.dot(obstacle_to_start, obstacle_to_start) - self.__radius**2  # type: ignore[no-untyped-call]
 
         discriminant = coef_b**2 - 4 * coef_a * coef_c
         if discriminant < 0:
@@ -59,7 +59,7 @@ class Obstacle(object):
     def get_location(self) -> vector3:
         """
         Returns the location of the obstacle as a vector3 object.
-        
+
         Returns:
             vector3: The location of the obstacle.
         """

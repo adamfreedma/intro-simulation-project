@@ -1,9 +1,11 @@
 import pytest
 from main import MainApp
 
+
 def test_main_app_init() -> None:
     app = MainApp()
     assert isinstance(app, MainApp)
+
 
 def test_main_app_config_window() -> None:
     app = MainApp()
@@ -11,14 +13,16 @@ def test_main_app_config_window() -> None:
 
     assert app.height == 600
     assert app.width == 800
-    
+
+
 def test_main_app_close() -> None:
     app = MainApp()
     app.close()
     # Add assertions to test the close functionality
 
     assert app.closed == True
-    
+
+
 def test_main_app_confirm_menu() -> None:
     app = MainApp()
     app.confirm_menu()

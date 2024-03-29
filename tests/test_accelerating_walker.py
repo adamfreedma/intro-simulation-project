@@ -1,6 +1,7 @@
 from accelerating_walker import AcceleratingWalker
 import math
 
+
 def test_accelerating_walker_init() -> None:
     walker = AcceleratingWalker("John", False, 2.5, "Quadratic")
     walker_wrong = AcceleratingWalker("John", False, 2.5, "wrong")
@@ -9,11 +10,13 @@ def test_accelerating_walker_init() -> None:
     assert walker.get_mass() == 2.5
     assert walker_wrong.get_acceleration_type() == "Linear"
 
+
 def test_accelerating_walker_generate_move_radius() -> None:
     walker = AcceleratingWalker("John", False)
     radius = walker._generate_move_radius()
     assert isinstance(radius, float)
     assert radius >= 0
+
 
 def test_accelerating_walker_generate_move_angle() -> None:
     walker = AcceleratingWalker("John", False)
@@ -26,6 +29,7 @@ def test_accelerating_walker_generate_move_angle() -> None:
     yaw, pitch = walker3d._generate_move_angle()
     assert isinstance(yaw, float)
     assert isinstance(pitch, float)
+
 
 def test_accelerating_walker_reset() -> None:
     walker = AcceleratingWalker("John", False)

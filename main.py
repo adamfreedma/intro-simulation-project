@@ -1,4 +1,4 @@
-import customtkinter as CTk # type: ignore[import]
+import customtkinter as CTk  # type: ignore[import]
 from main_frame import MainFrame
 from graph_viewer_frame import GraphViewerFrame
 from simulation import Simulation
@@ -7,7 +7,8 @@ from screen import Screen
 import customtkinter as ctk
 from typing import Any, Optional
 
-class MainApp(CTk.CTk): # type: ignore[misc]
+
+class MainApp(CTk.CTk):  # type: ignore[misc]
 
     def __init__(self) -> None:
         """
@@ -26,16 +27,16 @@ class MainApp(CTk.CTk): # type: ignore[misc]
         self.screen = Screen(800, 600)
         self.grid = Grid()
         self.simulation = Simulation(self.grid, self.screen)
-        
+
         # initializes the frames
         self.tab_menu = ctk.CTkTabview(self)
         self.tab_list = []
         self.tab_list.append(self.tab_menu.add("Simulation"))
         self.tab_list.append(self.tab_menu.add("Graph viewer"))
-        
+
         self.main_frame = MainFrame(self.tab_list[0], self, self.simulation)
         self.graph_viewer_frame = GraphViewerFrame(self.tab_list[1], self)
-        
+
         # layout
         self.main_frame.pack()
         self.graph_viewer_frame.pack()
@@ -53,15 +54,15 @@ class MainApp(CTk.CTk): # type: ignore[misc]
         self.width = 800
         self.height = 600
 
-    def close(self, _:Any=None) -> None:
-            """
-            Closes the application window.
+    def close(self, _: Any = None) -> None:
+        """
+        Closes the application window.
 
-            Args:
-                _: Optional argument (ignored).
-            """
-            self.destroy()
-            self.closed = True
+        Args:
+            _: Optional argument (ignored).
+        """
+        self.destroy()
+        self.closed = True
 
     def confirm_menu(self, _: Optional[Any] = None) -> None:
         """
@@ -79,7 +80,8 @@ class MainApp(CTk.CTk): # type: ignore[misc]
             self.top.overrideredirect(1)
             # adding the label and buttons
             question_label = CTk.CTkLabel(
-                self.top, text="Are you sure you want to quit?",
+                self.top,
+                text="Are you sure you want to quit?",
             )
 
             yes_button = CTk.CTkButton(

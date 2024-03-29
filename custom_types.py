@@ -3,6 +3,7 @@ from typing import Any, Tuple
 vector3 = Tuple[float, float, float]
 angle_vector3 = Tuple[float, float, float]
 
+
 def cast_to_vector3(value: Any) -> vector3:
     """
     Casts a value to a vector3.

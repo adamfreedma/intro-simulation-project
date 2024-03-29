@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from move import Move
 
+
 def random_angle() -> float:
     """
     Generate a random angle between 0 and 2pi.
@@ -15,6 +16,7 @@ def random_angle() -> float:
         float: A random angle between 0 and 2pi.
     """
     return random.random() * 2 * math.pi
+
 
 def normalize(vec: vector3) -> vector3:
     """
@@ -27,10 +29,11 @@ def normalize(vec: vector3) -> vector3:
         vector3: The normalized vector.
 
     """
-    if len(vec) == 0 or np.linalg.norm(vec) == 0: # type: ignore[no-untyped-call]
+    if len(vec) == 0 or np.linalg.norm(vec) == 0:  # type: ignore[no-untyped-call]
         return vec
     # casting back to a vector3
-    return cast_to_vector3(np.array(vec) / np.linalg.norm(vec)) # type: ignore[no-untyped-call]
+    return cast_to_vector3(np.array(vec) / np.linalg.norm(vec))  # type: ignore[no-untyped-call]
+
 
 def angle_and_radius_from_vector(vec: vector3) -> vector3:
     """
@@ -42,13 +45,14 @@ def angle_and_radius_from_vector(vec: vector3) -> vector3:
     Returns:
         vector3: A tuple containing the yaw, radius, and pitch values.
     """
-    radius = np.linalg.norm(vec) # type: ignore[no-untyped-call]
+    radius = np.linalg.norm(vec)  # type: ignore[no-untyped-call]
     if radius == 0:
         return (0, 0, 0)
     pitch = math.asin(vec[2] / radius)
     yaw = math.atan2(vec[1], vec[0])
-    
+
     return (yaw, radius, pitch)
+
 
 def vector_from_angle_and_radius(yaw: float, radius: float, pitch: float) -> vector3:
     """
@@ -70,7 +74,7 @@ def vector_from_angle_and_radius(yaw: float, radius: float, pitch: float) -> vec
     return (x, y, z)
 
 
-def add_move(location: vector3, move: 'Move') -> vector3:
+def add_move(location: vector3, move: "Move") -> vector3:
     """
     Adds a move to a location (vector3).
 
@@ -96,4 +100,4 @@ def dist(vec1: vector3, vec2: vector3) -> float:
     Returns:
         float: The Euclidean distance between the two vectors.
     """
-    return float(np.linalg.norm(np.subtract(vec2, vec1))) # type: ignore[no-untyped-call]
+    return float(np.linalg.norm(np.subtract(vec2, vec1)))  # type: ignore[no-untyped-call]

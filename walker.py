@@ -4,9 +4,10 @@ from custom_types import *
 import math_functions
 from typing import Tuple
 
+
 class Walker(ABC):
 
-    def __init__(self, name: str, mass: float=1) -> None:
+    def __init__(self, name: str, mass: float = 1) -> None:
         """
         Initialize a Walker object.
 
@@ -15,7 +16,7 @@ class Walker(ABC):
             mass (float, optional): The mass of the walker. Defaults to 1.
         """
         super().__init__()
-        
+
         self._name = name
         self._mass = mass
 
@@ -55,12 +56,12 @@ class Walker(ABC):
     def get_name(self) -> str:
         """
         Returns the name of the walker.
-        
+
         Returns:
             str: The name of the walker.
         """
         return self._name
-    
+
     def get_mass(self) -> float:
         """
         Returns the mass of the walker.
@@ -69,11 +70,11 @@ class Walker(ABC):
             float: The mass of the walker.
         """
         return self._mass
-    
+
     def is_3d(self) -> bool:
         """
         Returns True if the walker is in a 3D environment, False otherwise.
-        
+
         Returns:
             bool: is the walker in a 3D environment?
         """

@@ -1,16 +1,20 @@
-import customtkinter as ctk # type: ignore[import]
+import customtkinter as ctk  # type: ignore[import]
 from typing import Callable, Optional, Any
 
-class Spinbox(ctk.CTkFrame): # type: ignore[misc]
-    def __init__(self, *args: Any,
-                 width: int=100,
-                 height: int=32,
-                 starting_value: int=0,
-                 max_value: int=999,
-                 min_value: int=0,
-                 text: str="",
-                 command: Optional[Callable[[int], None]]=None,
-                 **kwargs: Any) -> None:
+
+class Spinbox(ctk.CTkFrame):  # type: ignore[misc]
+    def __init__(
+        self,
+        *args: Any,
+        width: int = 100,
+        height: int = 32,
+        starting_value: int = 0,
+        max_value: int = 999,
+        min_value: int = 0,
+        text: str = "",
+        command: Optional[Callable[[int], None]] = None,
+        **kwargs: Any
+    ) -> None:
         """
         Initialize a Spinbox object.
 
@@ -39,30 +43,48 @@ class Spinbox(ctk.CTkFrame): # type: ignore[misc]
         self.grid_columnconfigure((0, 2), weight=0)  # buttons don't expand
         self.grid_columnconfigure(1, weight=1)  # entry expands
 
-        self.subtract_button = ctk.CTkButton(self, text="-", width=height-6, height=height-6,
-                                                       command=self.subtract_button_callback)
+        self.subtract_button = ctk.CTkButton(
+            self,
+            text="-",
+            width=height - 6,
+            height=height - 6,
+            command=self.subtract_button_callback,
+        )
         self.subtract_button.grid(row=0, column=0, padx=(10, 0), pady=3)
         # initialize entry
         self.entry_var = ctk.StringVar(value=str(starting_value))
-        self.entry = ctk.CTkEntry(self, width=width-(2*height), height=height-6, border_width=0, textvariable=self.entry_var)
+        self.entry = ctk.CTkEntry(
+            self,
+            width=width - (2 * height),
+            height=height - 6,
+            border_width=0,
+            textvariable=self.entry_var,
+        )
         self.entry.grid(row=0, column=1, columnspan=1, padx=10, pady=3, sticky="ew")
         # initialize add button
-        self.add_button = ctk.CTkButton(self, text="+", width=height-6, height=height-6,
-                                                  command=self.add_button_callback)
+        self.add_button = ctk.CTkButton(
+            self,
+            text="+",
+            width=height - 6,
+            height=height - 6,
+            command=self.add_button_callback,
+        )
         self.add_button.grid(row=0, column=2, padx=(0, 10), pady=3)
-        
+
         if text:
             self.text_label = ctk.CTkLabel(self, width, text=text)
             self.text_label.grid(row=1, column=0, columnspan=3, padx=20, pady=3)
 
         # write listener
-        self.entry_var.trace_add("write", lambda *args: self.cap_write_values(self.entry_var))
+        self.entry_var.trace_add(
+            "write", lambda *args: self.cap_write_values(self.entry_var)
+        )
 
     def add_button_callback(self) -> bool:
         """
         Increments the value in the Spinbox entry by 1 and updates the entry field.
         If a command is provided and the Spinbox has a value, the command is called with the new value.
-        
+
         Returns:
             bool: True if the operation is successful, False otherwise.
         """
@@ -73,18 +95,18 @@ class Spinbox(ctk.CTkFrame): # type: ignore[misc]
             self.entry.insert(0, value)
         except ValueError:
             return False
-        
+
         # call command if provided
         if self.command is not None and self.get():
             self.command(int(self.get()))
-        
+
         return True
 
     def subtract_button_callback(self) -> bool:
         """
         Decreases the value in the entry field by 1 and updates the entry field accordingly.
         If a command is provided and the entry field has a valid value, the command is called with the new value.
-        
+
         Returns:
             bool: True if the operation is successful, False otherwise.
         """
@@ -105,10 +127,10 @@ class Spinbox(ctk.CTkFrame): # type: ignore[misc]
     def cap_write_values(self, text_var: ctk.StringVar) -> None:
         """
         Caps the value of the text_var within the specified range.
-        
+
         Args:
             text_var (ctk.StringVar): The StringVar object containing the value to be capped.
-        
+
         Returns:
             None
         """

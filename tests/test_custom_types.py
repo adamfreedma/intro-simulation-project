@@ -1,5 +1,6 @@
 from custom_types import cast_to_vector3
 
+
 def test_cast_to_vector3() -> None:
     # Test invalid input with less than 3 components
     valueError = False

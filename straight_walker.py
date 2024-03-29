@@ -5,9 +5,10 @@ import math
 import random
 from typing import Tuple
 
+
 class StraightWalker(Walker):
 
-    def __init__(self, name: str, is_3d: bool, mass: float=1) -> None:
+    def __init__(self, name: str, is_3d: bool, mass: float = 1) -> None:
         """
         Initialize a StraightWalker object.
 

@@ -1,7 +1,7 @@
 import pygame
 from pygame.locals import *
-import OpenGL.GL as GL # type: ignore[import]
-import OpenGL.GLU as GLU # type: ignore[import]
+import OpenGL.GL as GL  # type: ignore[import]
+import OpenGL.GLU as GLU  # type: ignore[import]
 from custom_types import *
 from custom_types import *
 from typing import List, Dict
@@ -36,7 +36,7 @@ class Screen:
         self.__trails: Dict[Walker, List[vector3]] = {}
         self.__trails_lock = threading.Lock()
         self.__colors: Dict[Walker, vector3] = {}
-        
+
         self.__run = True
 
     def initialize(self) -> None:
@@ -120,7 +120,7 @@ class Screen:
         """
         if walker in self.__trails:
             self.__trails[walker].append(position)
-            
+
     def get_trails(self) -> Dict[Walker, List[vector3]]:
         """
         Returns a dictionary containing the trails of each walker.
@@ -138,7 +138,7 @@ class Screen:
             obstacles (List[Obstacle]): A list of obstacles to be set on the screen.
         """
         self.__obstacles = obstacles
-        
+
     def get_obstacles(self) -> List[Obstacle]:
         """
         Returns the list of obstacles on the screen.
@@ -148,7 +148,9 @@ class Screen:
         """
         return self.__obstacles
 
-    def draw_line(self, starting_point: vector3, final_point: vector3, color: vector3) -> None:
+    def draw_line(
+        self, starting_point: vector3, final_point: vector3, color: vector3
+    ) -> None:
         """
         Draws a line on the screen from the starting point to the final point with the specified color.
 
@@ -306,17 +308,15 @@ class Screen:
 
         stop_event.set()
         self.close()
-        
+
     def close(self) -> None:
-        """Closes the screen.
-        """
+        """Closes the screen."""
         pygame.quit()
-    
+
     def stop(self) -> None:
-        """Stops the screen loop.
-        """
+        """Stops the screen loop."""
         self.__run = False
-        
+
     def get_stop(self) -> bool:
         """Return if the screen is stopped or not.
 

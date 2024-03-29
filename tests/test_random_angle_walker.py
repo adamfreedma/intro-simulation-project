@@ -1,17 +1,20 @@
 from random_angle_walker import RandomAngleWalker
 import math
 
+
 def test_init() -> None:
     walker = RandomAngleWalker("Walker1", True, 2.5)
     assert walker.get_name() == "Walker1"
     assert walker.is_3d() == True
     assert walker.get_mass() == 2.5
 
+
 def test_generate_move_radius() -> None:
     walker = RandomAngleWalker("Walker1", True, 2.5)
     radius = walker._generate_move_radius()
     assert isinstance(radius, float)
     assert radius >= 0
+
 
 def test_generate_move_angle() -> None:
     walker = RandomAngleWalker("Walker1", True, 2.5)

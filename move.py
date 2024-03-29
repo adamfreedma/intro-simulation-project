@@ -2,9 +2,10 @@ from custom_types import *
 import numpy as np
 from math_functions import vector_from_angle_and_radius, angle_and_radius_from_vector
 
+
 class Move(object):
 
-    def __init__(self, yaw: float, radius: float, pitch: float=0) -> None:
+    def __init__(self, yaw: float, radius: float, pitch: float = 0) -> None:
         """
         Initialize a Move object.
 
@@ -35,7 +36,7 @@ class Move(object):
         """
         self.__radius *= factor
 
-    def __add__(self, other: 'Move') -> 'Move':
+    def __add__(self, other: "Move") -> "Move":
         """
         Adds two Move objects together and returns a new Move object.
 
@@ -47,8 +48,12 @@ class Move(object):
         """
         self_vector3 = vector_from_angle_and_radius(*self.angle_and_radius())
         other_vector3 = vector_from_angle_and_radius(*other.angle_and_radius())
-        return Move(*angle_and_radius_from_vector(cast_to_vector3(np.add(self_vector3, other_vector3))))
-    
+        return Move(
+            *angle_and_radius_from_vector(
+                cast_to_vector3(np.add(self_vector3, other_vector3))
+            )
+        )
+
     def __str__(self) -> str:
         """
         Returns a string representation of the object.

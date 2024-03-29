@@ -4,9 +4,10 @@ import random
 from custom_types import *
 from typing import Tuple
 
+
 class RandomWalker(Walker):
 
-    def __init__(self, name: str, is_3d: bool, mass: float=1) -> None:
+    def __init__(self, name: str, is_3d: bool, mass: float = 1) -> None:
         """
         Initialize a RandomWalker object.
 
