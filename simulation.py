@@ -183,6 +183,6 @@ class Simulation:
         graph.distance_graph(log_path, output_path)
         graph.distance_graph(log_path, output_path, "x")
         graph.distance_graph(log_path, output_path, "y")
-        graph.cross_amount_graph(log_path, output_path)
+        graph.cross_count_graph(log_path, output_path)
         if is_3d:
             graph.distance_graph(log_path, output_path, "z")

@@ -3,10 +3,18 @@ import colors
 import os
 from typing import Optional
 
-
 class ConfigChooseFrame(ctk.CTkFrame): # type: ignore[misc]
 
     def __init__(self, master: ctk.CTkFrame) -> None:
+        """
+        Initializes an instance of the ConfigChooseFrame class.
+
+        Args:
+            master (MainFrame): The main frame.
+
+        Returns:
+            None
+        """
         ctk.CTkFrame.__init__(self, master, corner_radius=15)
 
         self.height = master.height
@@ -25,6 +33,17 @@ class ConfigChooseFrame(ctk.CTkFrame): # type: ignore[misc]
         self.file_picker.pack(expand=True, padx=self.padding, pady=self.padding)
 
     def file_dialog(self, open: Optional[bool]=True) -> None:
+        """
+        Opens a file dialog to select a configuration file.
+
+        Args:
+            open (bool, optional): If True, opens the file dialog for selecting a file to open.
+                If False, dose not open the file dialog.
+
+        Returns:
+            None
+
+        """
         success = False
         if open:
             success = self.master.parse_config(
@@ -34,7 +53,7 @@ class ConfigChooseFrame(ctk.CTkFrame): # type: ignore[misc]
                     filetypes=[("JSON", "*.json")],
                 )
             )
-
+        # colors the button based on the success of reading the file and the file format
         if success:
             self.file_picker.configure(fg_color=colors.GREEN)
         else:

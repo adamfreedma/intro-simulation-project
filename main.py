@@ -9,13 +9,10 @@ from typing import Any, Optional
 
 class MainApp(CTk.CTk): # type: ignore[misc]
 
-    BUTTON_COLOR = "#009B44"
-    BUTTON_HOVER_COLOR = "#007B34"
-
-    RED_BUTTON_COLOR = "#DD1111"
-    RED_BUTTON_HOVER_COLOR = "#AA0000"
-
     def __init__(self) -> None:
+        """
+        Initializes the main application window.
+        """
         CTk.CTk.__init__(self)
 
         self.title("Random walk")
@@ -24,12 +21,13 @@ class MainApp(CTk.CTk): # type: ignore[misc]
         self.padding = 10
         self.closed = False
 
+        # configures the screen and simulation
         self._config_window()
         self.screen = Screen(800, 600)
         self.grid = Grid()
         self.simulation = Simulation(self.grid, self.screen)
         
-
+        # initializes the frames
         self.tab_menu = ctk.CTkTabview(self)
         self.tab_list = []
         self.tab_list.append(self.tab_menu.add("Simulation"))
@@ -38,10 +36,13 @@ class MainApp(CTk.CTk): # type: ignore[misc]
         self.main_frame = MainFrame(self.tab_list[0], self, self.simulation)
         self.graph_viewer_frame = GraphViewerFrame(self.tab_list[1], self)
         
+        # layout
         self.main_frame.pack()
         self.graph_viewer_frame.pack()
 
+        # bins the tab menu to the update_folders_list method
         self.tab_menu.configure(command=self.graph_viewer_frame.update_folders_list)
+        # adds a key binding to the escape key to open the exit confirm menu
         self.bind("<Escape>", self.confirm_menu)
 
         self.tab_menu.pack()
@@ -53,17 +54,30 @@ class MainApp(CTk.CTk): # type: ignore[misc]
         self.height = 600
 
     def close(self, _:Any=None) -> None:
-        self.destroy()
-        self.closed = True
+            """
+            Closes the application window.
 
-    def confirm_menu(self, _:Optional[Any]=None) -> None:
+            Args:
+                _: Optional argument (ignored).
+            """
+            self.destroy()
+            self.closed = True
+
+    def confirm_menu(self, _: Optional[Any] = None) -> None:
+        """
+        Opens a confirmation menu asking the user if they really want to quit.
+
+        Args:
+            _: Optional argument, not used in the method.
+        """
         if not self.confirm_menu_open:
             self.confirm_menu_open = True
 
+            # creates the window
             self.top = CTk.CTkToplevel(self)
             self.top.attributes("-topmost", "true")
             self.top.overrideredirect(1)
-
+            # adding the label and buttons
             question_label = CTk.CTkLabel(
                 self.top, text="Are you sure you want to quit?",
             )
@@ -86,6 +100,9 @@ class MainApp(CTk.CTk): # type: ignore[misc]
             no_button.grid(row=1, column=1, padx=self.padding, pady=self.padding)
 
     def close_confirm_menu(self) -> None:
+        """
+        Closes the confirm menu.
+        """
         self.confirm_menu_open = False
         self.top.destroy()
 

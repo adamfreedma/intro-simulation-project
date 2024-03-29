@@ -1,6 +1,6 @@
 import pytest
 import json
-from graph import read_json, distance_graph, cross_amount_graph
+from graph import read_json, distance_graph, cross_count_graph
 import os
 
 @pytest.fixture
@@ -40,7 +40,7 @@ def test_distance_graph(tmp_path: str, sample_data_path: str) -> None:
 def test_cross_amount_graph(tmp_path: str, sample_data_path: str) -> None:
     # Test generating cross amount graph
     output_path = str(tmp_path + "cross_amount_graph")
-    cross_amount_graph(sample_data_path, output_path)
+    cross_count_graph(sample_data_path, output_path)
     assert os.path.exists(f"{output_path}-cross-count.png")
     os.remove(f"{output_path}-cross-count.png")
     os.remove(sample_data_path)

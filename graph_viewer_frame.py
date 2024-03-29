@@ -8,6 +8,16 @@ class GraphViewerFrame(ctk.CTkFrame): # type: ignore[misc]
     __FOLDER_PREFIX = "GRAPHS"
 
     def __init__(self, tab_master: ctk.CTkFrame, master: ctk.CTkFrame) -> None:
+        """
+        Initializes the GraphViewerFrame object.
+
+        Args:
+            tab_master (ctk.CTkFrame): The parent frame for the GraphViewerFrame.
+            master (MainApp): The main app.
+
+        Returns:
+            None
+        """
         ctk.CTkFrame.__init__(self, tab_master, corner_radius=15)
 
         self.height = master.height
@@ -22,6 +32,7 @@ class GraphViewerFrame(ctk.CTkFrame): # type: ignore[misc]
 
         self.image = ctk.CTkLabel(self, image=None, text="")
         
+        # layout of the buttons frame
         self.buttons_frame = ctk.CTkFrame(self)
         self.folder_entry = ctk.CTkComboBox(self.buttons_frame, self.widget_width, variable=self.__folder_var)
         self.next_button = ctk.CTkButton(self.buttons_frame, self.widget_width, text="->", command=self.next_image)
@@ -41,25 +52,56 @@ class GraphViewerFrame(ctk.CTkFrame): # type: ignore[misc]
 
     @staticmethod
     def get_folder_prefix() -> str:
+        """
+        Returns the folder prefix used by the GraphViewerFrame class.
+        
+        Returns:
+            str: The folder prefix used by the GraphViewerFrame class.
+        """
         return GraphViewerFrame.__FOLDER_PREFIX
 
     def get_path_index(self) -> int:
+        """
+        Returns the current path index.
+
+        Returns:
+            int: The current path index.
+        """
         return self.__path_index
         
     def next_image(self) -> None:
+        """
+        Moves to the next image in the folder and updates the image displayed.
+        """
         self.__path_index += 1
         self.update_image()
         
     def prev_image(self) -> None:
+        """
+        Moves to the previous image in the folder and updates the image displayed.
+        """
         self.__path_index -= 1
         self.update_image()
     
     def update_folders_list(self) -> None:
-        self.folder_entry.configure(values=[folder[0].split(
-            self.__FOLDER_PREFIX)[-1] for folder in os.walk(os.getcwd())
-                                            if folder[0].count(self.__FOLDER_PREFIX)])
+            """
+            Updates the values in the folder_entry widget with the names of folders
+            that contain the specified folder prefix.
+
+            Returns:
+                None
+            """
+            self.folder_entry.configure(values=[folder[0].split(
+                self.__FOLDER_PREFIX)[-1] for folder in os.walk(os.getcwd())
+                                                if folder[0].count(self.__FOLDER_PREFIX)])
     
     def update_paths(self, test: Optional[bool]=False) -> None:
+        """
+        Update the list of image paths based on the selected folder.
+
+        Args:
+            test (bool, optional): If True, clears the list of paths. Defaults to False.
+        """
         folder_path = self.__FOLDER_PREFIX + self.__folder_var.get()
         if os.path.isdir(folder_path):
             self.__paths = [f"{folder_path}/{path}" for path in os.listdir(folder_path) if path.endswith(".png")]
@@ -69,6 +111,15 @@ class GraphViewerFrame(ctk.CTkFrame): # type: ignore[misc]
             self.update_image()
         
     def update_image(self) -> None:
+        """
+        Updates the image displayed in the frame.
+
+        If there are paths available and the current path exists, it opens the image at the current path
+        and displays it in the frame.
+
+        Returns:
+            None
+        """
         if self.__paths and os.path.exists(self.__paths[self.__path_index % len(self.__paths)]):
             img = ctk.CTkImage(dark_image=Image.open(self.__paths[self.__path_index % len(self.__paths)]), size=(self.width, self.height))
             self.image.configure(image=img)
