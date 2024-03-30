@@ -33,9 +33,9 @@ class Screen:
         self.__obstacles: List[Obstacle] = []
 
         self.__walkers: List[Walker] = []
-        self.__trails: Dict[Walker, List[vector3]] = {}
+        self.__trails: Dict[Walker, List[Types.vector3]] = {}
         self.__trails_lock = threading.Lock()
-        self.__colors: Dict[Walker, vector3] = {}
+        self.__colors: Dict[Walker, Types.vector3] = {}
 
         self.__run = True
 
@@ -110,23 +110,23 @@ class Screen:
         self.__trails_lock.release()
         self.__colors[walker] = (random.random(), random.random(), random.random())
 
-    def add_to_trail(self, walker: Walker, position: vector3) -> None:
+    def add_to_trail(self, walker: Walker, position: Types.vector3) -> None:
         """
         Adds a position to the trail of a given walker.
 
         Args:
             walker (Walker): The walker object.
-            position (vector3): The position to be added to the trail.
+            position (Types.vector3): The position to be added to the trail.
         """
         if walker in self.__trails:
             self.__trails[walker].append(position)
 
-    def get_trails(self) -> Dict[Walker, List[vector3]]:
+    def get_trails(self) -> Dict[Walker, List[Types.vector3]]:
         """
         Returns a dictionary containing the trails of each walker.
 
         Returns:
-            Dict[Walker, List[vector3]]: A dictionary where the keys are Walker objects and the values are lists of vector3 objects representing the trails.
+            Dict[Walker, List[Types.vector3]]: A dictionary where the keys are Walker objects and the values are lists of Types.vector3 objects representing the trails.
         """
         return self.__trails
 
@@ -149,15 +149,15 @@ class Screen:
         return self.__obstacles
 
     def draw_line(
-        self, starting_point: vector3, final_point: vector3, color: vector3
+        self, starting_point: Types.vector3, final_point: Types.vector3, color: Types.vector3
     ) -> None:
         """
         Draws a line on the screen from the starting point to the final point with the specified color.
 
         Args:
-            starting_point (vector3): The starting point of the line.
-            final_point (vector3): The final point of the line.
-            color (vector3): The color of the line.
+            starting_point (Types.vector3): The starting point of the line.
+            final_point (Types.vector3): The final point of the line.
+            color (Types.vector3): The color of the line.
         """
         GL.glColor3fv(color)
         GL.glLineWidth(5)
@@ -166,14 +166,14 @@ class Screen:
         GL.glVertex3fv(final_point)
         GL.glEnd()
 
-    def render_sphere(self, location: vector3, radius: float, color: vector3) -> None:
+    def render_sphere(self, location: Types.vector3, radius: float, color: Types.vector3) -> None:
         """
         Renders a sphere at the specified location with the given radius and color.
 
         Args:
-            location (vector3): The location of the sphere.
+            location (Types.vector3): The location of the sphere.
             radius (float): The radius of the sphere.
-            color (vector3): The color of the sphere.
+            color (Types.vector3): The color of the sphere.
         """
         GL.glTranslatef(*location)
         GL.glColor3f(*color)
@@ -218,12 +218,12 @@ class Screen:
         self.draw_line((0, -self.INF, 0), (0, self.INF, 0), (0, 1, 0))
         self.draw_line((0, 0, -self.INF), (0, 0, self.INF), (0, 0, 1))
 
-    def move(self, movement: vector3) -> None:
+    def move(self, movement: Types.vector3) -> None:
         """
         Moves the view by applying translation transformations.
 
         Args:
-            movement (vector3): The translation vector representing the movement in x, y, and z coordinates.
+            movement (Types.vector3): The translation vector representing the movement in x, y, and z coordinates.
         """
         # init model view matrix
         GL.glLoadIdentity()

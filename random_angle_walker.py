@@ -1,5 +1,5 @@
 from walker import Walker
-import math_functions
+from math_functions import MathFunctions
 from custom_types import *
 from typing import Tuple
 
@@ -39,8 +39,8 @@ class RandomAngleWalker(Walker):
         """
         result = None
         if self._is_3d:
-            result = (math_functions.random_angle(), math_functions.random_angle())
+            result = (MathFunctions.random_angle(), MathFunctions.random_angle())
         else:
-            result = (math_functions.random_angle(), 0)
+            result = (MathFunctions.random_angle(), 0)
 
         return result

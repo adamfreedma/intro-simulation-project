@@ -1,6 +1,6 @@
 from custom_types import *
 import numpy as np
-from math_functions import vector_from_angle_and_radius, angle_and_radius_from_vector
+from math_functions import MathFunctions
 
 
 class Move(object):
@@ -18,7 +18,7 @@ class Move(object):
         self.__radius = radius
         self.__pitch = pitch
 
-    def angle_and_radius(self) -> angle_vector3:
+    def angle_and_radius(self) -> Types.angle_vector3:
         """
         Returns the angle, radius, and pitch of the object.
 
@@ -46,11 +46,11 @@ class Move(object):
         Returns:
             Move: The resulting Move object after addition.
         """
-        self_vector3 = vector_from_angle_and_radius(*self.angle_and_radius())
-        other_vector3 = vector_from_angle_and_radius(*other.angle_and_radius())
+        self_vector3 = MathFunctions.vector_from_angle_and_radius(*self.angle_and_radius())
+        other_vector3 = MathFunctions.vector_from_angle_and_radius(*other.angle_and_radius())
         return Move(
-            *angle_and_radius_from_vector(
-                cast_to_vector3(np.add(self_vector3, other_vector3))
+            *MathFunctions.angle_and_radius_from_vector(
+                Types.cast_to_vector3(np.add(self_vector3, other_vector3))
             )
         )
 

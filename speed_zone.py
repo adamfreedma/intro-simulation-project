@@ -1,5 +1,5 @@
 from custom_types import *
-from custom_types import vector3
+from custom_types import Types
 from obstacle import Obstacle
 from typing import Tuple
 
@@ -34,7 +34,7 @@ class SpeedZone(Obstacle):
         """
         return self.__speed_factor
 
-    def get_color(self) -> vector3:
+    def get_color(self) -> Types.vector3:
         """
         Returns the color of the speed zone based on the speed factor.
 

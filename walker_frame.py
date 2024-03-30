@@ -1,6 +1,6 @@
 import customtkinter as ctk  # type: ignore[import]
 from spinbox import Spinbox
-import colors
+from colors import Colors
 from walker import Walker
 from straight_walker import StraightWalker
 from random_angle_walker import RandomAngleWalker
@@ -34,7 +34,7 @@ class WalkerFrame(ctk.CTkFrame):  # type: ignore[misc]
         self.dimension_var = ctk.BooleanVar(value=False)
 
         self.delete_button = ctk.CTkButton(
-            self, 0, text="X", fg_color=colors.RED, command=self.delete
+            self, 0, text="X", fg_color=Colors.RED, command=self.delete
         )
         self.walker_choose_dropdown = ctk.CTkOptionMenu(
             self,
@@ -51,7 +51,7 @@ class WalkerFrame(ctk.CTkFrame):  # type: ignore[misc]
             variable=self.dimension_var,
             onvalue=True,
             offvalue=False,
-            button_color=colors.WHITE,
+            button_color=Colors.WHITE,
         )
 
         self.mass_spinbox = Spinbox(

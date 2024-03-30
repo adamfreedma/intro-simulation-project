@@ -5,26 +5,26 @@ import numpy as np
 
 class Obstacle(object):
 
-    def __init__(self, location: vector3, radius: float) -> None:
+    def __init__(self, location: Types.vector3, radius: float) -> None:
         """
         Initialize an Obstacle object.
 
         Args:
-            location (vector3): The location of the obstacle.
+            location (Types.vector3): The location of the obstacle.
             radius (float): The radius of the obstacle.
         """
         self.__location = location
         self.__radius = radius
 
     def detect_colision(
-        self, starting_location: vector3, final_location: vector3
+        self, starting_location: Types.vector3, final_location: Types.vector3
     ) -> bool:
         """
         Detects whether a collision occurred between the obstacle and a movement from a starting location to a final location.
 
         Args:
-            starting_location (vector3): The starting location of the movement.
-            final_location (vector3): The final location of the movement.
+            starting_location (Types.vector3): The starting location of the movement.
+            final_location (Types.vector3): The final location of the movement.
 
         Returns:
             bool: True if there is a collision, False otherwise.
@@ -56,12 +56,12 @@ class Obstacle(object):
             # is there a collision
             return solution_1_touched or solution_2_touched or completely_inside
 
-    def get_location(self) -> vector3:
+    def get_location(self) -> Types.vector3:
         """
-        Returns the location of the obstacle as a vector3 object.
+        Returns the location of the obstacle as a Types.vector3 object.
 
         Returns:
-            vector3: The location of the obstacle.
+            Types.vector3: The location of the obstacle.
         """
         return self.__location
 

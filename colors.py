@@ -1,3 +1,4 @@
-WHITE = "#ffffff"
-RED = "#ff0000"
-GREEN = "#00ff00"
+class Colors:
+    WHITE = "#ffffff"
+    RED = "#ff0000"
+    GREEN = "#00ff00"

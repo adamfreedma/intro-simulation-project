@@ -1,5 +1,5 @@
 import customtkinter as ctk  # type: ignore[import]
-import colors
+from colors import Colors
 from spinbox import Spinbox
 
 
@@ -41,7 +41,7 @@ class StartFrame(ctk.CTkFrame):  # type: ignore[misc]
             self.widget_width,
             text="Start!",
             command=self.start,
-            fg_color=colors.RED,
+            fg_color=Colors.RED,
         )
 
         self.speed_slider_frame = ctk.CTkFrame(self.horizontal_frame)
@@ -60,7 +60,7 @@ class StartFrame(ctk.CTkFrame):  # type: ignore[misc]
             variable=self.visual_var,
             onvalue=True,
             offvalue=False,
-            button_color=colors.WHITE,
+            button_color=Colors.WHITE,
         )
 
         self.graph_output_folder_widget = ctk.CTkEntry(

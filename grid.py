@@ -5,7 +5,7 @@ from speed_zone import SpeedZone
 from typing import List
 from walker import Walker
 from move import Move
-import math_functions
+from math_functions import MathFunctions
 import math
 from custom_types import *
 import os
@@ -131,14 +131,14 @@ class Grid(object):
         return success
 
     def find_closest(
-        self, obstacles: List[Obstacle], starting_location: vector3
+        self, obstacles: List[Obstacle], starting_location: Types.vector3
     ) -> Optional[Obstacle]:
         """
         Finds the closest obstacle to the starting location among the given list of obstacles.
 
         Args:
             obstacles (List[Obstacle]): A list of obstacles to search through.
-            starting_location (vector3): The starting location to measure the distance from.
+            starting_location (Types.vector3): The starting location to measure the distance from.
 
         Returns:
             Optional[Obstacle]: The closest obstacle to the starting location, or None if no obstacles are provided.
@@ -150,7 +150,7 @@ class Grid(object):
         for obstacle in obstacles:
             # get the distance from the starting location to the obstacle
             dist = (
-                math_functions.dist(obstacle.get_location(), starting_location)
+                MathFunctions.dist(obstacle.get_location(), starting_location)
                 - obstacle.get_radius()
             )
             # updates the closest distance
@@ -179,16 +179,16 @@ class Grid(object):
             for other_walker in walker_list:
                 if other_walker != walker:
                     # calculating the gravity effect
-                    distance = math_functions.dist(
+                    distance = MathFunctions.dist(
                         walker.get_location(), other_walker.get_location()
                     )
                     walker_to_other_walker = np.subtract(
                         other_walker.get_location(), walker.get_location()
                     )
-                    direction = math_functions.normalize(
-                        cast_to_vector3(walker_to_other_walker)
+                    direction = MathFunctions.normalize(
+                        Types.cast_to_vector3(walker_to_other_walker)
                     )
-                    addition = cast_to_vector3(
+                    addition = Types.cast_to_vector3(
                         (
                             np.array(direction)
                             * other_walker.get_mass()
@@ -200,7 +200,7 @@ class Grid(object):
                     addition_sum += addition
 
         return Move(
-            *math_functions.angle_and_radius_from_vector(cast_to_vector3(addition_sum))
+            *MathFunctions.angle_and_radius_from_vector(Types.cast_to_vector3(addition_sum))
         )
 
     def move(

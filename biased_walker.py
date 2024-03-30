@@ -1,5 +1,5 @@
 from walker import Walker
-import math_functions
+from math_functions import MathFunctions
 from custom_types import *
 import math
 import numpy as np
@@ -67,7 +67,7 @@ class BiasedWalker(Walker):
         result = None
 
         # generating a normally distributed change in angle from the bias direction
-        change_direction = math_functions.random_angle()
+        change_direction = MathFunctions.random_angle()
         changee_magnitude = np.random.normal(scale=self.bias_scale)  # change in radians
 
         # finding the bias direction from the bias dictionary

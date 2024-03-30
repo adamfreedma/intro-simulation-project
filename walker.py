@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from move import Move
 from custom_types import *
-import math_functions
+from math_functions import MathFunctions
 from typing import Tuple
 
 
@@ -80,13 +80,13 @@ class Walker(ABC):
         """
         return self._is_3d
 
-    def get_location(self) -> vector3:
+    def get_location(self) -> Types.vector3:
         return self._location
 
     def move(self, move: Move) -> None:
-        self._location = math_functions.add_move(self._location, move)
+        self._location = MathFunctions.add_move(self._location, move)
 
-    def move_to(self, location: vector3) -> None:
+    def move_to(self, location: Types.vector3) -> None:
         self._location = location
 
     def reset(self) -> None:
