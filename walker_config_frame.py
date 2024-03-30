@@ -7,6 +7,8 @@ from walker import Walker
 
 class WalkerConfigFrame(ctk.CTkFrame):  # type: ignore[misc]
 
+    __MAX_WALKERS = 5
+
     def __init__(self, master: ctk.CTkFrame) -> None:
         """
         Initialize the WalkerConfigFrame.
@@ -38,6 +40,9 @@ class WalkerConfigFrame(ctk.CTkFrame):  # type: ignore[misc]
         self.walker_frame_list.append(walker_frame)
         walker_frame.pack(padx=self.padding, pady=self.padding)
 
+        if len(self.walker_frame_list) >= self.__MAX_WALKERS:
+            self.add_walker_button.configure(state="disabled")
+
     def delete_walker(self, walker_frame: WalkerFrame) -> None:
         """
         Deletes a walker frame from the walker frame list.
@@ -47,6 +52,8 @@ class WalkerConfigFrame(ctk.CTkFrame):  # type: ignore[misc]
         """
         if walker_frame in self.walker_frame_list:
             self.walker_frame_list.remove(walker_frame)
+
+        self.add_walker_button.configure(state="normal")
 
     def get_walkers(self) -> List[Walker]:
         """
