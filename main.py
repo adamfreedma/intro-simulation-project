@@ -6,9 +6,22 @@ from grid import Grid
 from screen import Screen
 import customtkinter as ctk
 from typing import Any, Optional
+import argparse
 
 
 class MainApp(CTk.CTk):  # type: ignore[misc]
+
+    HELP_STRING = """
+    Run python main.py to run the program.
+    
+    The program will open a GUI with possible configurations for the simulation,
+    choose the settings then press start to play the simulation.
+    
+    You can add obstacles via a JSON config file, the correct format is provided via the
+    config.json example file
+    
+    All simulation related paramaters (Non walker parameters) are configurable in real time.
+    """
 
     def __init__(self) -> None:
         """
@@ -108,9 +121,15 @@ class MainApp(CTk.CTk):  # type: ignore[misc]
         self.confirm_menu_open = False
         self.top.destroy()
 
-
-if __name__ == "__main__":
+def main():
+    """Runs the application
+    """
     ctk.set_appearance_mode("dark")
     ctk.set_default_color_theme("dark-blue")
     app = MainApp()
     app.mainloop()
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description=MainApp.HELP_STRING)
+    args = parser.parse_args()
+    main()
