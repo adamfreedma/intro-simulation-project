@@ -1,9 +1,9 @@
-import customtkinter as ctk # type: ignore[import]
-import colors
+import customtkinter as ctk  # type: ignore[import]
+from colors import Colors
 from spinbox import Spinbox
 
 
-class StartFrame(ctk.CTkFrame): # type: ignore[misc]
+class StartFrame(ctk.CTkFrame):  # type: ignore[misc]
 
     def __init__(self, master: ctk.CTkFrame) -> None:
         """
@@ -21,7 +21,7 @@ class StartFrame(ctk.CTkFrame): # type: ignore[misc]
         self.width = master.width
         self.widget_width = self.width // 8
         self.padding = master.padding
-        
+
         # initialize variables
         self.visual_var = ctk.BooleanVar(self, value=False)
         self.progress_var = ctk.DoubleVar(self, value=0)
@@ -41,19 +41,16 @@ class StartFrame(ctk.CTkFrame): # type: ignore[misc]
             self.widget_width,
             text="Start!",
             command=self.start,
-            fg_color=colors.RED,
+            fg_color=Colors.RED,
         )
 
         self.speed_slider_frame = ctk.CTkFrame(self.horizontal_frame)
         self.speed_slider = ctk.CTkSlider(
-            self.speed_slider_frame,
-            self.widget_width,
-            command=self.update_speed
+            self.speed_slider_frame, self.widget_width, command=self.update_speed
         )
         self.speed_slider.set(1)
         self.speed_slider_title = ctk.CTkLabel(
-            self.speed_slider_frame,
-            text="Visual simulation speed:"
+            self.speed_slider_frame, text="Visual simulation speed:"
         )
 
         self.visual_toggle = ctk.CTkSwitch(
@@ -63,7 +60,7 @@ class StartFrame(ctk.CTkFrame): # type: ignore[misc]
             variable=self.visual_var,
             onvalue=True,
             offvalue=False,
-            button_color=colors.WHITE,
+            button_color=Colors.WHITE,
         )
 
         self.graph_output_folder_widget = ctk.CTkEntry(
@@ -92,11 +89,21 @@ class StartFrame(ctk.CTkFrame): # type: ignore[misc]
         self.speed_slider_title.pack(expand=True, padx=self.padding, pady=self.padding)
         self.speed_slider.pack(expand=True, padx=self.padding, pady=self.padding)
 
-        self.graph_output_folder_widget.pack(side="right", expand=True, padx=self.padding, pady=self.padding)
-        self.max_steps_widget.pack(side="right", expand=True, padx=self.padding, pady=self.padding)
-        self.speed_slider_frame.pack(side="right", expand=True, padx=self.padding, pady=self.padding)
-        self.simulation_count_widget.pack(side="right", expand=True, padx=self.padding, pady=self.padding)
-        self.visual_toggle.pack(side="right", expand=True, padx=self.padding, pady=self.padding)
+        self.graph_output_folder_widget.pack(
+            side="right", expand=True, padx=self.padding, pady=self.padding
+        )
+        self.max_steps_widget.pack(
+            side="right", expand=True, padx=self.padding, pady=self.padding
+        )
+        self.speed_slider_frame.pack(
+            side="right", expand=True, padx=self.padding, pady=self.padding
+        )
+        self.simulation_count_widget.pack(
+            side="right", expand=True, padx=self.padding, pady=self.padding
+        )
+        self.visual_toggle.pack(
+            side="right", expand=True, padx=self.padding, pady=self.padding
+        )
         self.horizontal_frame.pack(expand=True, padx=self.padding, pady=self.padding)
 
         self.start_button.pack(expand=True, padx=self.padding, pady=self.padding)
@@ -107,12 +114,13 @@ class StartFrame(ctk.CTkFrame): # type: ignore[misc]
         with the selected options from the GUI.
         """
         self.progress_bar.pack(expand=True, padx=self.padding, pady=self.padding)
-        self.master.start_simulation(self.visual_var.get(),
-                                     self.progress_var,
-                                     simulation_count=self.simulation_count_widget.get(),
-                                     max_steps=self.max_steps_widget.get(),
-                                     graph_output_folder=self.graph_output_folder_widget.get(),
-                                    )
+        self.master.start_simulation(
+            self.visual_var.get(),
+            self.progress_var,
+            simulation_count=self.simulation_count_widget.get(),
+            max_steps=self.max_steps_widget.get(),
+            graph_output_folder=self.graph_output_folder_widget.get(),
+        )
 
     def update_speed(self, value: float) -> None:
         """
@@ -122,7 +130,7 @@ class StartFrame(ctk.CTkFrame): # type: ignore[misc]
             value (float): The new speed value.
         """
         self.master.update_speed(value)
-        
+
     def get_speed(self) -> float:
         """
         Get the current speed value.
@@ -140,7 +148,7 @@ class StartFrame(ctk.CTkFrame): # type: ignore[misc]
             value (int): The new simulation count value.
         """
         self.master.update_simulation_count(value)
-        
+
     def get_simulation_count(self) -> int:
         """
         Get the current simulation count value.
@@ -149,7 +157,7 @@ class StartFrame(ctk.CTkFrame): # type: ignore[misc]
             int: The current simulation count value.
         """
         return self.master.get_simulation_count()
-        
+
     def update_max_steps(self, value: int) -> None:
         """
         Updates the max steps.
@@ -158,7 +166,7 @@ class StartFrame(ctk.CTkFrame): # type: ignore[misc]
             value (int): The new max steps value.
         """
         self.master.update_max_steps(value)
-        
+
     def get_max_steps(self) -> int:
         """
         Get the current max steps value.

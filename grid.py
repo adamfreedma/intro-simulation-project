@@ -5,7 +5,7 @@ from speed_zone import SpeedZone
 from typing import List
 from walker import Walker
 from move import Move
-import math_functions
+from math_functions import MathFunctions
 import math
 from custom_types import *
 import os
@@ -13,8 +13,9 @@ import numpy as np
 import copy
 from typing import Optional
 
+
 class Grid(object):
-    
+
     __GRAVITY_CONSTANT = 1
 
     def __init__(self) -> None:
@@ -24,10 +25,10 @@ class Grid(object):
         self._obstacles: List[Obstacle] = []
 
     def clear_obstacles(self) -> None:
-            """
-            Clears all obstacles from the grid.
-            """
-            self._obstacles = []
+        """
+        Clears all obstacles from the grid.
+        """
+        self._obstacles = []
 
     def add_teleporters(self, path: str) -> bool:
         """
@@ -58,7 +59,7 @@ class Grid(object):
                         )
             except KeyError:
                 success = False
-        
+
         # return the success of the operation
         if success:
             self._obstacles.extend(teleporter_list)
@@ -116,7 +117,11 @@ class Grid(object):
                     # add each speed zone to the list based on the correct format
                     for speed_zone in data["speed zones"]:
                         speed_zone_list.append(
-                            SpeedZone(speed_zone["location"], speed_zone["radius"], speed_zone["speed factor"])
+                            SpeedZone(
+                                speed_zone["location"],
+                                speed_zone["radius"],
+                                speed_zone["speed factor"],
+                            )
                         )
             except KeyError:
                 success = False
@@ -126,14 +131,14 @@ class Grid(object):
         return success
 
     def find_closest(
-        self, obstacles: List[Obstacle], starting_location: vector3
+        self, obstacles: List[Obstacle], starting_location: Types.vector3
     ) -> Optional[Obstacle]:
         """
         Finds the closest obstacle to the starting location among the given list of obstacles.
 
         Args:
             obstacles (List[Obstacle]): A list of obstacles to search through.
-            starting_location (vector3): The starting location to measure the distance from.
+            starting_location (Types.vector3): The starting location to measure the distance from.
 
         Returns:
             Optional[Obstacle]: The closest obstacle to the starting location, or None if no obstacles are provided.
@@ -141,17 +146,20 @@ class Grid(object):
         """
         min_dist = math.inf
         closest = None
-        
+
         for obstacle in obstacles:
             # get the distance from the starting location to the obstacle
-            dist = math_functions.dist(obstacle.get_location(), starting_location) - obstacle.get_radius()
+            dist = (
+                MathFunctions.dist(obstacle.get_location(), starting_location)
+                - obstacle.get_radius()
+            )
             # updates the closest distance
             if dist < min_dist:
                 min_dist = dist
                 closest = obstacle
 
         return closest
-    
+
     def get_gravity_effect(self, walker: Walker, walker_list: List[Walker]) -> Move:
         """
         Calculates the gravity effect on a given walker based on the other walkers in the list.
@@ -171,19 +179,37 @@ class Grid(object):
             for other_walker in walker_list:
                 if other_walker != walker:
                     # calculating the gravity effect
-                    distance = math_functions.dist(walker.get_location(), other_walker.get_location())
-                    walker_to_other_walker = np.subtract(other_walker.get_location(), walker.get_location())
-                    direction = math_functions.normalize(cast_to_vector3(walker_to_other_walker))
-                    addition = cast_to_vector3((np.array(direction) *
-                                                other_walker.get_mass() *
-                                                self.__GRAVITY_CONSTANT) /
-                                               (max(distance, 1) * total_mass))
+                    distance = MathFunctions.dist(
+                        walker.get_location(), other_walker.get_location()
+                    )
+                    walker_to_other_walker = np.subtract(
+                        other_walker.get_location(), walker.get_location()
+                    )
+                    direction = MathFunctions.normalize(
+                        Types.cast_to_vector3(walker_to_other_walker)
+                    )
+                    addition = Types.cast_to_vector3(
+                        (
+                            np.array(direction)
+                            * other_walker.get_mass()
+                            * self.__GRAVITY_CONSTANT
+                        )
+                        / (max(distance, 1) * total_mass)
+                    )
                     # adding the gravity effect to the total move
                     addition_sum += addition
 
-        return Move(*math_functions.angle_and_radius_from_vector(cast_to_vector3(addition_sum)))
+        return Move(
+            *MathFunctions.angle_and_radius_from_vector(Types.cast_to_vector3(addition_sum))
+        )
 
-    def move(self, walker: Walker, move: Move, walker_list: List[Walker], obstacles: Optional[List[Obstacle]]=None) -> None:
+    def move(
+        self,
+        walker: Walker,
+        move: Move,
+        walker_list: List[Walker],
+        obstacles: Optional[List[Obstacle]] = None,
+    ) -> None:
         """
         Moves the walker according to the given move and handles collisions with obstacles.
 
@@ -200,10 +226,10 @@ class Grid(object):
         starting_location = walker.get_location()
         walker.move(move)
         final_location = walker.get_location()
-        
+
         if obstacles is None:
             obstacles = copy.deepcopy(self._obstacles)
-        
+
         # getting all hit obstacles
         hit_obstacles = [
             obstacle

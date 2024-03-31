@@ -1,12 +1,13 @@
 from abc import ABC, abstractmethod
 from move import Move
 from custom_types import *
-import math_functions
+from math_functions import MathFunctions
 from typing import Tuple
+
 
 class Walker(ABC):
 
-    def __init__(self, name: str, mass: float=1) -> None:
+    def __init__(self, name: str, mass: float = 1) -> None:
         """
         Initialize a Walker object.
 
@@ -15,7 +16,7 @@ class Walker(ABC):
             mass (float, optional): The mass of the walker. Defaults to 1.
         """
         super().__init__()
-        
+
         self._name = name
         self._mass = mass
 
@@ -55,12 +56,12 @@ class Walker(ABC):
     def get_name(self) -> str:
         """
         Returns the name of the walker.
-        
+
         Returns:
             str: The name of the walker.
         """
         return self._name
-    
+
     def get_mass(self) -> float:
         """
         Returns the mass of the walker.
@@ -69,23 +70,23 @@ class Walker(ABC):
             float: The mass of the walker.
         """
         return self._mass
-    
+
     def is_3d(self) -> bool:
         """
         Returns True if the walker is in a 3D environment, False otherwise.
-        
+
         Returns:
             bool: is the walker in a 3D environment?
         """
         return self._is_3d
 
-    def get_location(self) -> vector3:
+    def get_location(self) -> Types.vector3:
         return self._location
 
     def move(self, move: Move) -> None:
-        self._location = math_functions.add_move(self._location, move)
+        self._location = MathFunctions.add_move(self._location, move)
 
-    def move_to(self, location: vector3) -> None:
+    def move_to(self, location: Types.vector3) -> None:
         self._location = location
 
     def reset(self) -> None:

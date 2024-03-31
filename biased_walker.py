@@ -1,10 +1,11 @@
 from walker import Walker
-import math_functions
+from math_functions import MathFunctions
 from custom_types import *
 import math
 import numpy as np
 import random
 from typing import Tuple
+
 
 class BiasedWalker(Walker):
 
@@ -17,7 +18,14 @@ class BiasedWalker(Walker):
         "Down": (0, -0.5 * math.pi),
     }
 
-    def __init__(self, name: str, is_3d: bool, mass: float=1.0, bias: str="", bias_scale: int=1) -> None:
+    def __init__(
+        self,
+        name: str,
+        is_3d: bool,
+        mass: float = 1.0,
+        bias: str = "",
+        bias_scale: int = 1,
+    ) -> None:
         """
         Initialize a BiasedWalker object.
 
@@ -40,7 +48,6 @@ class BiasedWalker(Walker):
         else:
             self.bias = random.choice(list(self.BIAS_DICT.keys()))
 
-
     def _generate_move_radius(self) -> float:
         """
         Generates the radius for a move.
@@ -60,7 +67,7 @@ class BiasedWalker(Walker):
         result = None
 
         # generating a normally distributed change in angle from the bias direction
-        change_direction = math_functions.random_angle()
+        change_direction = MathFunctions.random_angle()
         changee_magnitude = np.random.normal(scale=self.bias_scale)  # change in radians
 
         # finding the bias direction from the bias dictionary
@@ -69,7 +76,8 @@ class BiasedWalker(Walker):
         # finding the bias direction as the opposite of the current location
         elif self.bias == "Origin":
             yaw = math.atan2(self._location[1], self._location[0])
-            pitch = (math.atan2(self._location[2], np.linalg.norm(self._location[:2])) # type: ignore[no-untyped-call]
+            pitch = (
+                math.atan2(self._location[2], np.linalg.norm(self._location[:2]))  # type: ignore[no-untyped-call]
                 + math.pi
             )
 

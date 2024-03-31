@@ -1,9 +1,10 @@
-import customtkinter as ctk # type: ignore[import]
+import customtkinter as ctk  # type: ignore[import]
 import colors
 import os
 from typing import Optional
 
-class ConfigChooseFrame(ctk.CTkFrame): # type: ignore[misc]
+
+class ConfigChooseFrame(ctk.CTkFrame):  # type: ignore[misc]
 
     def __init__(self, master: ctk.CTkFrame) -> None:
         """
@@ -32,7 +33,7 @@ class ConfigChooseFrame(ctk.CTkFrame): # type: ignore[misc]
         # layout
         self.file_picker.pack(expand=True, padx=self.padding, pady=self.padding)
 
-    def file_dialog(self, open: Optional[bool]=True) -> None:
+    def file_dialog(self, open: Optional[bool] = True) -> None:
         """
         Opens a file dialog to select a configuration file.
 
@@ -58,4 +59,3 @@ class ConfigChooseFrame(ctk.CTkFrame): # type: ignore[misc]
             self.file_picker.configure(fg_color=colors.GREEN)
         else:
             self.file_picker.configure(fg_color=colors.RED)
-

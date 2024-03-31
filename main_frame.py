@@ -1,4 +1,4 @@
-import customtkinter as ctk # type: ignore[import]
+import customtkinter as ctk  # type: ignore[import]
 from customtkinter import DoubleVar
 from start_frame import StartFrame
 from config_choose_frame import ConfigChooseFrame
@@ -11,11 +11,14 @@ import shutil
 from typing import List
 from typing import Optional
 
-class MainFrame(ctk.CTkFrame): # type: ignore[misc]
-    
+
+class MainFrame(ctk.CTkFrame):  # type: ignore[misc]
+
     __FOLDER_PREFIX = "GRAPHS"
-    
-    def __init__(self, tab_master: ctk.CTkFrame, master: ctk.CTkFrame, simulation: Simulation) -> None:
+
+    def __init__(
+        self, tab_master: ctk.CTkFrame, master: ctk.CTkFrame, simulation: Simulation
+    ) -> None:
         """
         Initializes the MainFrame object.
 
@@ -42,9 +45,15 @@ class MainFrame(ctk.CTkFrame): # type: ignore[misc]
         self.walker_config_frame = WalkerConfigFrame(self)
 
         # layout
-        self.walker_config_frame.pack(anchor="s", fill="both", padx=self.padding, pady=self.padding)
-        self.config_choose_frame.pack(anchor="s", fill="both", padx=self.padding, pady=self.padding)
-        self.start_frame.pack(anchor="s", fill="both", padx=self.padding, pady=self.padding)
+        self.walker_config_frame.pack(
+            anchor="s", fill="both", padx=self.padding, pady=self.padding
+        )
+        self.config_choose_frame.pack(
+            anchor="s", fill="both", padx=self.padding, pady=self.padding
+        )
+        self.start_frame.pack(
+            anchor="s", fill="both", padx=self.padding, pady=self.padding
+        )
 
     def get_folder_prefix(self) -> str:
         """
@@ -55,10 +64,14 @@ class MainFrame(ctk.CTkFrame): # type: ignore[misc]
         """
         return self.__FOLDER_PREFIX
 
-    def start_simulation(self, visual: bool, progress_var: DoubleVar,
-                         simulation_count: Optional[int]=None,
-                         max_steps: Optional[int]=None,
-                         graph_output_folder: str="") -> None:
+    def start_simulation(
+        self,
+        visual: bool,
+        progress_var: DoubleVar,
+        simulation_count: Optional[int] = None,
+        max_steps: Optional[int] = None,
+        graph_output_folder: str = "",
+    ) -> None:
         """
         Starts the simulation.
 
@@ -93,23 +106,31 @@ class MainFrame(ctk.CTkFrame): # type: ignore[misc]
         # getting the events to detect when each walker is done
         walker_thread_list: List[threading.Thread] = []
         walker_list = self.walker_config_frame.get_walkers()
-        run_event_dict = {walker : threading.Event() for walker in walker_list}
+        run_event_dict = {walker: threading.Event() for walker in walker_list}
         # starting the simulation for each walker
         for walker in walker_list:
             output_path = None
             if graph_output_folder:
                 output_path = f"{graph_output_folder}/{walker.get_name()}"
-            
+
             walker_thread = threading.Thread(
                 target=self.simulation.simulate,
-                args=[walker, self.stop_event, run_event_dict, progress_var, walker_list, visual, output_path]
+                args=[
+                    walker,
+                    self.stop_event,
+                    run_event_dict,
+                    progress_var,
+                    walker_list,
+                    visual,
+                    output_path,
+                ],
             )
             walker_thread.start()
-            
+
             walker_thread_list.append(walker_thread)
         # waiting for all walkers to finish
         self.wait_to_stop(walker_thread_list)
-            
+
     def wait_to_stop(self, walker_thread_list: List[threading.Thread]) -> None:
         """
         Waits for all walker threads to stop before stopping the simulation and the start frame.
@@ -129,17 +150,17 @@ class MainFrame(ctk.CTkFrame): # type: ignore[misc]
             self.after(50, self.wait_to_stop, walker_thread_list)
 
     def update_speed(self, value: float) -> None:
-            """
-            Updates the speed of the simulation.
+        """
+        Updates the speed of the simulation.
 
-            Args:
-                value (float): The new speed value.
+        Args:
+            value (float): The new speed value.
 
-            Returns:
-                None
-            """
-            self.simulation.update_speed(value)
-        
+        Returns:
+            None
+        """
+        self.simulation.update_speed(value)
+
     def update_simulation_count(self, value: int) -> None:
         """
         Updates the simulation count with the given value.
@@ -148,7 +169,7 @@ class MainFrame(ctk.CTkFrame): # type: ignore[misc]
             value (int): The new simulation count value.
         """
         self.simulation.set_simulation_count(value)
-        
+
     def get_simulation_count(self) -> int:
         """
         Returns the simulation count.
@@ -157,7 +178,7 @@ class MainFrame(ctk.CTkFrame): # type: ignore[misc]
             int: The simulation count.
         """
         return self.simulation.get_simulation_count()
-        
+
     def update_max_steps(self, value: int) -> None:
         """
         Updates the maximum number of steps for the simulation.
@@ -166,7 +187,7 @@ class MainFrame(ctk.CTkFrame): # type: ignore[misc]
             value (int): The new maximum number of steps.
         """
         self.simulation.set_max_steps(value)
-        
+
     def get_max_steps(self) -> int:
         """
         Returns the maximum number of steps for the simulation.
@@ -177,13 +198,13 @@ class MainFrame(ctk.CTkFrame): # type: ignore[misc]
         return self.simulation.get_max_steps()
 
     def parse_config(self, path: str) -> bool:
-            """
-            Parses the configuration file at the given path and updates the simulation settings.
+        """
+        Parses the configuration file at the given path and updates the simulation settings.
 
-            Args:
-                path (str): The path to the configuration file.
+        Args:
+            path (str): The path to the configuration file.
 
-            Returns:
-                bool: True if the configuration was successfully parsed and applied, False otherwise.
-            """
-            return self.simulation.config(path)
+        Returns:
+            bool: True if the configuration was successfully parsed and applied, False otherwise.
+        """
+        return self.simulation.config(path)

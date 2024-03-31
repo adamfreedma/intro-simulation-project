@@ -1,13 +1,14 @@
-import matplotlib.pyplot as plt # type: ignore[import]
+import matplotlib.pyplot as plt  # type: ignore[import]
 import matplotlib
 import numpy as np
 import json
 from typing import Dict, Any
 
-matplotlib.use('Agg')
+matplotlib.use("Agg")
 
 import json
 from typing import Dict, Any
+
 
 def read_json(path: str) -> Dict[str, Any]:
     """
@@ -19,10 +20,11 @@ def read_json(path: str) -> Dict[str, Any]:
     Returns:
         dict: The contents of the JSON file as a dictionary.
     """
-    with open(path, 'r') as f:
+    with open(path, "r") as f:
         return dict(json.load(f))
 
-def distance_graph(data_path: str, output_path: str, axis: str="") -> None:
+
+def distance_graph(data_path: str, output_path: str, axis: str = "") -> None:
     """
     Generate a distance graph based on the logged data.
 
@@ -37,13 +39,17 @@ def distance_graph(data_path: str, output_path: str, axis: str="") -> None:
     fig, ax = plt.subplots()
     ax.plot(range(len(data)), data)
     # sets the labels and title
-    ax.set(xlabel='Steps', ylabel='Distance',
-        title=f"Average {axis}distance as a function of steps")
+    ax.set(
+        xlabel="Steps",
+        ylabel="Distance",
+        title=f"Average {axis}distance as a function of steps",
+    )
     ax.grid()
     # saves the graph
     fig.savefig(f"{output_path}-{axis}distance.png")
     plt.close(fig)
-    
+
+
 def cross_count_graph(data_path: str, output_path: str) -> None:
     """
     Generate a graph showing the average Y axis cross count as a function of steps.
@@ -59,8 +65,11 @@ def cross_count_graph(data_path: str, output_path: str) -> None:
     fig, ax = plt.subplots()
     ax.plot(range(len(data)), data)
     # sets the labels and title
-    ax.set(xlabel='Steps', ylabel='Y cross count',
-        title='Average Y axis cross count as a function of steps')
+    ax.set(
+        xlabel="Steps",
+        ylabel="Y cross count",
+        title="Average Y axis cross count as a function of steps",
+    )
     ax.grid()
     # saves the graph
     fig.savefig(f"{output_path}-cross-count.png")

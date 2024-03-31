@@ -2,19 +2,23 @@ import pytest
 from random_walker import RandomWalker
 import math
 
+
 @pytest.fixture
 def random_walker() -> RandomWalker:
     return RandomWalker("Test Walker", is_3d=False, mass=1)
+
 
 def test_random_walker_init(random_walker: RandomWalker) -> None:
     assert random_walker.get_name() == "Test Walker"
     assert random_walker.is_3d() == False
     assert random_walker.get_mass() == 1
 
+
 def test_generate_move_radius(random_walker: RandomWalker) -> None:
     move_radius = random_walker._generate_move_radius()
     assert isinstance(move_radius, float)
     assert move_radius >= 0
+
 
 def test_generate_move_angle(random_walker: RandomWalker) -> None:
     walker2d = RandomWalker("Test Walker", is_3d=False, mass=1)

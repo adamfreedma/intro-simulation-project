@@ -1,7 +1,8 @@
 from custom_types import *
-from custom_types import vector3
+from custom_types import Types
 from obstacle import Obstacle
 from typing import Tuple
+
 
 class SpeedZone(Obstacle):
 
@@ -32,8 +33,8 @@ class SpeedZone(Obstacle):
             float: The speed factor of the speed zone.
         """
         return self.__speed_factor
-    
-    def get_color(self) -> vector3:
+
+    def get_color(self) -> Types.vector3:
         """
         Returns the color of the speed zone based on the speed factor.
 
@@ -45,13 +46,20 @@ class SpeedZone(Obstacle):
             A tuple representing the RGB color values as floats between 0 and 1.
         """
         value = 0.5
-        
+
         if self.__speed_factor > 1:
             # fading from yellow to green
-            value = 0.5 + min(((self.__speed_factor * self.__COLOR_FADE_SPEED - 1) / (2 * self.__speed_factor * self.__COLOR_FADE_SPEED)), 0.5)
+            value = 0.5 + min(
+                (
+                    (self.__speed_factor * self.__COLOR_FADE_SPEED - 1)
+                    / (2 * self.__speed_factor * self.__COLOR_FADE_SPEED)
+                ),
+                0.5,
+            )
         if self.__speed_factor < 1:
             # fading from yellow to red
-            value = 0.5 - min((1 - self.__speed_factor / self.__COLOR_FADE_SPEED) / 2, 0.5)
-            
+            value = 0.5 - min(
+                (1 - self.__speed_factor / self.__COLOR_FADE_SPEED) / 2, 0.5
+            )
+
         return (min(2 * (1 - value), 1), min(2 * value, 1), 0)
-        

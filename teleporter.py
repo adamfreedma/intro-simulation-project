@@ -1,7 +1,8 @@
 from custom_types import *
-from custom_types import vector3
+from custom_types import Types
 from obstacle import Obstacle
 from typing import Tuple
+
 
 class Teleporter(Obstacle):
 
@@ -22,11 +23,11 @@ class Teleporter(Obstacle):
         super().__init__(location, radius)
         self.__target = target
 
-    def get_target(self) -> vector3:
+    def get_target(self) -> Types.vector3:
         """
         Returns the target location of the teleporter.
 
         Returns:
-            vector3: The target location of the teleporter.
+            Types.vector3: The target location of the teleporter.
         """
         return self.__target

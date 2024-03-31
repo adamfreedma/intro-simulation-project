@@ -1,12 +1,13 @@
 from walker import Walker
-import math_functions
+from math_functions import MathFunctions
 import random
 from custom_types import *
 from typing import Tuple
 
+
 class RandomWalker(Walker):
 
-    def __init__(self, name: str, is_3d: bool, mass: float=1) -> None:
+    def __init__(self, name: str, is_3d: bool, mass: float = 1) -> None:
         """
         Initialize a RandomWalker object.
 
@@ -38,8 +39,8 @@ class RandomWalker(Walker):
         """
         result = None
         if self._is_3d:
-            result = (math_functions.random_angle(), math_functions.random_angle())
+            result = (MathFunctions.random_angle(), MathFunctions.random_angle())
         else:
-            result = (math_functions.random_angle(), 0.0)
+            result = (MathFunctions.random_angle(), 0.0)
 
         return result
