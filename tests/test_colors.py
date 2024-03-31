@@ -1,19 +1,19 @@
 import pytest
-from colors import WHITE, RED, GREEN
+from colors import Colors
 
 
 def test_white_color() -> None:
-    assert WHITE == "#ffffff"
+    assert Colors.WHITE == "#ffffff"
 
 
 def test_red_color() -> None:
-    assert RED == "#ff0000"
+    assert Colors.RED == "#ff0000"
 
 
 def test_green_color() -> None:
-    assert GREEN == "#00ff00"
+    assert Colors.GREEN == "#00ff00"
 
 
 def test_invalid_color() -> None:
-    with pytest.raises(NameError):
-        assert BLUE == "#0000ff"  # type: ignore[name-defined]
+    with pytest.raises(AttributeError):
+        assert Colors.BLUE == "#0000ff"  # type: ignore[attr-defined]

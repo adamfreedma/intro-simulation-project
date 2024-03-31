@@ -37,7 +37,7 @@ def test_start_frame_update_simulation_count(start_frame: StartFrame) -> None:
     assert start_frame.get_simulation_count() == 100
 
 
-def test_start_frame_update_max_steps(start_frame):
+def test_start_frame_update_max_steps(start_frame: StartFrame) -> None:
     start_frame.update_max_steps(100)
 
     assert start_frame.get_max_steps() == 100

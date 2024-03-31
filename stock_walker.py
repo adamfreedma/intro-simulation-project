@@ -1,4 +1,4 @@
-from typing import Tuple, List
+from typing import Tuple, List, cast
 from walker import Walker
 import yfinance as yf # type: ignore[import]
 import pandas as pd # type: ignore[import]
@@ -25,7 +25,7 @@ class StockWalker(Walker):
             stock = yf.Ticker(random.choice(tickers['Symbol']))
             today = datetime.date.today()
             time_delta = datetime.timedelta(days=self.__DAY_COUNT)
-            return stock.history(start=today-time_delta, end=today, interval='1d')['Close'].values.tolist()
+            return cast(List[float], stock.history(start=today-time_delta, end=today, interval='1d')['Close'].values.tolist())
         except Exception:
             return self.__choose_random_stock()
     

@@ -121,7 +121,7 @@ class MainApp(CTk.CTk):  # type: ignore[misc]
         self.confirm_menu_open = False
         self.top.destroy()
 
-def main():
+def main() -> None:
     """Runs the application
     """
     ctk.set_appearance_mode("dark")

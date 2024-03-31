@@ -138,7 +138,7 @@ class StartFrame(ctk.CTkFrame):  # type: ignore[misc]
         Returns:
             float: The current speed value.
         """
-        return self.speed_slider.get()
+        return float(self.speed_slider.get())
 
     def update_simulation_count(self, value: int) -> None:
         """
@@ -156,7 +156,7 @@ class StartFrame(ctk.CTkFrame):  # type: ignore[misc]
         Returns:
             int: The current simulation count value.
         """
-        return self.master.get_simulation_count()
+        return int(self.master.get_simulation_count())
 
     def update_max_steps(self, value: int) -> None:
         """
@@ -174,7 +174,7 @@ class StartFrame(ctk.CTkFrame):  # type: ignore[misc]
         Returns:
             int: The current max steps value.
         """
-        return self.master.get_max_steps()
+        return int(self.master.get_max_steps())
 
     def stop(self) -> None:
         """

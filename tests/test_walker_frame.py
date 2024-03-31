@@ -5,13 +5,13 @@ from main_frame import MainFrame
 from screen import Screen
 from simulation import Simulation
 from straight_walker import StraightWalker
-from walker_frame import WalkerFrame, Walker
+from walker_frame import WalkerFrame
 from walker_config_frame import WalkerConfigFrame
 import customtkinter as ctk  # type: ignore[import]
 
 
 @pytest.fixture
-def walker_frame():
+def walker_frame() -> WalkerFrame:
     return WalkerFrame(
         WalkerConfigFrame(
             MainFrame(
@@ -23,13 +23,13 @@ def walker_frame():
     )
 
 
-def test_get_walker(walker_frame):
+def test_get_walker(walker_frame: WalkerFrame) -> None:
     walker_frame.master.create_walker()
     walker = walker_frame.get_walker("0")
     assert isinstance(walker, StraightWalker)
 
 
-def test_pack_walker_specific_widgets(walker_frame):
+def test_pack_walker_specific_widgets(walker_frame: WalkerFrame) -> None:
     error = False
     try:
         walker_frame.pack_walker_specific_widgets("Biased")
@@ -41,7 +41,7 @@ def test_pack_walker_specific_widgets(walker_frame):
     assert error == False
 
 
-def test_delete(walker_frame):
+def test_delete(walker_frame: WalkerFrame) -> None:
     walker_frame.master.create_walker()
     master = walker_frame.master
     walker_frame.delete()
@@ -49,5 +49,5 @@ def test_delete(walker_frame):
     assert walker_frame not in master.walker_frame_list
 
 
-def test_walker_frame_init(walker_frame):
+def test_walker_frame_init(walker_frame: WalkerFrame) -> None:
     assert isinstance(walker_frame.get_walker("2"), StraightWalker)

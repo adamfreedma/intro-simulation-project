@@ -1,4 +1,5 @@
 # Random walker - Adam Freedman
+I used github for version control whilst working on the project, the repository can be found here: [Github](https://github.com/adamfreedma/intro-simulation-project)
 ---
 ## Expantions list:
 - GUI: User interface and 3D rendering of the simulation, shown by ticking on the 'Visual' checkbox and the '3d' tickbox on the walker.
@@ -17,3 +18,13 @@
 - GUI: The user interface is written using the customtkinter library, a tkinter expansion, and the 3D visualization is written using pygame and OpenGL. you can move around the visualization and zoom in and out using the 'WASD' 'Space' and 'Shift' keys. All the walkers, their trails and the obstacles are drawn on the screen.
 - Multithreading: Each walker is assigned its own thread, to keep the threads synchronized after each iteration they all wait for an Event flag to be turned on/off to continue, that way the keep in sync. This allowes the gravity calculation to be correct and the progress bar running smoothly.
 - Gravity: Applies a gravity effect to each walker each step, the effect is calculated using the masses of all the other walkers and is scaled down by the total mass to achieve a constant total force.
+
+## Type hinting and Testing
+The entire codebase is using Type hinting and there are tests that have 95% coverage, you can run the tests and type checking using:
+```
+python -m pytest --cov=.
+```
+and,
+```
+mypy . --strict
+```

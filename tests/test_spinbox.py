@@ -16,7 +16,7 @@ def test_spinbox_initialization(spinbox: Spinbox) -> None:
     assert spinbox.get() == 0
 
 
-def test_spinbox_set(spinbox) -> None:
+def test_spinbox_set(spinbox: Spinbox) -> None:
     spinbox.set(10)
     assert spinbox.get() == 10
 
