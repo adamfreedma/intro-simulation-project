@@ -8,6 +8,8 @@ I used github for version control whilst working on the project, the repository 
 - Real time configuration: All the Non-walkers parameters can be configured while the simulation is running, use by entering a new config file mid run.
 - Accelerating walker: A new walker type that accelerates over time, use by choosing Accelerating on the walker type dropdown menu.
 - Stocks walker: A walker that moves based on random stocks from the s&p 500 index.
+- Resetable walker: A walker that has an increasing chance to reset the further he is from the origin.
+- improved Biased walker: Made the biased walker bias distribute normally around the bias direction to get a better bias spread.
 - Speed zone: A new obstacle type the scales up or down the movement, and has a coresponding color scaling from red to green, use by entering a config file having a speed zone.
 - Graph visualizer tab: A tab that detects all the graph folders created so far and shows the graphs inside them, use by switching to the graphs tab.
 - 3D: You can choose independently for each walker if he moves in 2 or 3 dimensions, use by ticking the '3d' checkbox.
