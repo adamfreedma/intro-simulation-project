@@ -131,9 +131,9 @@ class Simulation:
         """Waits for all walkers to finish the current simulation.
 
         Args:
-            simulation (int): _description_
-            run_event_dict (Dict[Walker, Event]): _description_
-            walker (Walker): _description_
+            simulation (int): The current simulation index.
+            run_event_dict (Dict[Walker, Event]): The dict of the threads running.
+            walker (Walker): Current walker.
         """
         # syncing the threads, on even runs setting the events, on odd runs unsetting the events
         if simulation % 2 == 0:
