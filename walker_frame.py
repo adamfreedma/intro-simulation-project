@@ -1,6 +1,7 @@
 import customtkinter as ctk  # type: ignore[import]
 from spinbox import Spinbox
 from colors import Colors
+from stock_walker import StockWalker
 from walker import Walker
 from straight_walker import StraightWalker
 from random_angle_walker import RandomAngleWalker
@@ -57,7 +58,7 @@ class WalkerFrame(ctk.CTkFrame):  # type: ignore[misc]
         self.mass_spinbox = Spinbox(
             self,
             width=self.widget_width,
-            starting_value=1,
+            starting_value=0,
             text="Mass",
         )
 
@@ -128,6 +129,11 @@ class WalkerFrame(ctk.CTkFrame):  # type: ignore[misc]
                 self.dimension_toggle.get(),
                 self.mass_spinbox.get(),
                 self.acceleration_entry.get(),
+            )
+        if self.walker_type.get() == "Stocks":
+            return StockWalker(
+                name,
+                self.mass_spinbox.get(),
             )
         # defaults to Straight
         return StraightWalker(

@@ -34,6 +34,7 @@ class Obstacle(object):
         # completely inside
         if np.linalg.norm(obstacle_to_start) < self.__radius:  # type: ignore[no-untyped-call]
             return True
+        
         # finding the coefficients for the quadratic equation
         coef_a = np.dot(movement, movement)  # type: ignore[no-untyped-call]
         coef_b = 2 * np.dot(obstacle_to_start, movement)  # type: ignore[no-untyped-call]
@@ -43,9 +44,8 @@ class Obstacle(object):
         if discriminant < 0:
             # no intersection
             return False
-        else:
+        elif coef_a > 0:
             discriminant = np.sqrt(discriminant)
-
             # cheking to see if the solutions are on the correct part of the line
             solution_1 = (-coef_b - discriminant) / (2 * coef_a)
             solution_2 = (-coef_b + discriminant) / (2 * coef_a)
@@ -56,6 +56,8 @@ class Obstacle(object):
             # is there a collision
             return solution_1_touched or solution_2_touched or completely_inside
 
+        return False
+    
     def get_location(self) -> Types.vector3:
         """
         Returns the location of the obstacle as a Types.vector3 object.

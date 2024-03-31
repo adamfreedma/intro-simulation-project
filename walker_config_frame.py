@@ -1,5 +1,4 @@
 import customtkinter as ctk  # type: ignore[import]
-import colors
 from walker_frame import WalkerFrame
 from typing import List
 from walker import Walker

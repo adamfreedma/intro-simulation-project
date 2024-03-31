@@ -35,7 +35,7 @@ class StockWalker(Walker):
             print(len(self.__current_stock_data))
             self.__current_stock_data = self.__choose_random_stock()
         self.__step = 1
-        self._location = (0, math.copysign(self.__SCALE, self.__current_stock_data[0]), 0)
+        self._location = (0, self.__current_stock_data[0], 0)
         super().reset()
 
     def _generate_move_angle(self) -> Tuple[float, float]:

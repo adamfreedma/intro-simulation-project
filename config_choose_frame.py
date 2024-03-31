@@ -1,5 +1,5 @@
 import customtkinter as ctk  # type: ignore[import]
-import colors
+from colors import Colors
 import os
 from typing import Optional
 
@@ -56,6 +56,6 @@ class ConfigChooseFrame(ctk.CTkFrame):  # type: ignore[misc]
             )
         # colors the button based on the success of reading the file and the file format
         if success:
-            self.file_picker.configure(fg_color=colors.GREEN)
+            self.file_picker.configure(fg_color=Colors.GREEN)
         else:
-            self.file_picker.configure(fg_color=colors.RED)
+            self.file_picker.configure(fg_color=Colors.RED)
