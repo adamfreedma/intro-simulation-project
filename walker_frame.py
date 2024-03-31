@@ -1,6 +1,7 @@
 import customtkinter as ctk # type: ignore[import]
 from spinbox import Spinbox
 import colors
+from stock_walker import StockWalker
 from walker import Walker
 from straight_walker import StraightWalker
 from random_angle_walker import RandomAngleWalker
@@ -11,7 +12,7 @@ from typing import List
 
 class WalkerFrame(ctk.CTkFrame): # type: ignore[misc]
 
-    __WALKER_TYPES = ["Straight", "Random Angle", "Random", "Biased", "Accelerating"]
+    __WALKER_TYPES = ["Straight", "Random Angle", "Random", "Biased", "Accelerating", "Stocks"]
 
     def __init__(self, master: ctk.CTkFrame) -> None:
         """
@@ -106,6 +107,8 @@ class WalkerFrame(ctk.CTkFrame): # type: ignore[misc]
             return BiasedWalker(name, self.dimension_toggle.get(), self.mass_spinbox.get(), self.bias_entry.get())
         if self.walker_type.get() == "Accelerating":
             return AcceleratingWalker(name, self.dimension_toggle.get(), self.mass_spinbox.get(), self.acceleration_entry.get())
+        if self.walker_type.get() == "Stocks":
+            return StockWalker(name, self.mass_spinbox.get())
         # defaults to Straight
         return StraightWalker(name, self.dimension_toggle.get(), self.mass_spinbox.get())
     
