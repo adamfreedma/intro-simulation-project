@@ -13,12 +13,12 @@ class StockWalker(Walker):
     
     def __init__(self, name: str, mass: float=1) -> None:
         super().__init__(name, mass)
-        self.__current_stock_data = self.__choose_random_stock()
+        self.__current_stock_data = self._choose_random_stock()
         self.__step = 1
         
         self._is_3d = False
         
-    def __choose_random_stock(self) -> List[float]:
+    def _choose_random_stock(self) -> List[float]:
         try:
             tickers = pd.read_html(
         'https://en.wikipedia.org/wiki/List_of_S%26P_500_companies')[0]
@@ -27,13 +27,13 @@ class StockWalker(Walker):
             time_delta = datetime.timedelta(days=self.__DAY_COUNT)
             return cast(List[float], stock.history(start=today-time_delta, end=today, interval='1d')['Close'].values.tolist())
         except Exception:
-            return self.__choose_random_stock()
+            return self._choose_random_stock()
     
     def reset(self) -> None:
-        self.__current_stock_data = self.__choose_random_stock()
+        self.__current_stock_data = self._choose_random_stock()
         while len(self.__current_stock_data) < self.__LIST_LENGTH:
             print(len(self.__current_stock_data))
-            self.__current_stock_data = self.__choose_random_stock()
+            self.__current_stock_data = self._choose_random_stock()
         self.__step = 1
         self._location = (0, self.__current_stock_data[0], 0)
         super().reset()
@@ -46,3 +46,6 @@ class StockWalker(Walker):
         stock_change = abs(self.__current_stock_data[self.__step] - self.__current_stock_data[self.__step - 1])
         self.__step += 1
         return stock_change
+    
+    def get_step(self) -> int:
+        return self.__step

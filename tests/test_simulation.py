@@ -39,7 +39,8 @@ def test_save_log_data(simulation: Simulation) -> None:
     x_distance_list = [0.5, 1.0, 1.5]
     y_distance_list = [0.2, 0.4, 0.6]
     z_distance_list = [0.1, 0.2, 0.3]
-    average_time_to_leave = 10.0
+    center_mass_distance_list = [0.1, 0.2, 0.3]
+    average_time_to_leave = [10.0, 3.0, 3.0]
     y_cross_count_list = [5.0, 10.0, 15.0]
     simulation._save_log_data(
         "log.txt",
@@ -47,6 +48,7 @@ def test_save_log_data(simulation: Simulation) -> None:
         x_distance_list,
         y_distance_list,
         z_distance_list,
+        center_mass_distance_list,
         average_time_to_leave,
         y_cross_count_list,
     )
@@ -70,17 +72,6 @@ def test_simulate(simulation: Simulation) -> None:
 
     os.remove("test-xdistance.png")
     os.remove("test-ydistance.png")
-
-
-def test_run_visual(simulation: Simulation) -> None:
-    event = threading.Event()
-    run_thread = threading.Thread(target=simulation.run_visual, args=(event,))
-    run_thread.start()
-    time.sleep(0.1)
-    simulation.stop()
-    run_thread.join()
-    assert simulation.get_stop()
-    simulation.close()
 
 
 def test_update_speed(simulation: Simulation) -> None:

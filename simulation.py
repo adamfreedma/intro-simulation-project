@@ -220,9 +220,9 @@ class Simulation:
 
                 location = walker.get_location()
                 distance = float(np.linalg.norm(location))  # type: ignore[no-untyped-call]
-                center_mass_distance = float(np.linalg.norm(np.subtract(
-                    location, np.average([other_walker.get_location()
-                                          for other_walker in walker_list], axis=0))))  # type: ignore[no-untyped-call]
+                center_mass_distance = float(np.linalg.norm(np.subtract( # type: ignore[no-untyped-call]
+                    location, np.average([other_walker.get_location() # type: ignore[no-untyped-call]
+                                          for other_walker in walker_list], axis=0))))
                 if walker.is_3d():
                     distance = float(np.linalg.norm(location[:2]))  # type: ignore[no-untyped-call]
                 # tracking  y axis crosses

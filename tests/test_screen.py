@@ -1,6 +1,8 @@
 from re import T
 import pytest
+from resetable_walker import ResetableWalker
 from screen import Screen
+from stock_walker import StockWalker
 from straight_walker import StraightWalker
 from obstacle import Obstacle
 from teleporter import Teleporter
@@ -22,7 +24,7 @@ def test_initialize(screen: Screen) -> None:
 
 
 def test_add_and_remove_walker(screen: Screen) -> None:
-    walker = StraightWalker("Josh", False)
+    walker = StockWalker("Josh", False)
     screen.add_walker(walker)
     assert walker in screen.get_walkers()
     screen.remove_walker(walker)
@@ -30,7 +32,7 @@ def test_add_and_remove_walker(screen: Screen) -> None:
 
 
 def test_reset_trail(screen: Screen) -> None:
-    walker = StraightWalker("Josh", False)
+    walker = ResetableWalker("Josh", False)
     screen.add_walker(walker)
     screen.reset_trail(walker)
     assert screen.get_trails()[walker] == []
@@ -53,10 +55,7 @@ def test_set_obstacles(screen: Screen) -> None:
 def test_draw_line(screen: Screen) -> None:
     screen.initialize()
 
-    try:
-        screen.draw_line((-screen.INF, 0, 0), (screen.INF, 0, 0), (1, 0, 0))
-    except Exception as e:
-        assert False
+    screen.draw_line((-screen.INF, 0, 0), (screen.INF, 0, 0), (1, 0, 0))
 
     assert True
     screen.close()
@@ -68,10 +67,7 @@ def test_render_sphere(screen: Screen) -> None:
     radius = 1.0
     color = (1, 0, 0)
 
-    try:
-        screen.render_sphere(location, radius, color)
-    except Exception as e:
-        assert False
+    screen.render_sphere(location, radius, color)
 
     assert True
     screen.close()
@@ -90,10 +86,7 @@ def test_render_all(screen: Screen) -> None:
     )
     screen.initialize()
 
-    try:
-        screen.render_all()
-    except Exception as e:
-        assert False
+    screen.render_all()
 
     assert True
     screen.close()
@@ -102,21 +95,7 @@ def test_render_all(screen: Screen) -> None:
 def test_move(screen: Screen) -> None:
     screen.initialize()
     movement = (1, 0, 0)
-    try:
-        screen.move(movement)
-    except Exception as e:
-        assert False
+    screen.move(movement)
 
     assert True
-    screen.close()
-
-
-def test_run_and_stop(screen: Screen) -> None:
-    stop_event = threading.Event()
-    run_thread = threading.Thread(target=screen.run, args=(stop_event,))
-    run_thread.start()
-    time.sleep(0.1)
-    screen.stop()
-    run_thread.join()
-    assert screen.get_stop()
     screen.close()

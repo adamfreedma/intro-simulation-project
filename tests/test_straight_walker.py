@@ -26,8 +26,6 @@ def test_generate_move_angle(straight_walker: StraightWalker) -> None:
     assert len(angle) == 2
     assert angle[0] >= 0 and angle[0] <= 2 * math.pi
     assert angle[1] >= 0 and angle[1] <= 2 * math.pi
-    assert angle[0] >= 0 and angle[0] <= 360
-    assert angle[1] >= 0 and angle[1] <= 360
 
     walker2d = StraightWalker("Test Walker", is_3d=False, mass=1)
     yaw, pitch = walker2d._generate_move_angle()
