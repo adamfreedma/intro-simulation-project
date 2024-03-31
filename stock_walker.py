@@ -10,7 +10,6 @@ class StockWalker(Walker):
     
     __DAY_COUNT = 1461
     __LIST_LENGTH = 1000
-    __SCALE = 5
     
     def __init__(self, name: str, mass: float=1) -> None:
         super().__init__(name, mass)

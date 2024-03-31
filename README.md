@@ -1,1 +1,19 @@
-# intro-simulation-project
+# Random walker - Adam Freedman
+---
+## Expantions list:
+- GUI: User interface and 3D rendering of the simulation, shown by ticking on the 'Visual' checkbox and the '3d' tickbox on the walker.
+- Multithreading: The ability to run multiple walkers at the same time, each running on a different thread, use by pressing 'Add walker' multiple times.
+- Gravity: Gravitational effect changing the movement of the walkers based on their masses, use by setting a Non-zero mass for 2 or more walkers.
+- Real time configuration: All the Non-walkers parameters can be configured while the simulation is running, use by entering a new config file mid run.
+- Accelerating walker: A new walker type that accelerates over time, use by choosing Accelerating on the walker type dropdown menu.
+- Stocks walker: A walker that moves based on random stocks from the s&p 500 index.
+- Speed zone: A new obstacle type the scales up or down the movement, and has a coresponding color scaling from red to green, use by entering a config file having a speed zone.
+- Graph visualizer tab: A tab that detects all the graph folders created so far and shows the graphs inside them, use by switching to the graphs tab.
+- 3D: You can choose independently for each walker if he moves in 2 or 3 dimensions, use by ticking the '3d' checkbox.
+- Custom GUI widget: 'Spinbox' A custom widget that allows easy integer input from the user, used on the simulation tab on multiple instances.
+- Progress bar: Shows the simulation progress in real time to indicate how many more iteration are left.
+
+## Extra explanation
+- GUI: The user interface is written using the customtkinter library, a tkinter expansion, and the 3D visualization is written using pygame and OpenGL. you can move around the visualization and zoom in and out using the 'WASD' 'Space' and 'Shift' keys. All the walkers, their trails and the obstacles are drawn on the screen.
+- Multithreading: Each walker is assigned its own thread, to keep the threads synchronized after each iteration they all wait for an Event flag to be turned on/off to continue, that way the keep in sync. This allowes the gravity calculation to be correct and the progress bar running smoothly.
+- Gravity: Applies a gravity effect to each walker each step, the effect is calculated using the masses of all the other walkers and is scaled down by the total mass to achieve a constant total force.
