@@ -13,6 +13,7 @@ I used github for version control whilst working on the project, the repository 
 - Speed zone: A new obstacle type the scales up or down the movement, and has a coresponding color scaling from red to green, use by entering a config file having a speed zone.
 - Graph visualizer tab: A tab that detects all the graph folders created so far and shows the graphs inside them, use by switching to the graphs tab.
 - 3D: You can choose independently for each walker if he moves in 2 or 3 dimensions, use by ticking the '3d' checkbox.
+- Extra logs and graphs: Added distance from the center mass as a function of steps to the log files and the graphs.
 - Custom GUI widget: 'Spinbox' A custom widget that allows easy integer input from the user, used on the simulation tab on multiple instances.
 - Progress bar: Shows the simulation progress in real time to indicate how many more iteration are left.
 

@@ -96,7 +96,8 @@ class Simulation:
         x_distance_list: List[float],
         y_distance_list: List[float],
         z_distance_list: List[float],
-        average_time_to_leave: float,
+        center_mass_distance_list: List[float],
+        average_time_to_leave_list: List[float],
         y_cross_count_list: List[float],
     ) -> None:
         """Saves the data to
@@ -107,6 +108,7 @@ class Simulation:
             x_distance_list (List[float]): The distance in the x axis data list.
             y_distance_list (List[float]): The distance in the y axis data list.
             z_distance_list (List[float]): The distance in the z axis data list.
+            center_mass_distance_list (List[float]): The distance from the center mass data list.
             average_time_to_leave (float): The average time to leave.
             y_cross_count_list (List[float]): The cross count list data lis.
         """
@@ -115,7 +117,8 @@ class Simulation:
             "xdistance": x_distance_list,
             "ydistance": y_distance_list,
             "zdistance": z_distance_list,
-            "time_to_leave": average_time_to_leave,
+            "cmdistance": center_mass_distance_list,
+            "time_to_leave": average_time_to_leave_list,
             "y_cross_count_list": y_cross_count_list,
         }
         # making the logs folder if it dose not exist
@@ -189,7 +192,8 @@ class Simulation:
         x_distance_list = [0.0] * self.__max_steps
         y_distance_list = [0.0] * self.__max_steps
         z_distance_list = [0.0] * self.__max_steps
-        average_time_to_leave = 0.0
+        center_mass_distance_list = [0.0] * self.__max_steps
+        average_time_to_leave_list = [0.0] * self.__simulation_count
         y_cross_count_list = [0.0] * self.__max_steps
         # adds the walker to the screen
         self.__screen.add_walker(walker)
@@ -216,6 +220,9 @@ class Simulation:
 
                 location = walker.get_location()
                 distance = float(np.linalg.norm(location))  # type: ignore[no-untyped-call]
+                center_mass_distance = float(np.linalg.norm(np.subtract(
+                    location, np.average([other_walker.get_location()
+                                          for other_walker in walker_list], axis=0))))  # type: ignore[no-untyped-call]
                 if walker.is_3d():
                     distance = float(np.linalg.norm(location[:2]))  # type: ignore[no-untyped-call]
                 # tracking  y axis crosses
@@ -242,10 +249,13 @@ class Simulation:
                 z_distance_list[step] += abs(location[2]) / float(
                     self.__simulation_count
                 )
+                center_mass_distance_list[step] += abs(center_mass_distance) / float(
+                    self.__simulation_count
+                )
 
                 self.__screen.add_to_trail(walker, walker.get_location())
 
-            average_time_to_leave += time_to_leave / float(self.__max_steps)
+            average_time_to_leave_list[simulation] = time_to_leave
 
             if stop_event.is_set():
                 break
@@ -263,7 +273,8 @@ class Simulation:
             x_distance_list,
             y_distance_list,
             z_distance_list,
-            average_time_to_leave,
+            center_mass_distance_list,
+            average_time_to_leave_list,
             y_cross_count_list,
         )
 
@@ -324,6 +335,8 @@ class Simulation:
         graph.distance_graph(log_path, output_path)
         graph.distance_graph(log_path, output_path, "x")
         graph.distance_graph(log_path, output_path, "y")
+        graph.distance_graph(log_path, output_path, "cm")
         graph.cross_count_graph(log_path, output_path)
+        graph.time_to_leave_graph(log_path, output_path)
         if is_3d:
             graph.distance_graph(log_path, output_path, "z")

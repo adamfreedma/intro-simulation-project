@@ -103,10 +103,12 @@ def test_generate_graphs(simulation: Simulation) -> None:
     assert os.path.exists("test-zdistance.png")
     assert os.path.exists("test-distance.png")
     assert os.path.exists("test-cross-count.png")
+    assert os.path.exists("test-time-to-leave.png")
 
     os.remove("test-xdistance.png")
     os.remove("test-ydistance.png")
     os.remove("test-zdistance.png")
     os.remove("test-cross-count.png")
     os.remove("test-distance.png")
+    os.remove("test-time-to-leave.png")
     os.remove("log.txt")
